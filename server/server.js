@@ -13,7 +13,7 @@ app.use(express.static(path.resolve(__dirname, '..', 'node_modules')));
 app.use(body.json());
 app.use(cookie());
 
-const port = process.env.PORT || 8080;
+const port = process.env.PORT || 3000;
 
 app.listen(port, function () {
     console.log(`Server listening port ${port}`);

@@ -7,7 +7,10 @@ rootElement.appendChild(headerElement);
 rootElement.appendChild(menuElement);
 rootElement.appendChild(pageElement);
 
-headerElement.innerHTML = "FilmLook"
-menuElement.innerHTML = "Menu"
-pageElement.innerHTML = "Some content"
+function renderMain() {
+    headerElement.innerHTML = "FilmLook";
+    menuElement.innerHTML = "Menu";
+    pageElement.innerHTML = "Some content";
+}
 
+renderMain();

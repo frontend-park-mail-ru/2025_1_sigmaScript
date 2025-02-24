@@ -1,0 +1,40 @@
+{
+  "name": "2025_1_sigmascript",
+  "version": "1.0.0",
+  "description": "Project FILMLOOK",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "prestart": "npm run compile:templates",
+    "start": "DEBUG=* && node ./server/server.js",
+    "compile:templates": ""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/frontend-park-mail-ru/2025_1_sigmaScript.git"
+  },
+  "author": "sigmaScript",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/frontend-park-mail-ru/2025_1_sigmaScript/issues"
+  },
+  "homepage": "https://github.com/frontend-park-mail-ru/2025_1_sigmaScript#readme",
+  "dependencies": {
+    "body-parser": "^1.20.3",
+    "cookie-parser": "^1.4.7",
+    "express": "^4.21.2",
+    "morgan": "^1.10.0",
+    "path": "^0.12.7"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.21.0",
+    "eslint": "^9.21.0",
+    "eslint-config-prettier": "^10.0.1",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-prettier": "^5.2.3",
+    "globals": "^16.0.0",
+    "prettier": "^3.5.2",
+    "typescript-eslint": "^8.24.1"
+  }
+}

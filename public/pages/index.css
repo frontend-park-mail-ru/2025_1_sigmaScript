@@ -1,0 +1,28 @@
+#root {
+    display: grid;
+  
+    grid-template-areas:
+      "header header"
+      "menu content" ;
+  
+    grid-template-rows: 40px 1fr;
+    grid-template-columns: min-content 1fr;
+}
+
+header {
+    grid-area: header;
+    font-weight: bold;
+    font-size: 20px;
+    padding-left: 20px;
+    background-color: lightslategray;
+}
+
+aside {
+    grid-area: menu;
+    padding: 20px;
+}
+  
+main {
+    grid-area: content;
+    padding: 20px;
+}

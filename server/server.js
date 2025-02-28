@@ -8,6 +8,8 @@ const path = require('path');
 const app = express();
 
 app.use(morgan('dev'));
+app.use(express.static(path.resolve(__dirname, '..', 'public/static')));
+app.use(express.static(path.resolve(__dirname, '..', 'public/components')));
 app.use(express.static(path.resolve(__dirname, '..', 'public/pages')));
 app.use(express.static(path.resolve(__dirname, '..', 'node_modules')));
 app.use(body.json());

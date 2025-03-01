@@ -12,7 +12,8 @@
     width: 50%;
     height: 100%;
     background: inherit;
-    border-radius: 23px;
+    font-weight: 700;
+    border-radius: 25px;
 }
 
 .switch__button:hover { 

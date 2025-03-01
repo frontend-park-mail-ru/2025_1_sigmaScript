@@ -6,20 +6,18 @@ main {
     width: 100vw;
     height: 100vh;
     background-color: #16161A;
-    background-image: url('/img/auth_background.png');
+    background-image: url('/img/login_background.png');
+    background-size: cover;
 }
 
 .login {
-    box-sizing: border-box; 
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-around;
-    width: 22%;
-    height: 50%;
+    justify-content: space-evenly;
+    position: relative;
+    width: 20%;
+    height: 55%;
     padding: 0;
     background-color: inherit;
-    border: 1px solid rgba(148, 161, 178, 0.5);
+    /* border: 1px solid rgba(148, 161, 178, 0.5); */
     border-radius: 32px;
 }
 
@@ -27,4 +25,13 @@ main {
     width: 50%;
     text-align: center; 
     font-size: 2.0rem;
+}
+
+.login__back {
+    position: absolute;
+    top: 4%;
+    left: 6%;
+    cursor: pointer; 
+    width: 10%;
+    height: 10%;
 }

@@ -3,6 +3,7 @@ import { Login } from '/Login/Login.js';
 const rootElement = document.getElementById('root');
 
 function renderMain() {
+    rootElement.innerHTML = '';
     const login = document.createElement('a');
     login.innerHTML = 'Войти';
     login.addEventListener('click', (e) => {
@@ -14,8 +15,8 @@ function renderMain() {
 
 function renderLogin() {
     rootElement.innerHTML = '';
-    const login = new Login(rootElement);
+    const login = new Login(rootElement, renderMain);
     login.render();
 }
 
-renderMain();
+renderLogin();

@@ -6,7 +6,7 @@ import pluginPrettier from 'eslint-plugin-prettier';
 export default [
     {
         files: ['**/*.{js,mjs,cjs,ts,jsx,tsx}'],
-        ignores: ['**/node_modules/*']
+        ignores: ['**/node_modules/*', '**/*.precompiled.js']
     },
     {
         languageOptions: {

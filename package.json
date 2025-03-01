@@ -9,7 +9,7 @@
     "lint-fix": "eslint public server --ext .js,.jsx,.ts,.tsx --fix",
     "prestart": "npm run compile:templates",
     "start": "DEBUG=* && node ./server/server.js",
-    "compile:templates": ""
+    "compile:templates": "handlebars public/components/Login/Login.hbs -f public/components/Login/Login.precompiled.js && handlebars public/components/Button/Button.hbs -f public/components/Button/Button.precompiled.js && handlebars public/components/Input/Input.hbs -f public/components/Input/Input.precompiled.js && handlebars public/components/Switch/Switch.hbs -f public/components/Switch/Switch.precompiled.js"
   },
   "repository": {
     "type": "git",

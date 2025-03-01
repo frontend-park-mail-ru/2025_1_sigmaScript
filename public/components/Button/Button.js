@@ -1,3 +1,5 @@
+import { createID } from '/createID.js';
+
 export class Button {
     #parent;
     #data;
@@ -5,7 +7,7 @@ export class Button {
 
     constructor(parent, type, text) {
         this.#parent = parent;
-        this.#id = 'button--' + crypto.randomUUID();
+        this.#id = 'button--' + createID();
         this.#data = { id: this.#id, type, text };
     }
 
@@ -21,8 +23,14 @@ export class Button {
         this.#parent = newParent;
     }
 
+    parentDefined() {
+        return !(this.#parent === null || this.#parent === undefined);
+    }
+
     self() {
-        return document.querySelector('.' + this.#id);
+        if (this.parentDefined()) {
+            return document.getElementById(this.#id);
+        }
     }
 
     destroy() {
@@ -33,7 +41,7 @@ export class Button {
 
     render() {
         this.destroy();
-        if (this.#parent === null || this.#parent === undefined) {
+        if (!this.parentDefined) {
             return;
         }
         const template = Handlebars.templates['Button.hbs'];

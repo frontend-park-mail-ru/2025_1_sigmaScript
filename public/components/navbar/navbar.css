@@ -1,0 +1,12 @@
+
+.navbar {
+    display: block;
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100vw;
+    height: var(--navbar-height);
+    min-width: 1000px;
+    min-height: 50px;
+    background-color: var(--background-color);
+}

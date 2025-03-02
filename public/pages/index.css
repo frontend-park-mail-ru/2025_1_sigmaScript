@@ -1,3 +1,19 @@
+@import url("../components/components.css");
+
+:root {
+    --primary-color: #7F5AF0;
+    --background-color: #16161A;
+    --text-field-border-color: rgba(148, 161, 178, 0.5);
+    --navbar-height: 9rem;
+    --item-height: calc(((100vw - 6rem * 2 - 1.6rem * calc(3 - 1)) / 3 * 9 / 16))
+}
+
+html {
+    /* от этой величины считается rem */
+    font-size: 10px;
+}
+
+
 #root {
     display: grid;
   
@@ -7,6 +23,8 @@
   
     grid-template-rows: 40px 1fr;
     grid-template-columns: min-content 1fr;
+
+    margin-top: calc(var(--navbar-height)* 1.5);
 }
 
 header {
@@ -14,7 +32,7 @@ header {
     font-weight: bold;
     font-size: 20px;
     padding-left: 20px;
-    background-color: lightslategray;
+    background-color: lightslategray;    
 }
 
 aside {
@@ -25,4 +43,5 @@ aside {
 main {
     grid-area: content;
     padding: 20px;
+    height: 1000px;
 }

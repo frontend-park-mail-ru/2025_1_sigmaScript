@@ -5,7 +5,7 @@ const headerElement = document.createElement('header');
 const menuElement = document.createElement('aside');
 const pageElement = document.createElement('main');
 
-const nav = new Navbar(document.getElementsByTagName("body")[0], null);
+const nav = new Navbar(document.querySelector('body'));
 nav.render();
 
 rootElement.appendChild(headerElement);

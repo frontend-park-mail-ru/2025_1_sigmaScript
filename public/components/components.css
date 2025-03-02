@@ -1,4 +1,8 @@
-@import "navbar/navbar.css";
+@import "./navbar/navbar.css";
+@import "./input/input.css";
+@import "./button/button.css";
+@import "./search_field/search_field.css";
+@import "./icon/icon.css";
 
 header {
     background-color: rgb(255,0,0);

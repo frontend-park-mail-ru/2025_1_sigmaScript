@@ -2,6 +2,9 @@ import { Login } from '/Login/Login.js';
 
 const rootElement = document.getElementById('root');
 
+/**
+ * Отрисовывает главную страницу
+ */
 function renderMain() {
     rootElement.innerHTML = '';
     const login = document.createElement('a');
@@ -13,6 +16,9 @@ function renderMain() {
     rootElement.appendChild(login);
 }
 
+/**
+ * Отрисовывает страницу входа (авторизации)
+ */
 function renderLogin() {
     rootElement.innerHTML = '';
     const login = new Login(rootElement, renderMain);

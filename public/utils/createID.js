@@ -1,3 +1,8 @@
+/**
+ * Генерирует случайный id, похожий на uuid
+ *
+ * @returns {string} случайный id.
+ */
 export function createID() {
     let id = '';
     const alphabet = '0123456789abcdef';

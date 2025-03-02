@@ -5,40 +5,71 @@ export class Button {
     #data;
     #id;
 
+    /**
+     * Создаёт новый Button.
+     * @param {HTMLElement} parent В какой элемент вставлять
+     * @param {string} type Тип кнопки.
+     * @param {string} text Текст кнопки.
+     */
     constructor(parent, type, text) {
         this.#parent = parent;
         this.#id = 'button--' + createID();
         this.#data = { id: this.#id, type, text };
     }
 
+    /**
+     * Возвращает родителя.
+     * @returns {HTMLElement}
+     */
     get parent() {
         return this.#parent;
     }
 
+    /**
+     * Возвращает данные шаблона.
+     * @returns {Object}
+     */
     get data() {
         return this.#data;
     }
 
+    /**
+     * Задаем родителя.
+     */
     setParent(newParent) {
         this.#parent = newParent;
     }
 
+    /**
+     * Проверяет на наличие родителя.
+     * @returns {boolean}
+     */
     parentDefined() {
         return !(this.#parent === null || this.#parent === undefined);
     }
 
+    /**
+     * Возвращает себя из DOM.
+     * @returns {HTMLElement}
+     */
     self() {
         if (this.parentDefined()) {
             return document.getElementById(this.#id);
         }
     }
 
+    /**
+     * Удаляет отрисованные элементы.
+     */
     destroy() {
         if (this.self()) {
             this.self().remove();
         }
     }
 
+    /**
+     * Рисует компонент на экран.
+     */
     render() {
         this.destroy();
         if (!this.parentDefined) {

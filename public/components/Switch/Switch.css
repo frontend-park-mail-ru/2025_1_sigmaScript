@@ -16,10 +16,28 @@
     border-radius: 25px;
 }
 
+.switch__button--left {
+    background: linear-gradient(to right, #0000 50%, #7F5AF0 50%);
+    background-size: 200% 100%;
+    background-position: left center;
+    transition: background-position 0.12s ease;
+}
+
+.switch__button--right {
+    background: linear-gradient(to right, #7F5AF0 50%, #0000 50%);
+    background-size: 200% 100%;
+    background-position: right center;
+    transition: background-position 0.12s ease;
+}
+
 .switch__button:hover { 
     background-color: rgba(148, 161, 178, 0.15);
 } 
 
-.switch__button--right {
-    background-color: #7F5AF0;
+.switch__button--left.active {
+    background-position: right center;
+}
+
+.switch__button--right.active {
+    background-position: left center;
 }

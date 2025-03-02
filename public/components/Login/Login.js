@@ -6,36 +6,66 @@ import { Switch } from '/Switch/Switch.js';
 export class Login {
     #parent;
     #id;
-    constructor(parent, prevPage) {
+    #mode;
+
+    /**
+     * Создаёт новую форму входа/регистрации.
+     * @param {HTMLElement} parent В какой элемент вставлять
+     * @param {Function} prevPage Функция перехода на предыдущую страницу.
+     * @param {boolean} mode Поле для сохранения состояния - вход или регистрация.
+     */
+    constructor(parent, prevPage, mode) {
         this.#parent = parent;
         this.#id = 'login--' + createID();
+        this.#mode = mode; // sign up - 0, sign in - 1
         this.prevPage = prevPage;
     }
 
+    /**
+     * Возвращает родителя.
+     * @returns {HTMLElement}
+     */
     get parent() {
         return this.#parent;
     }
 
+    /**
+     * Задаем родителя.
+     */
     setParent(newParent) {
         this.#parent = newParent;
     }
 
+    /**
+     * Проверяет на наличие родителя.
+     * @returns {boolean}
+     */
     parentDefined() {
         return !(this.#parent === null || this.#parent === undefined);
     }
 
+    /**
+     * Возвращает себя из DOM.
+     * @returns {HTMLElement}
+     */
     self() {
         if (this.parentDefined()) {
             return document.getElementById(this.#id);
         }
     }
 
+    /**
+     * Удаляет отрисованные элементы.
+     */
     destroy() {
         if (this.self()) {
             this.self().remove();
         }
     }
 
+    /**
+     * Рисует компонент на экран.
+     */
     render() {
         this.destroy();
         if (!this.parentDefined()) {
@@ -56,29 +86,52 @@ export class Login {
         this.repeatInput.render();
         this.submitButton.render();
 
+        this.signInButton = this.switch.self().querySelector('.switch__button--left');
+        this.signUpButton = this.switch.self().querySelector('.switch__button--right');
+        this.backButton = this.self().querySelector('.login__back');
+
         this.addEvents();
+
+        if (this.#mode) {
+            this.signUpMode();
+        } else {
+            this.signInMode();
+        }
     }
 
+    /**
+     * Функция перехода в режим входа.
+     */
+    signInMode() {
+        this.signInButton.classList.add('active');
+        this.signUpButton.classList.remove('active');
+        this.repeatInput.self().style.visibility = 'hidden';
+        this.submitButton.self().textContent = 'Войти';
+    }
+
+    /**
+     * Функция перехода в режим регистрации.
+     */
+    signUpMode() {
+        this.signInButton.classList.remove('active');
+        this.signUpButton.classList.add('active');
+        this.repeatInput.self().style.visibility = 'visible';
+        this.submitButton.self().textContent = 'Зарегистрироваться';
+    }
+
+    /**
+     * Добавление событий на кнопки.
+     */
     addEvents() {
-        const signInButton = this.switch.self().querySelector('.switch__button--left');
-        const signUpButton = this.switch.self().querySelector('.switch__button--right');
-        const backButton = this.self().querySelector('.login__back');
-
-        signInButton.addEventListener('click', () => {
-            signInButton.style.backgroundColor = '#7F5AF0';
-            signUpButton.style.backgroundColor = 'inherit';
-            this.repeatInput.self().style.visibility = 'hidden';
-            this.submitButton.self().textContent = 'Войти';
+        this.signInButton.addEventListener('click', () => {
+            this.signInMode();
         });
 
-        signUpButton.addEventListener('click', () => {
-            signUpButton.style.backgroundColor = '#7F5AF0';
-            signInButton.style.backgroundColor = 'inherit';
-            this.repeatInput.self().style.visibility = 'visible';
-            this.submitButton.self().textContent = 'Зарегистрироваться';
+        this.signUpButton.addEventListener('click', () => {
+            this.signUpMode();
         });
 
-        backButton.addEventListener('click', () => {
+        this.backButton.addEventListener('click', () => {
             this.prevPage();
         });
     }

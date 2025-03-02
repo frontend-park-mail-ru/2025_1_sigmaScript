@@ -1,12 +1,9 @@
+import Icon from '../icon/icon.js';
+import SearchField from '../search_field/search_field.js';
 
-import { Icon } from "../icon/icon.js";
-import SearchField from "../search_field/search_field.js";
-
-
-const searchSvg = "./search_button.svg";
-const logoSvg = "logo_text_border_lining.svg";
-const userSvg = "./Avatar large.svg"
-
+const searchSvg = '/svg/search_button.svg';
+const logoSvg = '/svg/logo_text_border_lining.svg';
+const userSvg = '/svg/Avatar large.svg';
 
 /**
  * Навигационная панель
@@ -45,55 +42,55 @@ class Navbar {
     #elements() {
         return document.querySelector('.navbar_elements');
     }
-    
+
     render() {
-        this.destroy();
-        if ((this.#parent === null) || (this.#parent === undefined)) {
+        if (!this.#parent) {
             return;
         }
+        this.destroy();
 
         const navbar = document.createElement('navbar');
-        navbar.classList.add("navbar");
+        navbar.classList.add('navbar');
         this.#parent.appendChild(navbar);
+        // eslint-disable-next-line no-undef
         const navbarTempl = Handlebars.templates['navbar.hbs'];
         navbar.innerHTML = navbarTempl({});
 
         const navbarLogo = document.createElement('div');
-        navbarLogo.classList.add("navbar__logo");
+        navbarLogo.classList.add('navbar__logo');
         this.#elements().appendChild(navbarLogo);
-        
-        const logo = Icon(navbarLogo, {
-            id: "navbarLogo",
+
+        const logo = new Icon(navbarLogo, {
+            id: 'navbarLogo',
             srcIcon: logoSvg,
-            link: "#",
-        })
+            link: '#'
+        });
         logo.render();
 
         // поле поиска
-        const searchField = SearchField(this.#elements(), {
-            id: "search",
-            placeholder: "Название фильма для поиска",
-            type: "text",
-            searchFormId: "navbarsearchform",
-            rightBtnId: "rightBtn",
-            rightIcon: searchSvg,
+        const searchField = new SearchField(this.#elements(), {
+            id: 'search',
+            placeholder: 'Название фильма для поиска',
+            type: 'text',
+            searchFormId: 'navbarsearchform',
+            rightBtnId: 'rightBtn',
+            rightIcon: searchSvg
         });
         searchField.render();
 
         // аватар Пользователя
-        const user = Icon(this.#elements(), {
-            id: "user",
+        const user = new Icon(this.#elements(), {
+            id: 'user',
             srcIcon: userSvg,
-            size: "large",
-            text: "Войти",
-            textColor: "primary",
+            size: 'large',
+            text: 'Войти',
+            textColor: 'primary',
             link: '#',
             circular: true,
-            direction: "row",
+            direction: 'row'
         });
-        user.render()
+        user.render();
     }
-
 }
 
 export default Navbar;

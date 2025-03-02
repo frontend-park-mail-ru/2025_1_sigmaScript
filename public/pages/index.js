@@ -1,4 +1,4 @@
-import Navbar from "../components/navbar/navbar.js";
+import Navbar from '../components/navbar/navbar.js';
 
 const rootElement = document.getElementById('root');
 const headerElement = document.createElement('header');
@@ -13,11 +13,10 @@ rootElement.appendChild(menuElement);
 rootElement.appendChild(pageElement);
 
 function renderMain() {
-    headerElement.innerHTML = "FilmLook";
-    menuElement.innerHTML = "Menu";
-    pageElement.innerHTML = "Some content";
-    headerElement.classList.add("header")
-    
+    headerElement.innerHTML = 'FilmLook';
+    menuElement.innerHTML = 'Menu';
+    pageElement.innerHTML = 'Some content';
+    headerElement.classList.add('header');
 }
 
 renderMain();

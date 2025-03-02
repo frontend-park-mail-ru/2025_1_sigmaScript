@@ -1,4 +1,3 @@
-
 /**
  * Элемент поиска с полем ввода поиска и возможностью установки рядом кнопки
  * @param {HTMLElement} parent - родительский элемент
@@ -15,9 +14,10 @@
  * @param {string} config.rightIcon - путь до иконки, которая будет внутри правой кнопки
  * @param {string} config.rightBtnId - уникальный id правой кнопки
  * @param {string} config.rightBtnText - текст внутри правой кнопки
- * @returns {function}
+ * @param {Object} config.actions - события элемента
+ * @returns {Class}
  * @example
- * const searchField = SearchField(this.#elements(), {
+ * const searchField = new SearchField(this.#elements(), {
  *  id: "search",
  *  placeholder: "Название фильма для поиска",
  *  type: "text",
@@ -26,68 +26,75 @@
  *  rightIcon: searchSvg,
  * });
  */
-export const SearchField = (parent, config = {id: ""}) => {
-    let _config = Object.assign({}, config);
+class SearchField {
+    #parent;
+    #config = {};
+    #actions = {};
 
-    if (_config.id === "") {
-        _config.id += 'Input';
+    constructor(parent, config) {
+        this.#parent = parent;
+
+        this.#config = Object.assign({}, config);
+
+        if (this.#config.id === '') {
+            this.#config.id = 'Input';
+        }
+
+        this.#actions = config.actions || {};
     }
-    const _actions = {};
 
-    const self = () => {
-        if ((parent === null) || (parent === undefined)) {
+    self() {
+        if (this.#parent) {
             return;
         }
-        return parent.querySelector('#' + _config.id);
+        return this.#parent.querySelector('#' + this.#config.id);
     }
 
-    const setActions = (newActions) => {
+    setActions(newActions) {
         for (let action in newActions) {
-            _actions[action] = newActions[action];
+            this.#actions[action] = newActions[action];
         }
     }
 
-    const applyActions = () => {
-        if (_actions.leftBtn) {
-            const btnLeft = self().querySelector('#' + _config.leftBtnId);
-            btnLeft.addEventListener("click", _actions.leftBtnId);
+    #applyActions() {
+        if (this.#actions.leftBtn) {
+            const btnLeft = this.self().querySelector('#' + this.#config.leftBtnId);
+            btnLeft.addEventListener('click', this.#actions.leftBtn);
         }
-        if (_actions.rightBtn) {
-            const btnRight = self().querySelector('#' + _config.rightBtnId);
-            btnRight.addEventListener("click", _actions.rightBtnId);
-        }
-    }
-
-
-    const form = () => {
-        if (!self()) {
-            throw new Error(`Объект с id="${_config.searchFormId}" не найден на странице`);
-        }
-        return self().querySelector('#' + _config.searchFormId);
-    }
-
-    const destroy = () => {
-        if (self()) {
-            self().remove();
+        if (this.#actions.rightBtn) {
+            const btnRight = this.self().querySelector('#' + this.#config.rightBtnId);
+            btnRight.addEventListener('click', this.#actions.rightBtn);
         }
     }
 
-    const render = () => {
-        destroy();
+    form() {
+        if (!this.self()) {
+            throw new Error(`Объект с id="${this.#config.searchFormId}" не найден на странице`);
+        }
+        return this.self().querySelector('#' + this.#config.searchFormId);
+    }
 
+    destroy() {
+        if (this.self()) {
+            this.self().remove();
+        }
+    }
+
+    render() {
+        let wrapper = document.createElement('div');
+        // eslint-disable-next-line no-undef
         const inputTempl = Handlebars.templates['search_field.hbs'];
+        wrapper.insertAdjacentHTML('beforeEnd', inputTempl(this.#config));
 
-        parent.insertAdjacentHTML("beforeEnd", inputTempl(_config));
+        const icon = wrapper.firstElementChild;
+        wrapper.remove();
 
-        applyActions();
-    }
-
-    return {
-        self,
-        form,
-        setActions,
-        destroy,
-        render,
+        if (this.self()) {
+            this.self().replaceWith(icon);
+        } else {
+            this.#parent.insertAdjacentElement('beforeEnd', icon);
+        }
+        this.#applyActions();
     }
 }
 

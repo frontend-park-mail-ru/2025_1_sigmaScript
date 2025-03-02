@@ -1,4 +1,3 @@
-
 /**
  * Иконка с текстом
  * @param {HTMLElement} parent - родительский элемент
@@ -13,9 +12,9 @@
  * @param {string} config.direction - направление иконки
  * @param {boolean} config.circular - круглая иконка
  * @param {Object} config.actions - события иконки
- * @returns 
+ * @returns
  * @example
- * const icon = Icon(document.body, {
+ * const icon = new Icon(document.body, {
  *    src: 'logo.svg',
  *    text: 'Иконка',
  *    textColor: 'primary',
@@ -24,42 +23,51 @@
  *    circular: true,
  * });
  */
-export const Icon = (parent, config) => {
-    let _config = {};
+class Icon {
+    #parent;
+    #config = {};
+    #actions = {};
 
-    _config.id = config.id || "Icon";
-    _config.srcIcon = config.srcIcon || "";
-    _config.text = config.text || "";
-    _config.textColor = config.textColor || "secondary";
-    _config.bgColor = config.bgColor || "none";
-    _config.size = config.size || "";
-    _config.direction = config.direction || "column";
-    _config.circular = config.circular || false;
+    constructor(parent, config) {
+        this.#parent = parent;
 
-    const _actions = config.actions || {};
+        this.#config.id = config.id || 'Icon';
+        this.#config.srcIcon = config.srcIcon || '';
+        this.#config.text = config.text || '';
+        this.#config.textColor = config.textColor || 'secondary';
+        this.#config.bgColor = config.bgColor || 'none';
+        this.#config.size = config.size || '';
+        this.#config.direction = config.direction || 'column';
+        this.#config.circular = config.circular || false;
 
-    const self = () => {
-        return parent.querySelector('#' + _config.id);
+        this.#actions = config.actions || {};
     }
 
-    const destroy = () => {
-        if (self()) {
-            self().remove();
-        }
-    }
-
-    const setActions = (newActions) => {
-        for (let action in newActions) {
-            _actions[action] = newActions[action];
-        }
-    }
-
-    const applyActions = () => {
-        if (!self()) {
+    self() {
+        if (!this.#parent) {
             return;
         }
-        for (let action in _actions) {
-            self().addEventListener(action, _actions[action]);
+        return this.#parent.querySelector('#' + this.#config.id);
+    }
+
+    destroy() {
+        if (this.self()) {
+            this.self().remove();
+        }
+    }
+
+    setActions(newActions) {
+        for (let action in newActions) {
+            this.#actions[action] = newActions[action];
+        }
+    }
+
+    #applyActions() {
+        if (!this.self()) {
+            return;
+        }
+        for (let action in this.#actions) {
+            this.self().addEventListener(action, this.#actions[action]);
         }
     }
 
@@ -86,42 +94,37 @@ export const Icon = (parent, config) => {
      *    textColor: 'primary',
      * });
      */
-    const changeConfig = (newConfig) => {
-        _config = {
-            ..._config,
-            ...newConfig,
+    changeConfig(newConfig) {
+        this.#config = {
+            ...this.#config,
+            ...newConfig
         };
 
-        if (self()) {
-            render();
+        if (this.self()) {
+            this.render();
         }
     }
 
     /**
      * Отрисовка иконки
      * @returns
-    */
-    const render = () => {
-        const wrapper = document.createElement('div');
-        wrapper.classList.add("wrapper");
+     */
+    render() {
+        let wrapper = document.createElement('div');
+        // eslint-disable-next-line no-undef
         const iconTempl = Handlebars.templates['icon.hbs'];
-        wrapper.insertAdjacentHTML("beforeEnd", iconTempl(_config));
-        
-        
-        if (self()) {
-            self().replaceWith(wrapper);
+        wrapper.insertAdjacentHTML('beforeEnd', iconTempl(this.#config));
+
+        const icon = wrapper.firstElementChild;
+        wrapper.remove();
+
+        if (this.self()) {
+            this.self().replaceWith(icon);
         } else {
-            parent.insertAdjacentElement("beforeEnd", wrapper);
+            this.#parent.insertAdjacentElement('beforeEnd', icon);
         }
-
-        applyActions();
+        this.#applyActions();
     }
-
-    return {
-        self,
-        destroy,
-        setActions,
-        changeConfig,
-        render,
-    };
 }
+
+export default Icon;

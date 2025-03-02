@@ -1,4 +1,7 @@
-@import url("../components/components.css");
+@import "../components/components.css";
+@import "/css/font.css";
+@import "/css/flex-box.css";
+@import "/Login/Login.css";
 
 :root {
     --primary-color: #7F5AF0;
@@ -59,4 +62,17 @@ main {
 .flex-dir-row {
     display: flex;
     flex-direction: row;
+  
+  body {
+    margin: 0;
 }
+
+html {
+    font-size: 10px;
+}
+
+a {
+    font-size: 2rem;
+    font-weight: 700;
+    color:black;
+  

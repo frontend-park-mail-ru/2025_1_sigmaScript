@@ -7,9 +7,9 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint public server --ext .js,.jsx,.ts,.tsx",
     "lint-fix": "eslint public server --ext .js,.jsx,.ts,.tsx --fix",
-    "compile:templates": "handlebars public/components/navbar/navbar.hbs -f public/components/navbar/navbar.precompiled.js && handlebars public/components/universal_button/button.hbs -f public/components/universal_button/button.precompiled.js && handlebars public/components/universal_input/input.hbs -f public/components/universal_input/input.precompiled.js && handlebars public/components/icon/icon.hbs -f public/components/icon/icon.precompiled.js && handlebars public/components/search_field/search_field.hbs -f public/components/search_field/search_field.precompiled.js",
     "prestart": "npm run compile:templates",
-    "start": "DEBUG=* && node ./server/server.js"
+    "start": "DEBUG=* && node ./server/server.js",
+    "compile:templates": "handlebars public/components/Login/Login.hbs -f public/components/Login/Login.precompiled.js && handlebars public/components/Button/Button.hbs -f public/components/Button/Button.precompiled.js && handlebars public/components/Input/Input.hbs -f public/components/Input/Input.precompiled.js && handlebars public/components/Switch/Switch.hbs -f public/components/Switch/Switch.precompiled.js && handlebars public/components/navbar/navbar.hbs -f public/components/navbar/navbar.precompiled.js && handlebars public/components/universal_button/button.hbs -f public/components/universal_button/button.precompiled.js && handlebars public/components/universal_input/input.hbs -f public/components/universal_input/input.precompiled.js && handlebars public/components/icon/icon.hbs -f public/components/icon/icon.precompiled.js && handlebars public/components/search_field/search_field.hbs -f public/components/search_field/search_field.precompiled.js" 
   },
   "repository": {
     "type": "git",

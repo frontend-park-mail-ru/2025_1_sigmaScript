@@ -1,16 +1,28 @@
+import { Login } from '/Login/Login.js';
+
 const rootElement = document.getElementById('root');
-const headerElement = document.createElement('header');
-const menuElement = document.createElement('aside');
-const pageElement = document.createElement('main');
 
-rootElement.appendChild(headerElement);
-rootElement.appendChild(menuElement);
-rootElement.appendChild(pageElement);
-
+/**
+ * Отрисовывает главную страницу
+ */
 function renderMain() {
-    headerElement.innerHTML = "FilmLook";
-    menuElement.innerHTML = "Menu";
-    pageElement.innerHTML = "Some content";
+    rootElement.innerHTML = '';
+    const login = document.createElement('a');
+    login.innerHTML = 'Войти';
+    login.addEventListener('click', (e) => {
+        e.preventDefault();
+        renderLogin();
+    });
+    rootElement.appendChild(login);
 }
 
-renderMain();
+/**
+ * Отрисовывает страницу входа (авторизации)
+ */
+function renderLogin() {
+    rootElement.innerHTML = '';
+    const login = new Login(rootElement, renderMain);
+    login.render();
+}
+
+renderLogin();

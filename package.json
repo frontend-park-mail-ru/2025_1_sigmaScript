@@ -5,10 +5,11 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "lint": "eslint public server --ext .js,.jsx,.ts,.tsx",
+    "lint-fix": "eslint public server --ext .js,.jsx,.ts,.tsx --fix",
     "prestart": "npm run compile:templates",
     "start": "DEBUG=* && node ./server/server.js",
-    "compile:templates": ""
+    "compile:templates": "handlebars public/components/Login/Login.hbs -f public/components/Login/Login.precompiled.js && handlebars public/components/Button/Button.hbs -f public/components/Button/Button.precompiled.js && handlebars public/components/Input/Input.hbs -f public/components/Input/Input.precompiled.js && handlebars public/components/Switch/Switch.hbs -f public/components/Switch/Switch.precompiled.js"
   },
   "repository": {
     "type": "git",
@@ -24,8 +25,10 @@
     "body-parser": "^1.20.3",
     "cookie-parser": "^1.4.7",
     "express": "^4.21.2",
+    "handlebars": "^4.7.8",
     "morgan": "^1.10.0",
-    "path": "^0.12.7"
+    "path": "^0.12.7",
+    "uuid": "^11.1.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.21.0",

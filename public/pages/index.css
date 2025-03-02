@@ -1,28 +1,17 @@
-#root {
-    display: grid;
-  
-    grid-template-areas:
-      "header header"
-      "menu content" ;
-  
-    grid-template-rows: 40px 1fr;
-    grid-template-columns: min-content 1fr;
+@import "/css/font.css";
+@import "/css/flex-box.css";
+@import "/Login/Login.css";
+
+body {
+    margin: 0;
 }
 
-header {
-    grid-area: header;
-    font-weight: bold;
-    font-size: 20px;
-    padding-left: 20px;
-    background-color: lightslategray;
+html {
+    font-size: 10px;
 }
 
-aside {
-    grid-area: menu;
-    padding: 20px;
-}
-  
-main {
-    grid-area: content;
-    padding: 20px;
+a {
+    font-size: 2rem;
+    font-weight: 700;
+    color:black;
 }

@@ -1,0 +1,24 @@
+<div class="search_input {{#if inputClasses}} {{inputClasses}} {{/if}}" id="{{id}}">
+
+    <form class="search_input__form flex-dir-row" id="{{searchFormId}}">
+
+        {{#if leftBtnId}}
+            <button class="search_input__icon_btn" id="{{leftBtnId}}" >
+                <img src="{{leftIcon}}" alt="*">
+                {{#if leftIcon}} <img src="{{leftIcon}}" alt="*"> {{/if}}
+                {{#if leftBtnText}} <span>{{leftBtnText}}</span> {{/if}}
+            </button>
+        {{/if}}
+
+        <input class="search_input__field" id="{{searchFormId}}_input" placeholder="{{placeholder}}" type="{{type}}" value="{{text}}">
+
+        {{#if rightBtnId}}
+            <button class="search_input__icon_btn" id="{{rightBtnId}}">
+                {{#if rightIcon}} <img src="{{rightIcon}}" alt="*"> {{/if}}
+                {{#if rightBtnText}} <span>{{rightBtnText}}</span> {{/if}}
+            </button>
+        {{/if}}
+
+    </form>
+    
+</div>

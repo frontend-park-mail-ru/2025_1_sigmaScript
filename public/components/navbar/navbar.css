@@ -1,0 +1,61 @@
+
+.navbar {
+    display: block;
+    position: fixed;
+    left: 0;
+    top: 0;
+
+    width: 100vw;
+    height: calc(var(--navbar-elements-height)*1.5);
+    min-width: 180px;
+    min-height: 20px;
+    background-color: var(--transparent-element);
+}
+
+.navbar_elements {
+
+    position: fixed;
+    left: 0;
+    top: 0;
+    padding-left: 60px;
+    padding-right: 60px;
+
+    background: var(--background-color);
+    height: var(--navbar-elements-height);
+    width: calc(100% - 120px);
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+}
+
+.navbar_gradient {
+    position: fixed;
+    left: 0;
+    top: 0;
+
+    width: 100%;
+    height: calc(var(--navbar-elements-height)*1.5);
+    min-width: 300px;
+    min-height: 20px;
+
+    background: linear-gradient(180deg, #16161A 67%, rgba(22, 22, 26, 0.75) 75%, rgba(22, 22, 26, 0.453846) 84%, rgba(22, 22, 26, 0.2) 92%, rgba(22, 22, 26, 0) 100%);
+}
+
+
+.navbar__input_form {
+    display: flex;
+    flex-direction: row;
+}
+
+.navbar__logo {
+    width: auto;
+    height: calc(var(--navbar-elements-height) * 0.5);
+    
+    border: none;
+    outline: none;
+
+    margin-top: calc(var(--navbar-elements-height) * 0.25);
+    margin-bottom: calc(var(--navbar-elements-height) * 0.25);
+
+}

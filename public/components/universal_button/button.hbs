@@ -1,0 +1,11 @@
+<button
+    id="{{id}}"
+    class="button button-color_{{color}}"
+    {{#if disabled}} disabled {{/if}}
+    {{#if form}} form="{{form}}" type="{{btnType}}" name="{{btnName}}" {{/if}}
+    {{#if autofocus}} autofocus="autofocus" {{/if}} >
+    {{#if srcIcon}}
+        <img src="{{srcIcon}}" class="button__icon" alt="icon">
+    {{/if}}
+    <span class="button__text button__text-color_{{textColor}}"> {{btnText}} </span>
+</button>

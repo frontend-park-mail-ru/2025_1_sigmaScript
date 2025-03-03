@@ -1,8 +1,69 @@
+@import "../components/components.css";
 @import "/css/font.css";
 @import "/css/flex-box.css";
 @import "/Login/Login.css";
 
-body {
+:root {
+    --primary-color: #7F5AF0;
+    --secondary-color: rgba(31, 31, 31, 0.9);
+    --primary-text-color: #FFFFFE;
+    --secondary-text-color: #72757E;
+    --background-color: #16161A;
+    --success-color: #50FF50;
+    --error-color: #FF5050;
+    --text-field-border-color: rgba(148, 161, 178, 0.5);
+    --transparent-element: rgba(22, 22, 26, 0);
+
+
+
+    --navbar-elements-height: 9rem;
+    --button-height: 9rem;
+}
+
+
+html {
+    /* от этой величины считается rem */
+    font-size: 10px;
+}
+
+
+#root {
+    display: grid;
+  
+    grid-template-areas:
+      "header header"
+      "menu content" ;
+  
+    grid-template-rows: 40px 1fr;
+    grid-template-columns: min-content 1fr;
+
+    margin-top: calc(var(--navbar-elements-height)* 1.5);
+}
+
+header {
+    grid-area: header;
+    font-weight: bold;
+    font-size: 20px;
+    padding-left: 20px;
+    background-color: lightslategray;    
+}
+
+aside {
+    grid-area: menu;
+    padding: 20px;
+}
+  
+main {
+    grid-area: content;
+    padding: 20px;
+    height: 1000px;
+}
+
+.flex-dir-row {
+    display: flex;
+    flex-direction: row;
+  
+  body {
     margin: 0;
 }
 
@@ -14,4 +75,4 @@ a {
     font-size: 2rem;
     font-weight: 700;
     color:black;
-}
+  

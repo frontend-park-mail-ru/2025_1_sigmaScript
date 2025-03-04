@@ -22,6 +22,11 @@ app.use(express.static(path.resolve(__dirname, '..', 'public/static/')));
 app.use(body.json());
 app.use(cookie());
 
+app.get('/consts.js', (req, res) => {
+    const filePath = path.resolve(__dirname, '..', 'public', 'consts.js');
+    res.sendFile(filePath);
+});
+
 const port = process.env.PORT || 3000;
 
 app.listen(port, function () {

@@ -42,12 +42,38 @@ export class Input {
         return !(this.#parent === null || this.#parent === undefined);
     }
 
+    /**
+     * Возвращает DOM элемент ошибки
+     * @returns {HTMLElement}
+     */
     getErrorContainer() {
+        return this.self()?.querySelector('.input__error-container');
+    }
+
+    /**
+     * Возвращает DOM элемент поля ввода
+     * @returns {HTMLElement}
+     */
+    getInput() {
+        return this.self()?.querySelector('.input');
+    }
+
+    /**
+     * Очищает поле ввода
+     */
+    clearInput() {
         if (this.parentDefined()) {
-            return this.self().querySelector('.input__error-container');
+            this.getInput().value = '';
         }
     }
 
+    /**
+     * Возвращает значение из поля ввода
+     * @returns {string}
+     */
+    getValue() {
+        return this.getInput()?.value;
+    }
     /**
      * Задаем родителя.
      */

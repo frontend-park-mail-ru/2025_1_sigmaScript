@@ -13,6 +13,7 @@ export const ERRORS = {
     ErrSessionNotExistsShort: 'not_exists',
     ErrInvalidPasswordShort: 'invalid_password',
     ErrPasswordTooShort: 'Password too short',
+    ErrPasswordTooLong: 'Password too long',
     ErrEmptyPassword: 'Empty password',
     ErrEasyPassword: 'Easy password',
     ErrDefault: 'internal_error',
@@ -28,9 +29,9 @@ export const ERROR_HANDLERS = {
     [ERRORS.ErrInvalidEmail]: (context) => context.showError(context.emailInput, 'Неправильная почта'),
     [ERRORS.ErrPasswordTooShort]: (context) =>
         context.showError(context.passwordInput, 'Длина пароля менее 6 символов', context.repeatInput),
+    [ERRORS.ErrPasswordTooLong]: (context) =>
+        context.showError(context.passwordInput, 'Длина пароля более 18 символов', context.repeatInput),
     [ERRORS.ErrEmptyPassword]: (context) =>
         context.showError(context.passwordInput, 'Пустой пароль', context.repeatInput),
-    [ERRORS.ErrEasyPassword]: (context) =>
-        context.showError(context.passwordInput, 'Пароль слишком лёгкий', context.repeatInput),
     [ERRORS.ErrDefault]: (context) => context.showError(context.lastInput, 'Что-то пошло не так. Попробуйте ещё')
 };

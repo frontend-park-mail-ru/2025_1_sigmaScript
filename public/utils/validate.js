@@ -58,23 +58,10 @@ export function isVaidPassword(password) {
     if (password.length < 6) {
         return ERROR_HANDLERS[ERRORS.ErrPasswordTooShort];
     }
+    if (password.length > 18) {
+        return ERROR_HANDLERS[ERRORS.ErrPasswordTooLong];
+    }
     if (password.trim() === '') {
         return ERROR_HANDLERS[ERRORS.ErrEmptyPassword];
     }
-    let lower = false,
-        upper = false,
-        digit = false;
-    for (const lett of password) {
-        if (lett >= 'a' && lett <= 'z') {
-            lower = true;
-        } else if (lett >= 'A' && lett <= 'Z') {
-            upper = true;
-        } else if (lett >= '0' && lett <= '9') {
-            digit = true;
-        }
-    }
-    if (lower && upper && digit) {
-        return null;
-    }
-    return ERROR_HANDLERS[ERRORS.ErrEasyPassword];
 }

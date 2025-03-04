@@ -77,6 +77,7 @@ export class Login {
         if (!this.parentDefined()) {
             return;
         }
+        // eslint-disable-next-line no-undef
         const template = Handlebars.templates['Login.hbs'];
         this.#parent.innerHTML += template({ id: this.#id });
 

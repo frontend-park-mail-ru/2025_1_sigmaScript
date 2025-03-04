@@ -75,6 +75,7 @@ export class Switch {
         if (!this.parentDefined()) {
             return;
         }
+        // eslint-disable-next-line no-undef
         const template = Handlebars.templates['Switch.hbs'];
         this.#parent.innerHTML += template(this.#data);
     }

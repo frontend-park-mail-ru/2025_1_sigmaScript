@@ -95,6 +95,7 @@ export class Button {
         if (!this.parentDefined) {
             return;
         }
+        // eslint-disable-next-line no-undef
         const template = Handlebars.templates['Button.hbs'];
         this.#parent.innerHTML += template(this.#data);
     }

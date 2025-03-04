@@ -5,7 +5,6 @@ const rootElement = document.getElementById('root');
 const nav = new Navbar(document.querySelector('body'));
 nav.render();
 
-
 /**
  * Отрисовывает главную страницу
  */

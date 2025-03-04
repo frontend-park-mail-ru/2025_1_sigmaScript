@@ -108,6 +108,7 @@ export class Input {
         if (!this.parentDefined()) {
             return;
         }
+        // eslint-disable-next-line no-undef
         const template = Handlebars.templates['Input.hbs'];
         this.#parent.innerHTML += template(this.#data);
     }

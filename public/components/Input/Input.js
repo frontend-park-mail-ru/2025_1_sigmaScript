@@ -59,6 +59,15 @@ export class Input {
     }
 
     /**
+     * Очищает поле ввода
+     */
+    clearInput() {
+        if (this.parentDefined()) {
+            this.getInput().value = '';
+        }
+    }
+
+    /**
      * Возвращает значение из поля ввода
      * @returns {string}
      */

@@ -117,6 +117,7 @@ export class Login {
         this.submitButton.self().textContent = 'Войти';
         this.#mode = 1;
         this.resetForm();
+        this.clearInputs();
     }
 
     /**
@@ -129,6 +130,7 @@ export class Login {
         this.submitButton.self().textContent = 'Зарегистрироваться';
         this.#mode = 0;
         this.resetForm();
+        this.clearInputs();
     }
 
     /**
@@ -159,6 +161,15 @@ export class Login {
         this.removeError(this.emailInput);
         this.removeError(this.passwordInput);
         this.removeError(this.repeatInput);
+    }
+
+    /**
+     * Очищает поля ввода
+     */
+    clearInputs() {
+        this.emailInput.clearInput();
+        this.passwordInput.clearInput();
+        this.repeatInput.clearInput();
     }
 
     /**

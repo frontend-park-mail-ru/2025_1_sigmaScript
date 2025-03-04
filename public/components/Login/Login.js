@@ -2,6 +2,12 @@ import { createID } from '/createID.js';
 import { Button } from '/Button/Button.js';
 import { Input } from '/Input/Input.js';
 import { Switch } from '/Switch/Switch.js';
+import { AUTH_URL } from '/consts.js';
+import { ERRORS } from '/consts.js';
+import { ERROR_HANDLERS } from '/consts.js';
+import { isValidEmail } from '/validate.js';
+import { isVaidPassword } from '/validate.js';
+import { debounce } from '/debounce.js';
 
 export class Login {
     #parent;
@@ -90,6 +96,8 @@ export class Login {
         this.signUpButton = this.switch.self().querySelector('.switch__button--right');
         this.backButton = this.self().querySelector('.login__back');
 
+        this.submitButton.disable();
+
         this.addEvents();
 
         if (this.#mode) {
@@ -107,6 +115,8 @@ export class Login {
         this.signUpButton.classList.remove('active');
         this.repeatInput.self().style.visibility = 'hidden';
         this.submitButton.self().textContent = 'Войти';
+        this.#mode = 1;
+        this.resetForm();
     }
 
     /**
@@ -117,6 +127,142 @@ export class Login {
         this.signUpButton.classList.add('active');
         this.repeatInput.self().style.visibility = 'visible';
         this.submitButton.self().textContent = 'Зарегистрироваться';
+        this.#mode = 0;
+        this.resetForm();
+    }
+
+    /**
+     * Показывает ошибку в переданные поля ввода с указанным сообщением
+     * @param {Input} firstInput - обязательное поле ввода.
+     * @param {string} message - отображаемое сообщение об ошибке
+     * @param {Input} [secondInput] - опциональное поле ввода
+     */
+    showError(firstInput, message, secondInput) {
+        firstInput.getErrorContainer().innerHTML = message;
+        firstInput.getInput().classList.add('error');
+        secondInput?.getInput().classList.add('error');
+    }
+
+    /**
+     * Очищает переданное поле ввода от ошибок
+     * @param {Input} input - очищаемое поле ввода
+     */
+    removeError(input) {
+        input.getErrorContainer().innerHTML = '';
+        input.getInput().classList.remove('error');
+    }
+
+    /**
+     * Сбрасывает форму
+     */
+    resetForm() {
+        this.removeError(this.emailInput);
+        this.removeError(this.passwordInput);
+        this.removeError(this.repeatInput);
+    }
+
+    /**
+     * Валидация почты
+     * @returns {bool}
+     */
+    validateEmail() {
+        let handler = isValidEmail(this.emailInput.getValue().trim());
+        if (handler) {
+            handler(this);
+            return false;
+        }
+        this.removeError(this.emailInput);
+        return true;
+    }
+
+    /**
+     * Валидация паролей
+     * @returns {bool}
+     */
+    validatePassword() {
+        if (this.#mode === 0 && this.passwordInput.getValue() !== this.repeatInput.getValue()) {
+            ERROR_HANDLERS[ERRORS.ErrPasswordsMismatchShort](this);
+            return false;
+        }
+        let handler = isVaidPassword(this.passwordInput.getValue());
+        if (handler) {
+            handler(this);
+            return false;
+        } else {
+            this.removeError(this.passwordInput);
+        }
+        handler = isVaidPassword(this.repeatInput.getValue());
+        if (this.#mode === 0 && handler) {
+            handler(this);
+            return false;
+        } else {
+            this.removeError(this.repeatInput);
+        }
+        return true;
+    }
+
+    /**
+     * Валидация полей ввода
+     */
+    validate() {
+        this.resetForm();
+        if (this.validateEmail() && this.validatePassword()) {
+            this.submitButton.enable();
+        } else {
+            this.submitButton.disable();
+        }
+    }
+
+    /**
+     * Отправка формы
+     * @param {Event} e - событие формы
+     */
+    async submitForm(e) {
+        e.preventDefault();
+        this.resetForm();
+
+        const email = this.emailInput.getValue().trim();
+        const pass = this.passwordInput.getValue();
+        const repeatPass = this.repeatInput.getValue();
+
+        try {
+            const url = AUTH_URL + (this.#mode === 1 ? 'login/' : 'register/');
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    username: email,
+                    password: pass,
+                    repeated_password: repeatPass
+                }),
+                credentials: 'include'
+            });
+            if (!response.ok) {
+                const error = await response.json();
+                throw new Error(error.error || 'Unknown error');
+            }
+            this.prevPage();
+        } catch (error) {
+            const err = error.message;
+            this.lastInput = '';
+
+            if (this.#mode === 1) {
+                this.lastInput = this.passwordInput;
+            } else {
+                this.lastInput = this.repeatInput;
+            }
+
+            for (const [key, handler] of Object.entries(ERROR_HANDLERS)) {
+                if (err.includes(key)) {
+                    console.log(key);
+                    handler(this);
+                    return;
+                }
+            }
+            ERROR_HANDLERS[ERRORS.ErrDefault](this);
+        }
     }
 
     /**
@@ -134,5 +280,15 @@ export class Login {
         this.backButton.addEventListener('click', () => {
             this.prevPage();
         });
+
+        this.submitButton.self().addEventListener('click', (e) => {
+            this.submitForm(e);
+        });
+
+        const debouncedValidate = debounce(this.validate.bind(this), 300);
+
+        this.emailInput.getInput().addEventListener('input', debouncedValidate);
+        this.passwordInput.getInput().addEventListener('input', debouncedValidate);
+        this.repeatInput.getInput().addEventListener('input', debouncedValidate);
     }
 }

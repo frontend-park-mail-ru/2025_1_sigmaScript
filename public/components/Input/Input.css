@@ -28,8 +28,9 @@
     border: 1px solid #7F5AF0;
 }
 
-.input:error {
+.error {
     border: 1px solid #FF0000;
+    border-radius: 25px;
 }
 
 .input__error-container {

@@ -59,6 +59,26 @@ export class Button {
     }
 
     /**
+     * Делает кнопку недоступной
+     */
+    disable() {
+        if (this.parentDefined()) {
+            this.self().classList.add('disable');
+            this.self().disabled = true;
+        }
+    }
+
+    /**
+     * Делает кнопку доступной
+     */
+    enable() {
+        if (this.parentDefined()) {
+            this.self().classList.remove('disable');
+            this.self().disabled = false;
+        }
+    }
+
+    /**
      * Удаляет отрисованные элементы.
      */
     destroy() {

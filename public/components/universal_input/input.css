@@ -1,4 +1,4 @@
-.input {
+.u_input {
     box-sizing: border-box;
     display: flex;
     flex-direction: row;
@@ -22,7 +22,7 @@
 }
 
 
-.input__field { 
+.u_input__field { 
     background-color: var(--background-color);
     color: var(--secondary-text-color); 
     width: auto;
@@ -38,12 +38,12 @@
     border-width: 1px;
 }
 
-.input__field:hover {
+.u_input__field:hover {
     outline: none;
 }
 
 
-.input__field:focus {
+.u_input__field:focus {
     caret-color: var(--primary-color);
     border-color: var(--primary-color);
     color: var(--primary-text-color);
@@ -51,7 +51,7 @@
 }
 
 
-.input__field-error {
+.u_input__field-error {
     color: var(--error-color);
     caret-color: var(--error-color);
     border-color: var(--error-color);

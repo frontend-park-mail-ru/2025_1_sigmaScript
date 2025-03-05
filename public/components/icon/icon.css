@@ -88,11 +88,11 @@
 }
 
 .icon__text-color_primary {
-    color: var(--primary-color);
+    color: var(--primary-text-color);
 }
 
 .icon__text-color_secondary {
-    color: var(--secondary-color);
+    color: var(--secondary-text-color);
 }
 
 .icon__text-color_success {

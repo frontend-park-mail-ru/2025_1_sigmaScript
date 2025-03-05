@@ -4,20 +4,28 @@
 
 main {
     width: 100vw;
-    height: 100vh;
+    height: 100%;
     background-color: #16161A;
-    background-image: url('/img/login_background.png');
+    background-image: url('/img/login_background.webp');
     background-size: cover;
 }
 
 .login {
-    justify-content: space-evenly;
     position: relative;
-    width: 20%;
+
+    justify-content: space-evenly;
+    
+    width: 30%;
     height: 55%;
     padding: 0;
     background-color: inherit;
     border-radius: 32px;
+
+    min-width: 300px;
+    max-width: 340px;
+
+    min-height: 410px;
+    max-height: 450px;
 }
 
 .login__text {

@@ -84,7 +84,7 @@ class Navbar {
             srcIcon: userSvg,
             size: 'large',
             text: 'Войти',
-            textColor: 'primary',
+            textColor: 'secondary',
             link: '#',
             circular: true,
             direction: 'row'

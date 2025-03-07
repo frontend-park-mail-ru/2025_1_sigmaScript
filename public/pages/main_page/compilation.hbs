@@ -1,0 +1,11 @@
+<div class="compilation flex-row">
+  <h2>{{title}}</h2>
+  {{#each movies}}
+  <!-- Карточка фильма -->
+  <article class="movie-card">
+    <img src="{{this.preview_url}}" alt="{{this.title}} Poster" class="poster">
+    <h3 class="title">{{this.title}}</h3>
+    <a href="/movies/{{this.id}}" class="details-link">Подробнее</a>
+  </article>
+  {{/each}}
+</div>

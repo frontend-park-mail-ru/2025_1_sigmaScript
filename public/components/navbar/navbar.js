@@ -1,7 +1,7 @@
 import Icon from '../icon/icon.js';
-import SearchField from '../search_field/search_field.js';
+// import SearchField from '../search_field/search_field.js';
 
-const searchSvg = '/svg/search_button.svg';
+// const searchSvg = '/svg/search_button.svg';
 const logoSvg = '/svg/logo_text_border_lining.svg';
 const userSvg = '/svg/Avatar large.svg';
 
@@ -23,74 +23,76 @@ const userSvg = '/svg/Avatar large.svg';
  * const nav = new Navbar(parent);
  */
 class Navbar {
-    #parent;
+  #parent;
 
-    constructor(parent) {
-        this.#parent = parent;
+  constructor(parent) {
+    this.#parent = parent;
+  }
+
+  self() {
+    return document.querySelector('.navbar');
+  }
+
+  destroy() {
+    if (this.self()) {
+      this.self().remove();
     }
+  }
 
-    self() {
-        return document.querySelector('.navbar');
+  #elements() {
+    return document.querySelector('.navbar_elements');
+  }
+
+  render() {
+    if (!this.#parent) {
+      return;
     }
+    this.destroy();
 
-    destroy() {
-        if (this.self()) {
-            this.self().remove();
-        }
-    }
+    const navbar = document.createElement('navbar');
+    navbar.classList.add('navbar');
+    this.#parent.appendChild(navbar);
+    // eslint-disable-next-line no-undef
+    const navbarTempl = Handlebars.templates['navbar.hbs'];
+    navbar.innerHTML = navbarTempl({});
 
-    #elements() {
-        return document.querySelector('.navbar_elements');
-    }
+    const navbarLogo = document.createElement('div');
+    navbarLogo.classList.add('navbar__logo');
+    this.#elements().appendChild(navbarLogo);
 
-    render() {
-        if (!this.#parent) {
-            return;
-        }
-        this.destroy();
+    const logo = new Icon(navbarLogo, {
+      id: 'navbarLogo',
+      srcIcon: logoSvg,
+      link: '#'
+    });
+    logo.render();
 
-        const navbar = document.createElement('navbar');
-        navbar.classList.add('navbar');
-        this.#parent.appendChild(navbar);
-        // eslint-disable-next-line no-undef
-        const navbarTempl = Handlebars.templates['navbar.hbs'];
-        navbar.innerHTML = navbarTempl({});
+    // todo
+    // // поле поиска
+    // const searchField = new SearchField(this.#elements(), {
+    //   id: 'search',
+    //   placeholder: 'Название фильма для поиска',
+    //   type: 'text',
+    //   searchFormId: 'navbarsearchform',
+    //   rightBtnId: 'rightBtn',
+    //   rightIcon: searchSvg
+    // });
+    // searchField.render();
 
-        const navbarLogo = document.createElement('div');
-        navbarLogo.classList.add('navbar__logo');
-        this.#elements().appendChild(navbarLogo);
-
-        const logo = new Icon(navbarLogo, {
-            id: 'navbarLogo',
-            srcIcon: logoSvg,
-            link: '#'
-        });
-        logo.render();
-
-        // поле поиска
-        const searchField = new SearchField(this.#elements(), {
-            id: 'search',
-            placeholder: 'Название фильма для поиска',
-            type: 'text',
-            searchFormId: 'navbarsearchform',
-            rightBtnId: 'rightBtn',
-            rightIcon: searchSvg
-        });
-        searchField.render();
-
-        // аватар Пользователя
-        const user = new Icon(this.#elements(), {
-            id: 'user',
-            srcIcon: userSvg,
-            size: 'large',
-            text: 'Войти',
-            textColor: 'secondary',
-            link: '#',
-            circular: true,
-            direction: 'row'
-        });
-        user.render();
-    }
+    // TODO
+    // аватар Пользователя
+    const user = new Icon(this.#elements(), {
+      id: 'user',
+      srcIcon: userSvg,
+      size: 'large',
+      text: 'Войти',
+      textColor: 'secondary',
+      link: '#',
+      circular: true,
+      direction: 'row'
+    });
+    user.render();
+  }
 }
 
 export default Navbar;

@@ -3,6 +3,7 @@
 @import "/css/font.css";
 @import "/css/flex-box.css";
 @import "/Login/Login.css";
+@import "./main_page/main_page.css";
 
 #root {
     display: block;
@@ -10,36 +11,24 @@
     width: 100vw;
     height: 100vh;
 
-    padding-top: calc(var(--navbar-elements-height)* 1);
+    /* padding-top: calc(var(--navbar-elements-height)* 1); */
 
     background-color: var(--background-color);
 }
 
-/* header {
-    grid-area: header;
-    font-weight: bold;
-    font-size: 20px;
-    padding-left: 20px;
-    background-color: lightslategray;    
-} */
-
-/* aside {
-    grid-area: menu;
-    padding: 20px;
-} */
-  
 main {
     width: 100vw;
     height: 100%;
+    padding-top: calc(var(--navbar-elements-height) * 1.5);
+    background-color: var(--background-color);
+    background-size: cover;
 }
 
 .flex-dir-row {
     display: flex;
     flex-direction: row;
-  
-    body {
-        margin: 0;
-    }
+
+    gap: 20px;
 }
 
 html {
@@ -49,5 +38,5 @@ html {
 a {
     font-size: 2rem;
     font-weight: 700;
-    color:black;
-} 
+    color: black;
+}

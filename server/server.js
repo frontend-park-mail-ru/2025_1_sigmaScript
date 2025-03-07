@@ -23,12 +23,12 @@ app.use(body.json());
 app.use(cookie());
 
 app.get('/consts.js', (req, res) => {
-    const filePath = path.resolve(__dirname, '..', 'public', 'consts.js');
-    res.sendFile(filePath);
+  const filePath = path.resolve(__dirname, '..', 'public', 'consts.js');
+  res.sendFile(filePath);
 });
 
 const port = process.env.PORT || 3000;
 
 app.listen(port, function () {
-    console.log(`Server listening port http://localhost:${port}`);
+  console.log(`Server listening port http://localhost:${port}`);
 });

@@ -2,10 +2,7 @@
 @import "/Input/Input.css";
 @import "/Switch/Switch.css";
 
-main {
-    width: 100vw;
-    height: 100%;
-    background-color: #16161A;
+.main_auth {
     background-image: url('/img/login_background.webp');
     background-size: cover;
 }
@@ -14,7 +11,7 @@ main {
     position: relative;
 
     justify-content: space-evenly;
-    
+
     width: 30%;
     height: 55%;
     padding: 0;
@@ -30,7 +27,7 @@ main {
 
 .login__text {
     width: 50%;
-    text-align: center; 
+    text-align: center;
     font-size: 2.0rem;
 }
 
@@ -38,7 +35,7 @@ main {
     position: absolute;
     top: 4%;
     left: 6%;
-    cursor: pointer; 
+    cursor: pointer;
     width: 10%;
     height: 10%;
 }

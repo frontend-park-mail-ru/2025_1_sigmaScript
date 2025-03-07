@@ -27,75 +27,75 @@
  * });
  */
 class SearchField {
-    #parent;
-    #config = {};
-    #actions = {};
+  #parent;
+  #config = {};
+  #actions = {};
 
-    constructor(parent, config) {
-        this.#parent = parent;
+  constructor(parent, config) {
+    this.#parent = parent;
 
-        this.#config = Object.assign({}, config);
+    this.#config = Object.assign({}, config);
 
-        if (this.#config.id === '') {
-            this.#config.id = 'Input';
-        }
-
-        this.#actions = config.actions || {};
+    if (this.#config.id === '') {
+      this.#config.id = 'Input';
     }
 
-    self() {
-        if (this.#parent) {
-            return;
-        }
-        return this.#parent.querySelector('#' + this.#config.id);
+    this.#actions = config.actions || {};
+  }
+
+  self() {
+    if (this.#parent) {
+      return;
     }
+    return this.#parent.querySelector('#' + this.#config.id);
+  }
 
-    setActions(newActions) {
-        for (let action in newActions) {
-            this.#actions[action] = newActions[action];
-        }
+  setActions(newActions) {
+    for (let action in newActions) {
+      this.#actions[action] = newActions[action];
     }
+  }
 
-    #applyActions() {
-        if (this.#actions.leftBtn) {
-            const btnLeft = this.self().querySelector('#' + this.#config.leftBtnId);
-            btnLeft.addEventListener('click', this.#actions.leftBtn);
-        }
-        if (this.#actions.rightBtn) {
-            const btnRight = this.self().querySelector('#' + this.#config.rightBtnId);
-            btnRight.addEventListener('click', this.#actions.rightBtn);
-        }
+  #applyActions() {
+    if (this.#actions.leftBtn) {
+      const btnLeft = this.self().querySelector('#' + this.#config.leftBtnId);
+      btnLeft.addEventListener('click', this.#actions.leftBtn);
     }
-
-    form() {
-        if (!this.self()) {
-            throw new Error(`Объект с id="${this.#config.searchFormId}" не найден на странице`);
-        }
-        return this.self().querySelector('#' + this.#config.searchFormId);
+    if (this.#actions.rightBtn) {
+      const btnRight = this.self().querySelector('#' + this.#config.rightBtnId);
+      btnRight.addEventListener('click', this.#actions.rightBtn);
     }
+  }
 
-    destroy() {
-        if (this.self()) {
-            this.self().remove();
-        }
+  form() {
+    if (!this.self()) {
+      throw new Error(`Объект с id="${this.#config.searchFormId}" не найден на странице`);
     }
+    return this.self().querySelector('#' + this.#config.searchFormId);
+  }
 
-    render() {
-        let wrapper = document.createElement('div');
-        // eslint-disable-next-line no-undef
-        const inputTempl = Handlebars.templates['search_field.hbs'];
-        wrapper.insertAdjacentHTML('beforeEnd', inputTempl(this.#config));
-
-        const icon = wrapper.firstElementChild;
-        wrapper.remove();
-
-        if (this.self()) {
-            this.self().replaceWith(icon);
-        } else {
-            this.#parent.insertAdjacentElement('beforeEnd', icon);
-        }
-        this.#applyActions();
+  destroy() {
+    if (this.self()) {
+      this.self().remove();
     }
+  }
+
+  render() {
+    let wrapper = document.createElement('div');
+    // eslint-disable-next-line no-undef
+    const inputTempl = Handlebars.templates['search_field.hbs'];
+    wrapper.insertAdjacentHTML('beforeEnd', inputTempl(this.#config));
+
+    const icon = wrapper.firstElementChild;
+    wrapper.remove();
+
+    if (this.self()) {
+      this.self().replaceWith(icon);
+    } else {
+      this.#parent.insertAdjacentElement('beforeEnd', icon);
+    }
+    this.#applyActions();
+  }
 }
 
 export default SearchField;

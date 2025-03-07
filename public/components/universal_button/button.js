@@ -23,68 +23,68 @@
  * });
  */
 class Button {
-    #config = {};
-    #actions = {};
-    #parent;
+  #config = {};
+  #actions = {};
+  #parent;
 
-    constructor(parent, config) {
-        this.#parent = parent;
+  constructor(parent, config) {
+    this.#parent = parent;
 
-        this.#config.id = config.id || 'btn';
-        this.#config.color = config.color || 'primary';
-        this.#config.disabled = config.disabled || false;
-        this.#config.form = config.form || '';
-        this.#config.srcIcon = config.srcIcon || '';
-        this.#config.text = config.text || '';
-        this.#config.textColor = config.textColor || 'primary';
-        this.#config.autofocus = config.autofocus || false;
+    this.#config.id = config.id || 'btn';
+    this.#config.color = config.color || 'primary';
+    this.#config.disabled = config.disabled || false;
+    this.#config.form = config.form || '';
+    this.#config.srcIcon = config.srcIcon || '';
+    this.#config.text = config.text || '';
+    this.#config.textColor = config.textColor || 'primary';
+    this.#config.autofocus = config.autofocus || false;
 
-        this.#actions = config.actions || {};
+    this.#actions = config.actions || {};
+  }
+
+  self() {
+    if (!this.#parent) {
+      return;
     }
+    return this.#parent.querySelector('#' + this.#config.id);
+  }
 
-    self() {
-        if (!this.#parent) {
-            return;
-        }
-        return this.#parent.querySelector('#' + this.#config.id);
+  destroy() {
+    if (this.self()) {
+      this.self().remove();
     }
+  }
 
-    destroy() {
-        if (this.self()) {
-            this.self().remove();
-        }
+  setActions(newActions) {
+    for (let action in newActions) {
+      this.#actions[action] = newActions[action];
     }
+  }
 
-    setActions(newActions) {
-        for (let action in newActions) {
-            this.#actions[action] = newActions[action];
-        }
+  #applyActions() {
+    if (this.self()) {
+      for (let action in this.#actions) {
+        this.self().addEventListener(action, this.#actions[action]);
+      }
     }
+  }
 
-    #applyActions() {
-        if (this.self()) {
-            for (let action in this.#actions) {
-                this.self().addEventListener(action, this.#actions[action]);
-            }
-        }
+  render() {
+    let wrapper = document.createElement('div');
+    // eslint-disable-next-line no-undef
+    const btnTempl = Handlebars.templates['button.hbs'];
+    wrapper.insertAdjacentHTML('beforeEnd', btnTempl(this.#config));
+
+    const btn = wrapper.firstElementChild;
+    wrapper.remove();
+
+    if (self()) {
+      self().replaceWith(btn);
+    } else {
+      this.#parent.insertAdjacentElement('beforeEnd', btn);
     }
-
-    render() {
-        let wrapper = document.createElement('div');
-        // eslint-disable-next-line no-undef
-        const btnTempl = Handlebars.templates['button.hbs'];
-        wrapper.insertAdjacentHTML('beforeEnd', btnTempl(this.#config));
-
-        const btn = wrapper.firstElementChild;
-        wrapper.remove();
-
-        if (self()) {
-            self().replaceWith(btn);
-        } else {
-            this.#parent.insertAdjacentElement('beforeEnd', btn);
-        }
-        this.#applyActions();
-    }
+    this.#applyActions();
+  }
 }
 
 export default Button;

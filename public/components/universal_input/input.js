@@ -18,76 +18,75 @@
  * });
  */
 class Input {
-    #parent;
-    #config = {};
-    #actions = {};
+  #parent;
+  #config = {};
+  #actions = {};
 
-    constructor(parent, config) {
-        this.#parent = parent;
+  constructor(parent, config) {
+    this.#parent = parent;
 
-        this.#config.id = config.id || 'Input';
-        this.#config.inputClasses = config.inputClasses || '';
-        this.#config.inputFieldId = config.inputFieldId || 'InputField';
-        this.#config.text = config.text || '';
-        this.#config.placeholder = config.placeholder || '';
-        this.#config.type = config.type || '';
-        this.#config.type = config.type || '';
+    this.#config.id = config.id || 'Input';
+    this.#config.inputClasses = config.inputClasses || '';
+    this.#config.inputFieldId = config.inputFieldId || 'InputField';
+    this.#config.text = config.text || '';
+    this.#config.placeholder = config.placeholder || '';
+    this.#config.type = config.type || '';
 
-        this.#actions = config.actions;
+    this.#actions = config.actions;
+  }
+
+  self() {
+    if (!this.#parent) {
+      return;
+    }
+    return this.#parent.querySelector('#' + this.#config.id);
+  }
+
+  setActions(newActions) {
+    for (let action in newActions) {
+      this.#actions[action] = newActions[action];
+    }
+  }
+
+  #applyActions() {
+    if (!this.self()) {
+      return;
     }
 
-    self() {
-        if (!this.#parent) {
-            return;
-        }
-        return this.#parent.querySelector('#' + this.#config.id);
+    if (this.#actions.keypress) {
+      this.self().addEventListeneraddEventListener('keypress', this.#actions.keypress);
     }
+  }
 
-    setActions(newActions) {
-        for (let action in newActions) {
-            this.#actions[action] = newActions[action];
-        }
+  field() {
+    if (!this.self()) {
+      throw new Error(`Объект с id="${this.#config.inputFieldId}" не найден на странице`);
     }
+    return this.self().querySelector('#' + this.#config.inputFieldId);
+  }
 
-    #applyActions() {
-        if (!this.self()) {
-            return;
-        }
-
-        if (this.#actions.keypress) {
-            this.self().addEventListeneraddEventListener('keypress', this.#actions.keypress);
-        }
+  destroy() {
+    if (this.self()) {
+      this.self().remove();
     }
+  }
 
-    field() {
-        if (!this.self()) {
-            throw new Error(`Объект с id="${this.#config.inputFieldId}" не найден на странице`);
-        }
-        return this.self().querySelector('#' + this.#config.inputFieldId);
+  render() {
+    let wrapper = document.createElement('div');
+    // eslint-disable-next-line no-undef
+    const inputTempl = Handlebars.templates['input.hbs'];
+    wrapper.insertAdjacentHTML('beforeEnd', inputTempl(this.#config));
+
+    const input = wrapper.firstElementChild;
+    wrapper.remove();
+
+    if (this.self()) {
+      this.self().replaceWith(input);
+    } else {
+      this.#parent.insertAdjacentElement('beforeEnd', input);
     }
-
-    destroy() {
-        if (this.self()) {
-            this.self().remove();
-        }
-    }
-
-    render() {
-        let wrapper = document.createElement('div');
-        // eslint-disable-next-line no-undef
-        const inputTempl = Handlebars.templates['input.hbs'];
-        wrapper.insertAdjacentHTML('beforeEnd', inputTempl(this.#config));
-
-        const input = wrapper.firstElementChild;
-        wrapper.remove();
-
-        if (this.self()) {
-            this.self().replaceWith(input);
-        } else {
-            this.#parent.insertAdjacentElement('beforeEnd', input);
-        }
-        this.#applyActions();
-    }
+    this.#applyActions();
+  }
 }
 
 export default Input;

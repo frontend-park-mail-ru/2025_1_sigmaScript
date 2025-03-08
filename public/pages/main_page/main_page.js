@@ -30,30 +30,8 @@ class MainPage {
     this.self().remove();
   }
 
-  // header(mainElem) {
-  //   if (!mainElem) {
-  //     return;
-  //   }
-  //   return mainElem.querySelector('#' + this.#config.headerId);
-  // }
-
-  // content(mainElem) {
-  //   if (!mainElem) {
-  //     return;
-  //   }
-  //   return mainElem.querySelector('#' + this.#config.contentId);
-  // }
-
-  // footer(mainElem) {
-  //   if (!mainElem) {
-  //     return;
-  //   }
-  //   return mainElem.querySelector('#' + this.#config.footerId);
-  // }
-
   async GetCompilations() {
     try {
-      // Делаем запрос на сервер
       const url = BASE_URL + 'collections/';
       const response = await fetch(url, {
         method: 'GET',
@@ -64,12 +42,6 @@ class MainPage {
       if (!response.ok) {
         throw new Error(`Ошибка при получении подборок: ${response.status}`);
       }
-
-      // // Делаем запрос на сервер
-      // const response = await fetch('http://localhost:8080/collections/');
-      // if (!response.ok) {
-      //   throw new Error(`Ошибка при получении подборок: ${response.status}`);
-      // }
 
       const compilations = await response.json();
       return { data: compilations, error: null };
@@ -82,19 +54,15 @@ class MainPage {
   async render() {
     this.destroy();
 
-    // Рендерим главную страницу
     const mainElem = document.createElement('main');
     mainElem.id = this.#config.id;
     this.#parent.appendChild(mainElem);
 
-    // рендерим header
     const mainElemHeader = document.createElement('div');
     mainElemHeader.classList += 'header sticky_to_top';
     mainElemHeader.id = this.#config.headerId;
     mainElem.appendChild(mainElemHeader);
 
-    // временное решение, пока нет state или роутера
-    // рендерим navbar
     const nav = new Navbar(mainElemHeader, () => {
       const rootElement = document.getElementById('root');
       rootElement.innerHTML = '';
@@ -103,30 +71,26 @@ class MainPage {
     });
     nav.render();
 
-    // Рендерим блок с контентом главной страницы
     const mainElemContent = document.createElement('div');
     mainElemContent.classList += 'content';
     mainElemContent.id = this.#config.contentId;
     mainElem.appendChild(mainElemContent);
 
-    // создаем блок с подборками
     const compilationsElem = document.createElement('compilations');
     compilationsElem.classList += 'flex-dir-col compilations';
     mainElemContent.appendChild(compilationsElem);
     // eslint-disable-next-line no-undef
     const compilationTempl = Handlebars.templates['compilation.hbs'];
 
-    // Получаем данные с бекенда
     const compilationsData = await this.GetCompilations();
     if (compilationsData.err) {
       console.log('Ошибка: ', compilationsData.err);
       return;
     }
 
-    // Рендерим каждую подборку
     for (const key in compilationsData.data) {
       const compData = compilationsData.data[key];
-      // Рендерим compilation
+
       const compilationElem = document.createElement('compilation');
       compilationElem.classList.add('compilation');
       compilationElem.insertAdjacentHTML(

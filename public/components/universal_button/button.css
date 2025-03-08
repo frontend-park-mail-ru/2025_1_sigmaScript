@@ -3,11 +3,11 @@
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    padding: calc(var(--navbar-elements-height) * 0.5 * 0.2);
+    padding: 1rem;
     gap: 4px;
 
-    height: calc(var(--navbar-elements-height) * 0.5);
-    border-radius: calc(var(--navbar-elements-height) * 0.5 * 0.45);
+    height: var(--navbar-elements-height);
+    border-radius: 25px;
     border: none;
 
     cursor: pointer;
@@ -30,14 +30,6 @@
 
     outline: none;
 }
-
-/* .switch__button:focus {
-    border: solid;
-    outline: none;
-    border-color: #67A9EA;
-    border-width: 2px;
-} */
-
 
 .u_button-color_primary {
     background-color: var(--primary-color);
@@ -73,11 +65,11 @@
 }
 
 .u_button__text-color_secondary {
-    color: var(--secondary-color)    
+    color: var(--secondary-color)
 }
 
 .u_button__icon {
     align-self: center;
     justify-content: center;
-    height: calc(var(--navbar-elements-height) * 0.5 * 0.6);
+    height: calc(var(--navbar-elements-height) * 0.6);
 }

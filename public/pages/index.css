@@ -18,13 +18,13 @@
     --transparent-element: rgba(22, 22, 26, 0);
 
 
-
-    --navbar-elements-height: 9rem;
+    --navbar-height: 13.5rem;
+    --navbar-content-height: 9rem;
+    --navbar-elements-height: 4.5rem;
     --button-height: 9rem;
 }
 
 html {
-    /* от этой величины считается rem */
     font-size: 10px;
 }
 
@@ -39,21 +39,7 @@ body {
 }
 
 #root {
-    /* display: block;
-
-    width: 100vw;
-    height: auto;
-    min-height: 100vh; */
-
     background-color: var(--background-color);
-
-    /* overflow-y: visible; */
-
-    /* display: block;
-    box-sizing: content-box;
-    float: none;
-    position: static;
-    z-index: auto; */
 }
 
 html {
@@ -71,7 +57,7 @@ main {
     z-index: 1;
     display: flex;
     flex-direction: column;
-    min-height: 100vh;
+    min-height: 100dvh;
     background-color: var(--background-color-light);
 }
 
@@ -83,8 +69,6 @@ main {
 .flex-dir-col {
     display: flex;
     flex-direction: column;
-    /* align-items: center;
-    justify-content: center; */
 }
 
 a {

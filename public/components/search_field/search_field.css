@@ -6,19 +6,13 @@
     align-items: center;
 
     width: auto;
-    height: calc(var(--navbar-elements-height) * 0.5);
-    
+    height: var(--navbar-elements-height);
+
+    margin: 0px 20px;
+
     border: none;
     outline: none;
     background-color: var(--background-color);
-
-    padding-left: 5px;
-    margin-top: calc(var(--navbar-elements-height) * 0.25);
-    margin-bottom: calc(var(--navbar-elements-height) * 0.25);
-
-    &::placeholder {
-        color: var(--secondary-text-color);
-    }
 }
 
 .search_input__form {
@@ -26,20 +20,24 @@
 }
 
 
-.search_input__field { 
+.search_input__field {
     background-color: var(--background-color);
-    color: var(--secondary-text-color); 
+    color: var(--secondary-text-color);
     width: auto;
     min-width: 360px;
-    height: calc(var(--navbar-elements-height) * 0.5);
+    height: var(--navbar-elements-height);
 
-    padding-left: calc(var(--navbar-elements-height) * 0.5 * 0.45);
+    padding-left: 2rem;
     font-size: 2.4rem;
 
     border: solid;
     border-color: var(--text-field-border-color);
-    border-radius: calc(var(--navbar-elements-height) * 0.5 * 0.45);
+    border-radius: 25px;
     border-width: 1px;
+
+    &::placeholder {
+        color: var(--secondary-text-color);
+    }
 }
 
 .search_input__field:hover {
@@ -68,8 +66,8 @@
     border: none;
     padding: 0;
     cursor: pointer;
-    
-    height: calc(var(--navbar-elements-height) * 0.5);
+
+    height: var(--navbar-elements-height);
     display: flex;
     align-self: center;
     justify-content: center;

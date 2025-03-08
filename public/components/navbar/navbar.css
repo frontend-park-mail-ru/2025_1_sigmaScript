@@ -1,8 +1,8 @@
 .navbar {
     display: block;
 
-    width: 100%;
-    height: calc(var(--navbar-elements-height)*1.5);
+    width: 100dvw;
+    height: var(--navbar-height);
     min-width: 180px;
     min-height: 20px;
     background-color: var(--transparent-element);
@@ -13,20 +13,21 @@
 }
 
 .navbar_elements {
-
+    box-sizing: border-box;
     position: fixed;
     left: 0;
     top: 0;
     padding-left: 60px;
     padding-right: 60px;
+    padding-top: 22.5px;
+    padding-bottom: 22.5px;
 
     background: var(--background-color);
-    height: var(--navbar-elements-height);
-    width: calc(100% - 120px);
+    height: var(--navbar-content-height);
+    width: 100%;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-
 }
 
 .navbar_gradient {
@@ -35,7 +36,7 @@
     top: 0;
 
     width: 100%;
-    height: calc(var(--navbar-elements-height)*1.5);
+    height: var(--navbar-height);
     min-width: 300px;
     min-height: 20px;
 
@@ -49,13 +50,16 @@
 }
 
 .navbar__logo {
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     width: auto;
-    height: calc(var(--navbar-elements-height) * 0.5);
+    height: 40px;
+
+    margin: 2.5px 0px;
 
     border: none;
     outline: none;
-
-    margin-top: calc(var(--navbar-elements-height) * 0.25);
-    margin-bottom: calc(var(--navbar-elements-height) * 0.25);
-
+    background-color: var(--transparent-element);
 }

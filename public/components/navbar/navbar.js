@@ -70,20 +70,6 @@ class Navbar {
     });
     logo.render();
 
-    // todo
-    // // поле поиска
-    // const searchField = new SearchField(this.#elements(), {
-    //   id: 'search',
-    //   placeholder: 'Название фильма для поиска',
-    //   type: 'text',
-    //   searchFormId: 'navbarsearchform',
-    //   rightBtnId: 'rightBtn',
-    //   rightIcon: searchSvg
-    // });
-    // searchField.render();
-
-    // TODO
-    // аватар Пользователя
     try {
       const url = AUTH_URL + 'session';
       const response = await fetch(url, {
@@ -112,7 +98,6 @@ class Navbar {
         direction: 'row'
       });
 
-      // временное решение, пока нет state или роутера
       if (!userInstance.username) {
         user.setActions({
           click: () => {

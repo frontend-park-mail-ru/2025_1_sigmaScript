@@ -1,7 +1,7 @@
 import Icon from '../icon/icon.js';
-// import SearchField from '../search_field/search_field.js';
+import { Login } from '/Login/Login.js';
+import { AUTH_URL } from '/consts.js';
 
-// const searchSvg = '/svg/search_button.svg';
 const logoSvg = '/svg/logo_text_border_lining.svg';
 const userSvg = '/svg/Avatar large.svg';
 
@@ -25,8 +25,11 @@ const userSvg = '/svg/Avatar large.svg';
 class Navbar {
   #parent;
 
-  constructor(parent) {
+  #renderMain = () => {};
+
+  constructor(parent, renderMain) {
     this.#parent = parent;
+    this.#renderMain = renderMain;
   }
 
   self() {
@@ -43,7 +46,7 @@ class Navbar {
     return document.querySelector('.navbar_elements');
   }
 
-  render() {
+  async render() {
     if (!this.#parent) {
       return;
     }
@@ -81,17 +84,73 @@ class Navbar {
 
     // TODO
     // аватар Пользователя
-    const user = new Icon(this.#elements(), {
-      id: 'user',
-      srcIcon: userSvg,
-      size: 'large',
-      text: 'Войти',
-      textColor: 'secondary',
-      link: '#',
-      circular: true,
-      direction: 'row'
-    });
-    user.render();
+    try {
+      const url = AUTH_URL + 'session';
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        credentials: 'include'
+      });
+      let userInstance = {};
+      if (!response.ok) {
+        const error = await response.json();
+        console.log(error.error || 'Unknown error');
+      } else {
+        userInstance = await response.json();
+      }
+
+      const user = new Icon(this.#elements(), {
+        id: 'user',
+        srcIcon: userSvg,
+        size: 'large',
+        text: userInstance.username || 'Войти',
+        textColor: 'secondary',
+        link: '#',
+        circular: true,
+        direction: 'row'
+      });
+
+      // временное решение, пока нет state или роутера
+      if (!userInstance.username) {
+        user.setActions({
+          click: () => {
+            const rootElement = document.getElementById('root');
+            rootElement.innerHTML = '';
+            const login = new Login(rootElement, this.#renderMain);
+            login.render();
+          }
+        });
+      } else {
+        user.setActions({
+          click: async () => {
+            try {
+              const url = AUTH_URL + 'logout';
+              const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json'
+                },
+                credentials: 'include'
+              });
+              if (!response.ok) {
+                const error = await response.json();
+                throw new Error(error.error || 'Unknown error');
+              }
+
+              this.#renderMain();
+            } catch (err) {
+              console.log(err);
+            }
+          }
+        });
+      }
+
+      user.render();
+    } catch (error) {
+      console.log(error);
+    }
   }
 }
 

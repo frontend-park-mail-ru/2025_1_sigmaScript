@@ -1,11 +1,9 @@
-import Navbar from '../components/navbar/navbar.js';
+// import Navbar from '../components/navbar/navbar.js';
 import MainPage from './main_page/main_page.js';
 // import { Login } from '/Login/Login.js';
 import { createID } from '../utils/createID.js';
 
 const rootElement = document.getElementById('root');
-const nav = new Navbar(document.querySelector('body'));
-nav.render();
 
 /**
  * Отрисовывает главную страницу

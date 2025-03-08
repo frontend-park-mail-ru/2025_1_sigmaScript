@@ -19,6 +19,7 @@ export const ERRORS = {
   ErrDefault: 'internal_error',
   ErrInvalidEmail: 'invalid_email'
 };
+export const BASE_URL = `http://localhost:${BACKEND_PORT}/`;
 
 export const ERROR_HANDLERS = {
   [ERRORS.ErrAlreadyExistsShort]: (context) => context.showError(context.emailInput, 'Вы уже зарегистрированы'),

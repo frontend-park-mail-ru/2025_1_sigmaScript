@@ -1,15 +1,15 @@
-
 .navbar {
     display: block;
-    position: fixed;
-    left: 0;
-    top: 0;
 
-    width: 100vw;
+    width: 100%;
     height: calc(var(--navbar-elements-height)*1.5);
     min-width: 180px;
     min-height: 20px;
     background-color: var(--transparent-element);
+
+    z-index: 5;
+    position: sticky;
+    top: 0;
 }
 
 .navbar_elements {
@@ -51,7 +51,7 @@
 .navbar__logo {
     width: auto;
     height: calc(var(--navbar-elements-height) * 0.5);
-    
+
     border: none;
     outline: none;
 

@@ -1,43 +1,53 @@
-.button {
+.u_button {
     display: flex;
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    padding: calc(var(--navbar-elements-height) * 0.5 * 0.2);
+    padding: 1rem;
     gap: 4px;
 
-    height: calc(var(--navbar-elements-height) * 0.5);
-    border-radius: calc(var(--navbar-elements-height) * 0.5 * 0.45);
+    height: var(--navbar-elements-height);
+    border-radius: 25px;
     border: none;
 
     cursor: pointer;
 }
 
-.button:hover {
-    background-color: rgba(0, 0, 0, 0);
+.u_button:hover {
+    border: solid;
+    border-width: 1px;
+    border-color: var(--primary-text-color);
 }
 
-.button:disabled {
-    background-color: rgba(0, 0, 0, 0);
+.u_button:disabled {
+    background: #72757E;
+    cursor: default;
 }
 
-.button-color_primary {
+.u_button:focus {
+    border-color: var(--primary-color);
+    border-width: 3px;
+
+    outline: none;
+}
+
+.u_button-color_primary {
     background-color: var(--primary-color);
 }
 
-.button-color_success {
-    background: green;
+.u_button-color_success {
+    background: var(--success-color);
 }
 
-.button-color_secondary {
+.u_button-color_secondary {
     background: var(--secondary-color);
 }
 
-.button-color_error {
+.u_button-color_error {
     background: var(--error-color);
 }
 
-.button__text {
+.u_button__text {
     align-self: center;
     justify-content: center;
     font-size: 2.4rem;
@@ -46,20 +56,20 @@
     color: var(--primary-text-color);
 }
 
-.button__text-color_primary {
+.u_button__text-color_primary {
     color: var(--primary-text-color);
 }
 
-.button__text-color_success {
+.u_button__text-color_success {
     color: green;
 }
 
-.button__text-color_secondary {
-    color: var(--secondary-color)    
+.u_button__text-color_secondary {
+    color: var(--secondary-color)
 }
 
-.button__icon {
+.u_button__icon {
     align-self: center;
     justify-content: center;
-    height: calc(var(--navbar-elements-height) * 0.5 * 0.6);
+    height: calc(var(--navbar-elements-height) * 0.6);
 }

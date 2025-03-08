@@ -1,9 +1,9 @@
-@import "./navbar/navbar.css";
-@import "./universal_input/input.css";
-@import "./universal_button/button.css";
-@import "./search_field/search_field.css";
+@import "./Button/Button.css";
 @import "./icon/icon.css";
-
-header {
-    background-color: rgb(255,0,0);
-}
+@import "./Input/Input.css";
+@import "./Login/Login.css";
+@import "./navbar/navbar.css";
+@import "./search_field/search_field.css";
+@import "./Switch/Switch.css";
+@import "./universal_button/button.css";
+@import "./universal_input/input.css";

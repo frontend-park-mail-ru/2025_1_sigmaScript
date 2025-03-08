@@ -5,9 +5,9 @@
  * @returns {Function} - новая функция, которая будет выполняться с задержкой.
  */
 export function debounce(func, ms) {
-    let timeout;
-    return function () {
-        clearTimeout(timeout);
-        timeout = setTimeout(() => func.apply(this, arguments), ms);
-    };
+  let timeout;
+  return function () {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => func.apply(this, arguments), ms);
+  };
 }

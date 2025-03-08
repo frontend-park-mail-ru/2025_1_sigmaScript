@@ -1,0 +1,104 @@
+.header {
+  display: block;
+}
+
+
+.compilations {
+  position: relative;
+  width: 100%;
+  height: auto;
+}
+
+.compilation {
+  position: relative;
+  width: 100%;
+}
+
+.compilation__title {
+  margin-top: 0;
+  text-align: center;
+  margin-bottom: 30px;
+  color: var(--primary-text-color);
+  font-size: 32px;
+}
+
+/* Flexbox контейнеры */
+.flex-column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100dvh;
+  padding: 20px;
+}
+
+.flex-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+}
+
+/* Секция compilation */
+.compilation__cards {
+  background-color: transparent;
+  width: auto;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(255, 255, 255, 0.15);
+  /* Светлая тень */
+  margin-bottom: 40px;
+}
+
+/* Карточка фильма */
+.movie_card {
+  width: 200px;
+  height: 300px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  border: 1px solid #555;
+  /* Темная рамка */
+  border-radius: 5px;
+  overflow: hidden;
+  transition: transform 0.3s ease-in-out;
+}
+
+.movie_card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 8px rgba(255, 255, 255, 0.35);
+  /* Светлая тень при наведении */
+}
+
+/* Изображение постера */
+.poster {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+
+/* Название фильма */
+.poster_title {
+  margin: 10px 0;
+  font-size: 18px;
+  font-weight: bold;
+  color: var(--primary-text-color);
+}
+
+/* Ссылка на подробности */
+.details-link {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #007bff;
+  /* Синий фон кнопки */
+  color: white;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  cursor: pointer;
+}
+
+.details-link:hover {
+  background-color: #0056b3;
+  /* Более темный синий при наведении */
+}

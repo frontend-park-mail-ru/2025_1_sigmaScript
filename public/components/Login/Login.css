@@ -2,27 +2,32 @@
 @import "/Input/Input.css";
 @import "/Switch/Switch.css";
 
-main {
-    width: 100vw;
-    height: 100vh;
-    background-color: #16161A;
-    background-image: url('/img/login_background.png');
+.main_auth {
+    background-image: url('/img/login_background.webp');
     background-size: cover;
 }
 
 .login {
-    justify-content: space-evenly;
     position: relative;
-    width: 20%;
-    height: 55%;
+
+    justify-content: space-evenly;
+
+    width: 30dvw;
+    height: 55dvh;
     padding: 0;
     background-color: inherit;
     border-radius: 32px;
+
+    min-width: 300px;
+    max-width: 340px;
+
+    min-height: 510px;
+    max-height: 560px;
 }
 
 .login__text {
     width: 50%;
-    text-align: center; 
+    text-align: center;
     font-size: 2.0rem;
 }
 
@@ -30,7 +35,7 @@ main {
     position: absolute;
     top: 4%;
     left: 6%;
-    cursor: pointer; 
+    cursor: pointer;
     width: 10%;
     height: 10%;
 }

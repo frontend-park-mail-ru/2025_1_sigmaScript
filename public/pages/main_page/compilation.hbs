@@ -1,0 +1,12 @@
+<h2 class="compilation__title">{{title}}</h2>
+<div class="compilation__cards flex-row">
+  {{#each movies}}
+  <!-- Карточка фильма -->
+  <a href="#">
+    <div class="movie_card">
+      <img src="{{this.preview_url}}" alt="{{this.title}} poster" class="poster">
+      <h3 class="poster_title">{{this.title}}</h3>
+    </div>
+  </a>
+  {{/each}}
+</div>

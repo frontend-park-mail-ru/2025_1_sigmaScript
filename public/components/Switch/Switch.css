@@ -3,17 +3,21 @@
     height: 12%;
     border: 1px solid rgba(148, 161, 178, 0.5);
     border-radius: 25px;
+
+    min-height: 56px;
 }
 
 .switch__button {
-    border: none;  
-    cursor: pointer; 
+    border: none;
+    cursor: pointer;
     box-sizing: border-box;
     width: 50%;
     height: 100%;
     background: inherit;
     font-weight: 700;
     border-radius: 25px;
+
+    min-height: 56px;
 }
 
 .switch__button--left {
@@ -30,9 +34,9 @@
     transition: background-position 0.12s ease;
 }
 
-.switch__button:hover { 
+.switch__button:hover {
     background-color: rgba(148, 161, 178, 0.15);
-} 
+}
 
 .switch__button--left.active {
     background-position: right center;

@@ -1,6 +1,8 @@
 .container__input {
     width: 84%;
     height: 12%;
+
+    min-height: 56px;
 }
 
 .input {

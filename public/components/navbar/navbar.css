@@ -1,7 +1,7 @@
 .navbar {
     display: block;
 
-    width: 100dvw;
+    width: 100%;
     height: var(--navbar-height);
     min-width: 180px;
     min-height: 20px;

@@ -1,5 +1,6 @@
 export const BACKEND_PORT = 8080;
-export const AUTH_URL = `http://localhost:${BACKEND_PORT}/auth/`;
+export const HOST_URL = 'localhost';
+export const AUTH_URL = `http://${HOST_URL}:${BACKEND_PORT}/auth/`;
 export const ERRORS = {
   ErrParseJSONShort: 'parse_json_error',
   ErrAlreadyExistsShort: 'already_exists',
@@ -19,7 +20,7 @@ export const ERRORS = {
   ErrDefault: 'internal_error',
   ErrInvalidEmail: 'invalid_email'
 };
-export const BASE_URL = `http://localhost:${BACKEND_PORT}/`;
+export const BASE_URL = `http://${HOST_URL}:${BACKEND_PORT}/`;
 
 export const ERROR_HANDLERS = {
   [ERRORS.ErrAlreadyExistsShort]: (context) => context.showError(context.emailInput, 'Вы уже зарегистрированы'),

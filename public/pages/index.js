@@ -5,3 +5,9 @@ const rootElement = document.getElementById('root');
 
 const main = new MainPage(rootElement, { id: `${createID()}` });
 main.render();
+
+// const button = document.getElementById('myButton');
+
+// button.addEventListener('click', () => {
+//   modal.open();
+// });

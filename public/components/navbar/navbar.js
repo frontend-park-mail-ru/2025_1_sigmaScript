@@ -1,6 +1,8 @@
+import { createID } from '../../utils/createID.js';
 import Icon from '../icon/icon.js';
 import { Login } from '/Login/Login.js';
 import { AUTH_URL } from '/consts.js';
+import Modal from '/modal/modal.js';
 
 const logoSvg = '/svg/logo_text_border_lining.svg';
 const userSvg = '/svg/Avatar large.svg';
@@ -91,12 +93,14 @@ class Navbar {
         id: 'user',
         srcIcon: userSvg,
         size: 'large',
-        text: userInstance.username || 'Войти',
+        text: userInstance.username ? 'Выйти' + userInstance.username : 'Войти',
         textColor: 'secondary',
         link: '#',
         circular: true,
         direction: 'row'
       });
+
+      const modalID = createID();
 
       if (!userInstance.username) {
         user.setActions({
@@ -110,24 +114,29 @@ class Navbar {
       } else {
         user.setActions({
           click: async () => {
-            try {
-              const url = AUTH_URL + 'logout';
-              const response = await fetch(url, {
-                method: 'POST',
-                headers: {
-                  'Content-Type': 'application/json'
-                },
-                credentials: 'include'
-              });
-              if (!response.ok) {
-                const error = await response.json();
-                throw new Error(error.error || 'Unknown error');
+            const modal = new Modal(this.#parent, {
+              id: modalID,
+              onConfirm: async () => {
+                try {
+                  const url = AUTH_URL + 'logout';
+                  const response = await fetch(url, {
+                    method: 'POST',
+                    headers: {
+                      'Content-Type': 'application/json'
+                    },
+                    credentials: 'include'
+                  });
+                  if (!response.ok) {
+                    const error = await response.json();
+                    throw new Error(error.error || 'Unknown error');
+                  }
+                  this.#renderMain();
+                } catch (err) {
+                  console.log(err);
+                }
               }
-
-              this.#renderMain();
-            } catch (err) {
-              console.log(err);
-            }
+            });
+            modal.render();
           }
         });
       }

@@ -223,7 +223,7 @@ export class Login {
     }
     return (
       this.passwordInput.getValue().length > 0 &&
-      (this.repeatInput.getValue().length > 0 && this.#mode === 0 || this.#mode === 1)
+      ((this.repeatInput.getValue().length > 0 && this.#mode === 0) || this.#mode === 1)
     );
   }
 

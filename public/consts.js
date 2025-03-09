@@ -28,10 +28,10 @@ export const ERROR_HANDLERS = {
   [ERRORS.ErrIncorrectLoginOrPasswordShort]: (context) =>
     context.showError(context.passwordInput, 'Неправильная почта или пароль', context.emailInput),
   [ERRORS.ErrInvalidEmail]: (context) => context.showError(context.emailInput, 'Неправильная почта'),
-  [ERRORS.ErrPasswordTooShort]: (context) =>
-    context.showError(context.passwordInput, 'Длина пароля менее 6 символов', context.repeatInput),
-  [ERRORS.ErrPasswordTooLong]: (context) =>
-    context.showError(context.passwordInput, 'Длина пароля более 18 символов', context.repeatInput),
+  [ERRORS.ErrPasswordTooShort]: (context, input) =>
+    context.showError(input, 'Длина пароля менее 6 символов'),
+  [ERRORS.ErrPasswordTooLong]: (context, input) =>
+    context.showError(input, 'Длина пароля более 18 символов'),
   [ERRORS.ErrEmptyPassword]: (context) =>
     context.showError(context.passwordInput, 'Пустой пароль', context.repeatInput),
   [ERRORS.ErrDefault]: (context) => context.showError(context.lastInput, 'Что-то пошло не так. Попробуйте ещё')

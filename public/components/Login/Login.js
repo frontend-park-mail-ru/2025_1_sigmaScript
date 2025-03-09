@@ -162,6 +162,7 @@ export class Login {
     this.removeError(this.emailInput);
     this.removeError(this.passwordInput);
     this.removeError(this.repeatInput);
+    this.submitButton.disable();
   }
 
   /**
@@ -192,25 +193,38 @@ export class Login {
    * @returns {bool}
    */
   validatePassword() {
-    if (this.#mode === 0 && this.passwordInput.getValue() !== this.repeatInput.getValue()) {
+    let handler;
+    if (this.passwordInput.getValue().length > 0) {
+      handler = isVaidPassword(this.passwordInput.getValue());
+      if (handler) {
+        handler(this, this.passwordInput);
+        return false;
+      } else {
+        this.removeError(this.passwordInput);
+      }
+    }
+    if (this.repeatInput.getValue().length > 0) {
+      handler = isVaidPassword(this.repeatInput.getValue());
+      if (this.#mode === 0 && handler) {
+        handler(this, this.repeatInput);
+        return false;
+      } else {
+        this.removeError(this.repeatInput);
+      }
+    }
+    if (
+      this.#mode === 0 &&
+      this.passwordInput.getValue().length > 0 &&
+      this.repeatInput.getValue().length > 0 &&
+      this.passwordInput.getValue() !== this.repeatInput.getValue()
+    ) {
       ERROR_HANDLERS[ERRORS.ErrPasswordsMismatchShort](this);
       return false;
     }
-    let handler = isVaidPassword(this.passwordInput.getValue());
-    if (handler) {
-      handler(this);
-      return false;
-    } else {
-      this.removeError(this.passwordInput);
-    }
-    handler = isVaidPassword(this.repeatInput.getValue());
-    if (this.#mode === 0 && handler) {
-      handler(this);
-      return false;
-    } else {
-      this.removeError(this.repeatInput);
-    }
-    return true;
+    return (
+      this.passwordInput.getValue().length > 0 &&
+      (this.repeatInput.getValue().length > 0 && this.#mode === 0 || this.#mode === 1)
+    );
   }
 
   /**

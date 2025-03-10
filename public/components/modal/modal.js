@@ -11,9 +11,9 @@ class Modal {
 
     this.#config.id = config.id || createID();
     this.#config.title = config.title || 'Выход из аккаунта';
-    this.#config.message = config.message || 'Вы действительно хотите выйти??';
-    this.#config.cancelText = config.cancelText || 'Отмена';
-    this.#config.confirmText = config.confirmText || 'Подтвердить';
+    this.#config.message = config.message || 'Вы действительно хотите выйти?';
+    this.#config.cancelText = config.cancelText || 'Нет';
+    this.#config.confirmText = config.confirmText || 'Да';
 
     this.#actions.onConfirm = config.onConfirm || this.#nofunc;
     this.#actions.onCancel = config.onCancel || this.#nofunc;

@@ -1,5 +1,6 @@
 import { createID } from '../../utils/createID.js';
 import Icon from '../icon/icon.js';
+import Button from '/universal_button/button.js';
 import { Login } from '/Login/Login.js';
 import { AUTH_URL } from '/consts.js';
 import Modal from '/modal/modal.js';
@@ -72,6 +73,10 @@ class Navbar {
     });
     logo.render();
 
+    const navbarUser = document.createElement('div');
+    navbarUser.classList.add('navbar__user', 'flex-box-row');
+    this.#elements().appendChild(navbarUser);
+
     try {
       const url = AUTH_URL + 'session';
       const response = await fetch(url, {
@@ -81,67 +86,85 @@ class Navbar {
         },
         credentials: 'include'
       });
-      let userInstance = {};
+      let userInstance = { username: null };
       if (!response.ok) {
         const error = await response.json();
         console.log(error.error || 'Unknown error');
       } else {
         userInstance = await response.json();
+        userInstance.username = userInstance.username.split('@')[0] 
       }
 
-      const user = new Icon(this.#elements(), {
+      const logout = async () => {
+        try {
+          const url = AUTH_URL + 'logout';
+          const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            credentials: 'include'
+          });
+          if (!response.ok) {
+            const error = await response.json();
+            throw new Error(error.error || 'Unknown error');
+          }
+          this.#renderMain();
+        } catch (err) {
+          console.log(err);
+        }
+      };
+
+      const LoginButtonAction = {
+        click: () => {
+          const rootElement = document.getElementById('root');
+          rootElement.innerHTML = '';
+          const login = new Login(rootElement, this.#renderMain);
+          login.render();
+        }
+      };
+
+      const LoginButton = new Button(navbarUser, {
+        id: 'loginbtn', 
+        text: 'Войти',
+        actions: LoginButtonAction, 
+      })
+
+      const LogoutButtonAction = {
+        click: async() =>{
+          const modal = new Modal(this.#parent, {
+            id: createID(),
+            onConfirm: logout,
+          });
+          modal.render();
+        }
+      };
+
+      const LogoutButton = new Button(navbarUser, {
+        id: 'logoutbtn', 
+        text: 'Выйти',
+        actions: LogoutButtonAction, 
+      })
+
+      const user = new Icon(navbarUser, {
         id: 'user',
         srcIcon: userSvg,
         size: 'large',
-        text: userInstance.username ? 'Выйти' + userInstance.username : 'Войти',
+        text: userInstance.username,
         textColor: 'secondary',
         link: '#',
         circular: true,
         direction: 'row'
       });
 
-      const modalID = createID();
-
       if (!userInstance.username) {
-        user.setActions({
-          click: () => {
-            const rootElement = document.getElementById('root');
-            rootElement.innerHTML = '';
-            const login = new Login(rootElement, this.#renderMain);
-            login.render();
-          }
-        });
+        LoginButton.render();
+        LoginButton.self().classList.add('navbar__button');
       } else {
-        user.setActions({
-          click: async () => {
-            const modal = new Modal(this.#parent, {
-              id: modalID,
-              onConfirm: async () => {
-                try {
-                  const url = AUTH_URL + 'logout';
-                  const response = await fetch(url, {
-                    method: 'POST',
-                    headers: {
-                      'Content-Type': 'application/json'
-                    },
-                    credentials: 'include'
-                  });
-                  if (!response.ok) {
-                    const error = await response.json();
-                    throw new Error(error.error || 'Unknown error');
-                  }
-                  this.#renderMain();
-                } catch (err) {
-                  console.log(err);
-                }
-              }
-            });
-            modal.render();
-          }
-        });
+        user.render();
+        LogoutButton.render()
+        LogoutButton.self().classList.add('navbar__button');
       }
-
-      user.render();
     } catch (error) {
       console.log(error);
     }

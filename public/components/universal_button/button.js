@@ -78,8 +78,8 @@ class Button {
     const btn = wrapper.firstElementChild;
     wrapper.remove();
 
-    if (self()) {
-      self().replaceWith(btn);
+    if (this.self()) {
+      this.self().replaceWith(btn);
     } else {
       this.#parent.insertAdjacentElement('beforeEnd', btn);
     }

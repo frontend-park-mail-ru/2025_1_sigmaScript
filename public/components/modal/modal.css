@@ -64,15 +64,19 @@
 }
 
 .modal_content-actions {
-  text-align: right;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap:10px
 }
 
 .modal_content__btn {
   color: var(--primary-text-color);
-  margin-left: 10px;
-  padding: 8px 16px;
+  padding: 8px;
   border: none;
-  border-radius: 4px;
+  border-radius: 25px;
+  width: 45%;
   cursor: pointer;
   transition: background-color 0.2s ease;
 }
@@ -80,6 +84,7 @@
 .modal_content-confirm {
   background-color: var(--primary-color);
   color: var(--primary-text-color);
+  font-weight: 500px;
 }
 
 .modal_content-confirm:hover {

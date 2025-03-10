@@ -63,3 +63,20 @@
     outline: none;
     background-color: var(--transparent-element);
 }
+
+.navbar__button.u_button >.u_button__text-color_primary{
+    color: #979AA3;
+}
+
+.navbar__button.u_button >.u_button__text-color_primary:hover {
+    color: #FFFE;
+}
+
+.navbar__button.u_button {
+    background-color: inherit;
+    margin-left: 10px;
+}
+
+.navbar__button.u_button:hover {
+    border: none;
+}

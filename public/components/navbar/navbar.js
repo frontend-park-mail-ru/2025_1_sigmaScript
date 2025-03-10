@@ -92,7 +92,7 @@ class Navbar {
         console.log(error.error || 'Unknown error');
       } else {
         userInstance = await response.json();
-        userInstance.username = userInstance.username.split('@')[0] 
+        userInstance.username = userInstance.username.split('@')[0];
       }
 
       const logout = async () => {
@@ -125,26 +125,26 @@ class Navbar {
       };
 
       const LoginButton = new Button(navbarUser, {
-        id: 'loginbtn', 
+        id: 'loginbtn',
         text: 'Войти',
-        actions: LoginButtonAction, 
-      })
+        actions: LoginButtonAction
+      });
 
       const LogoutButtonAction = {
-        click: async() =>{
+        click: async () => {
           const modal = new Modal(this.#parent, {
             id: createID(),
-            onConfirm: logout,
+            onConfirm: logout
           });
           modal.render();
         }
       };
 
       const LogoutButton = new Button(navbarUser, {
-        id: 'logoutbtn', 
+        id: 'logoutbtn',
         text: 'Выйти',
-        actions: LogoutButtonAction, 
-      })
+        actions: LogoutButtonAction
+      });
 
       const user = new Icon(navbarUser, {
         id: 'user',
@@ -162,7 +162,7 @@ class Navbar {
         LoginButton.self().classList.add('navbar__button');
       } else {
         user.render();
-        LogoutButton.render()
+        LogoutButton.render();
         LogoutButton.self().classList.add('navbar__button');
       }
     } catch (error) {

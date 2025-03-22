@@ -35,3 +35,16 @@ export const ERROR_HANDLERS = {
     context.showError(context.passwordInput, 'Пустой пароль', context.repeatInput),
   [ERRORS.ErrDefault]: (context) => context.showError(context.lastInput, 'Что-то пошло не так. Попробуйте ещё')
 };
+
+export const FOOTER_CONFIG = {
+  columns: [
+    {
+      title: 'FILMLOOK',
+      links: [
+        { text: 'Backend проекта', url: 'https://github.com/go-park-mail-ru/2025_1_sigmaScript' },
+        { text: 'Frontend проекта', url: 'https://github.com/frontend-park-mail-ru/2025_1_sigmaScript' }
+      ]
+    }
+  ],
+  copyright: '© 2025 sigmaScript'
+};

@@ -282,7 +282,6 @@ export class Login {
 
       for (const [key, handler] of Object.entries(ERROR_HANDLERS)) {
         if (err.includes(key)) {
-          console.log(key);
           handler(this);
           return;
         }

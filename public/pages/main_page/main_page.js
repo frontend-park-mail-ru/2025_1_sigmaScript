@@ -1,6 +1,8 @@
 import Navbar from '../../components/navbar/navbar.js';
 import { createID } from '/utils/createID.js';
 import { BASE_URL } from '/consts.js';
+import { Footer } from '/Footer/footer.js';
+import { FOOTER_CONFIG } from '/consts.js';
 
 class MainPage {
   #parent;
@@ -103,6 +105,9 @@ class MainPage {
 
       compilationsElem.insertAdjacentElement('beforeEnd', compilationElem);
     }
+
+    const footer = new Footer(mainElem, FOOTER_CONFIG);
+    footer.render();
   }
 }
 

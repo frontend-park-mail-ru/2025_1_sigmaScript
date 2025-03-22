@@ -12,27 +12,27 @@ const __dirname = path.dirname(__filename);
 const gitignorePath = path.resolve(__dirname, '.gitignore');
 
 export default [
-    includeIgnoreFile(gitignorePath),
-    {
-        files: ['**/*.{js,mjs,cjs,ts,jsx,tsx}'],
-        ignores: ['**/node_modules/*', '**/*.precompiled.js']
-    },
-    {
-        languageOptions: {
-            globals: {
-                ...globals.browser,
-                ...globals.node
-            }
-        }
-    },
-    pluginJs.configs.recommended,
-    {
-        plugins: {
-            prettier: pluginPrettier
-        },
-        rules: {
-            'prettier/prettier': 'error',
-            ...eslintConfigPrettier.rules
-        }
+  includeIgnoreFile(gitignorePath),
+  {
+    files: ['**/*.{js,mjs,cjs,ts,jsx,tsx}'],
+    ignores: ['**/node_modules/*', '**/*.precompiled.js']
+  },
+  {
+    languageOptions: {
+      globals: {
+        ...globals.browser,
+        ...globals.node
+      }
     }
+  },
+  pluginJs.configs.recommended,
+  {
+    plugins: {
+      prettier: pluginPrettier
+    },
+    rules: {
+      'prettier/prettier': 'error',
+      ...eslintConfigPrettier.rules
+    }
+  }
 ];

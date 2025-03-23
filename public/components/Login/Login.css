@@ -1,9 +1,9 @@
-@import "/Button/Button.css";
-@import "/Input/Input.css";
-@import "/Switch/Switch.css";
+@import "components/Button/Button.css";
+@import "components/Input/Input.css";
+@import "components/Switch/Switch.css";
 
 .main_auth {
-    background-image: url('/img/login_background.webp');
+    background-image: url('static/img/login_background.webp');
     background-size: cover;
 }
 

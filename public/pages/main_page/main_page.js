@@ -1,8 +1,9 @@
-import Navbar from '../../components/navbar/navbar.js';
-import { createID } from '/utils/createID.js';
-import { BASE_URL } from '/consts.js';
-import { Footer } from '/Footer/footer.js';
-import { FOOTER_CONFIG } from '/consts.js';
+import Navbar from 'components/navbar/navbar.js';
+import { createID } from 'utils/createID.js';
+import { BASE_URL } from 'public/consts.js';
+import { Footer } from 'components/Footer/Footer.js';
+import { FOOTER_CONFIG } from 'public/consts.js';
+import compilationTempl from './compilation.hbs';
 
 class MainPage {
   #parent;
@@ -81,8 +82,6 @@ class MainPage {
     const compilationsElem = document.createElement('compilations');
     compilationsElem.classList += 'flex-dir-col compilations';
     mainElemContent.appendChild(compilationsElem);
-    // eslint-disable-next-line no-undef
-    const compilationTempl = Handlebars.templates['compilation.hbs'];
 
     const compilationsData = await this.GetCompilations();
     if (compilationsData.err) {

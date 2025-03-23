@@ -1,12 +1,13 @@
-import { createID } from '../../utils/createID.js';
-import Icon from '../icon/icon.js';
-import Button from '/universal_button/button.js';
-import { Login } from '/Login/Login.js';
-import { AUTH_URL } from '/consts.js';
-import Modal from '/modal/modal.js';
+import { createID } from 'utils/createID.js';
+import Icon from 'components/icon/icon.js';
+import Button from 'components/universal_button/button.js';
+import { Login } from 'components/Login/Login.js';
+import { AUTH_URL } from 'public/consts.js';
+import Modal from 'components/modal/modal.js';
+import navbarTempl from './navbar.hbs';
 
-const logoSvg = '/svg/logo_text_border_lining.svg';
-const userSvg = '/svg/Avatar large.svg';
+const logoSvg = 'static/svg/logo_text_border_lining.svg';
+const userSvg = 'static/svg/Avatar large.svg';
 
 /**
  * Навигационная панель
@@ -58,8 +59,6 @@ class Navbar {
     const navbar = document.createElement('navbar');
     navbar.classList.add('navbar');
     this.#parent.appendChild(navbar);
-    // eslint-disable-next-line no-undef
-    const navbarTempl = Handlebars.templates['navbar.hbs'];
     navbar.innerHTML = navbarTempl({});
 
     const navbarLogo = document.createElement('div');

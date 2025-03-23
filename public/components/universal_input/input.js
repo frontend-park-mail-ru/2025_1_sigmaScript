@@ -1,3 +1,5 @@
+import inputTempl from './input.hbs';
+
 /**
  * Элемент поля ввода
  * @param {HTMLElement} parent - родительский элемент
@@ -73,8 +75,6 @@ class Input {
 
   render() {
     let wrapper = document.createElement('div');
-    // eslint-disable-next-line no-undef
-    const inputTempl = Handlebars.templates['input.hbs'];
     wrapper.insertAdjacentHTML('beforeEnd', inputTempl(this.#config));
 
     const input = wrapper.firstElementChild;

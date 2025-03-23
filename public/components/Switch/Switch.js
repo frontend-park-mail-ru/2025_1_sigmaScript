@@ -1,4 +1,5 @@
-import { createID } from '/createID.js';
+import { createID } from 'utils/createID.js';
+import template from './Switch.hbs';
 
 export class Switch {
   #parent;
@@ -75,8 +76,7 @@ export class Switch {
     if (!this.parentDefined()) {
       return;
     }
-    // eslint-disable-next-line no-undef
-    const template = Handlebars.templates['Switch.hbs'];
+
     this.#parent.innerHTML += template(this.#data);
   }
 }

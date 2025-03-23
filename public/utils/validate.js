@@ -1,5 +1,5 @@
-import { ERRORS } from '/consts.js';
-import { ERROR_HANDLERS } from '/consts.js';
+import { ERRORS } from 'public/consts.js';
+import { ERROR_HANDLERS } from 'public/consts.js';
 
 /**
  * Валидация почты

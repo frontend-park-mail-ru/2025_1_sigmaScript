@@ -1,4 +1,5 @@
-import { createID } from '/createID.js';
+import { createID } from 'utils/createID.js';
+import template from './Footer.hbs';
 
 export class Footer {
   #parent;
@@ -71,9 +72,6 @@ export class Footer {
    * Рисует компонент на экран.
    */
   render() {
-    // eslint-disable-next-line no-undef
-    const template = Handlebars.templates['Footer.hbs'];
-
     const mergedData = {
       columns: this.#data.columns || [],
       copyright: this.#data.copyright || '© 2025 sigmaScript',

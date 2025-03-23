@@ -1,3 +1,5 @@
+import btnTempl from './button.hbs';
+
 /**
  * Обычная кнопка
  * @param {HTMLElement} parent - родительский элемент
@@ -71,8 +73,6 @@ class Button {
 
   render() {
     let wrapper = document.createElement('div');
-    // eslint-disable-next-line no-undef
-    const btnTempl = Handlebars.templates['button.hbs'];
     wrapper.insertAdjacentHTML('beforeEnd', btnTempl(this.#config));
 
     const btn = wrapper.firstElementChild;

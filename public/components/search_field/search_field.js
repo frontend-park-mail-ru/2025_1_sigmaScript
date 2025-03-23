@@ -1,3 +1,5 @@
+import inputTempl from './search_field.hbs';
+
 /**
  * Элемент поиска с полем ввода поиска и возможностью установки рядом кнопки
  * @param {HTMLElement} parent - родительский элемент
@@ -82,8 +84,6 @@ class SearchField {
 
   render() {
     let wrapper = document.createElement('div');
-    // eslint-disable-next-line no-undef
-    const inputTempl = Handlebars.templates['search_field.hbs'];
     wrapper.insertAdjacentHTML('beforeEnd', inputTempl(this.#config));
 
     const icon = wrapper.firstElementChild;

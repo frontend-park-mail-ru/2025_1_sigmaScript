@@ -62,6 +62,7 @@ module.exports = {
       pages: path.join(publicPath, 'pages'),
       static: path.join(publicPath, 'static'),
       utils: path.join(publicPath, 'utils'),
+      types: path.join(publicPath, 'types'),
       public: publicPath
     }
   },

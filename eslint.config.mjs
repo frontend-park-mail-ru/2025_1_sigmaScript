@@ -2,6 +2,8 @@ import globals from 'globals';
 import pluginJs from '@eslint/js';
 import eslintConfigPrettier from 'eslint-config-prettier';
 import pluginPrettier from 'eslint-plugin-prettier';
+import tsParser from '@typescript-eslint/parser';
+import tsPlugin from '@typescript-eslint/eslint-plugin';
 
 import { includeIgnoreFile } from '@eslint/compat';
 import path from 'node:path';
@@ -26,6 +28,21 @@ export default [
     }
   },
   pluginJs.configs.recommended,
+  {
+    files: ['**/*.{ts,tsx}'],
+    languageOptions: {
+      parser: tsParser,
+      parserOptions: {
+        project: './tsconfig.json'
+      }
+    },
+    plugins: {
+      '@typescript-eslint': tsPlugin
+    },
+    rules: {
+      ...tsPlugin.configs.recommended.rules
+    }
+  },
   {
     plugins: {
       prettier: pluginPrettier

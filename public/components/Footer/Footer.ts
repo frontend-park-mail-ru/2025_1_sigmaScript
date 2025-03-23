@@ -1,16 +1,16 @@
+import { FooterData } from 'types/Footer.types';
 import { createID } from 'utils/createID.js';
 import template from './Footer.hbs';
 
 export class Footer {
-  #parent;
-  #data;
-  #id;
+  #parent: HTMLElement;
+  #data: FooterData;
+  #id: string;
 
   /**
    * Создаёт новый footer.
    * @param {HTMLElement} parent - Куда вставлять
    * @param {Object} data - Данные для шаблона
-   * @param {string} data.id - Уникальный идентификатор футера.
    * @param {Array<Object>} data.columns - Колонки с меню.
    * @param {string} data.columns[].title - Заголовок колонки.
    * @param {Array<Object>} data.columns[].links - Ссылки в колонке.
@@ -22,7 +22,7 @@ export class Footer {
    * @param {string} data.bottomLinks[].text - Текст ссылки.
    * @param {string} data.bottomLinks[].url - URL ссылки.
    */
-  constructor(parent, data = {}) {
+  constructor(parent: HTMLElement, data: FooterData = {}) {
     this.#parent = parent;
     this.#data = data;
     this.#id = 'footer--' + createID();
@@ -32,14 +32,14 @@ export class Footer {
    * Возвращает родителя.
    * @returns {HTMLElement}
    */
-  get parent() {
+  get parent(): HTMLElement {
     return this.#parent;
   }
 
   /**
    * Задаем родителя.
    */
-  setParent(newParent) {
+  set parent(newParent: HTMLElement) {
     this.#parent = newParent;
   }
 
@@ -47,7 +47,7 @@ export class Footer {
    * Проверяет на наличие родителя.
    * @returns {boolean}
    */
-  parentDefined() {
+  parentDefined(): boolean {
     return !(this.#parent === null || this.#parent === undefined);
   }
 
@@ -55,24 +55,22 @@ export class Footer {
    * Возвращает себя из DOM.
    * @returns {HTMLElement}
    */
-  self() {
-    if (this.parentDefined()) {
-      return document.getElementById(this.#id);
-    }
+  self(): HTMLElement | null {
+    return this.parentDefined() ? document.getElementById(this.#id) : null;
   }
 
   /**
    * Удаляет отрисованные элементы.
    */
-  destroy() {
+  destroy(): void {
     this.self()?.remove();
   }
 
   /**
    * Рисует компонент на экран.
    */
-  render() {
-    const mergedData = {
+  render(): void {
+    const mergedData: FooterData = {
       columns: this.#data.columns || [],
       copyright: this.#data.copyright || '© 2025 sigmaScript',
       bottomLinks: this.#data.bottomLinks || [],
@@ -83,9 +81,9 @@ export class Footer {
     this.#parent.insertAdjacentHTML('beforeend', template(mergedData));
 
     this.self()
-      ?.querySelectorAll('.footer__link')
+      ?.querySelectorAll<HTMLAnchorElement>('.footer__link')
       .forEach((link) => {
-        link.addEventListener('click', (e) => this.handleLinkClick(e));
+        link.addEventListener('click', (e: Event) => this.handleLinkClick(e));
       });
   }
 
@@ -93,10 +91,11 @@ export class Footer {
    * Обрабтчик клика
    * @param {Event} event - Событие клика.
    */
-  handleLinkClick(event) {
-    const url = event.target.getAttribute('href');
+  private handleLinkClick(event: Event): void {
+    const target = event.target as HTMLAnchorElement;
+    const url = target.getAttribute('href');
 
-    if (this.isInternalLink(url)) {
+    if (url && this.isInternalLink(url)) {
       event.preventDefault();
       // TODO: goToPage
     }
@@ -107,7 +106,7 @@ export class Footer {
    * @param {string} url - URL для проверки.
    * @returns {boolean} - `true`, если ссылка внутренняя, иначе `false`.
    */
-  isInternalLink(url) {
+  private isInternalLink(url: string): boolean {
     try {
       const linkHostname = new URL(url, window.location.origin).hostname;
       return linkHostname === window.location.hostname;

@@ -19,5 +19,5 @@
     "noImplicitAny": true
   },
   "include": ["public/**/*"],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", "webpack.config.ts"]
 }

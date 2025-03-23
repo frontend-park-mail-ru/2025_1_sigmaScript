@@ -1,9 +1,9 @@
-@import "/css/index.css";
-@import "../components/components.css";
-@import "/css/font.css";
-@import "/css/flex-box.css";
-@import "/Login/Login.css";
-@import "./main_page/main_page.css";
+@import "static/css/index.css";
+@import "components/components.css";
+@import "static/css/font.css";
+@import "static/css/flex-box.css";
+@import "components/Login/Login.css";
+@import "pages/main_page/main_page.css";
 
 :root {
     --primary-color: #7F5AF0;

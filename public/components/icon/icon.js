@@ -1,3 +1,5 @@
+import iconTempl from './icon.hbs';
+
 /**
  * Иконка с текстом
  * @param {HTMLElement} parent - родительский элемент
@@ -111,8 +113,6 @@ class Icon {
    */
   render() {
     let wrapper = document.createElement('div');
-    // eslint-disable-next-line no-undef
-    const iconTempl = Handlebars.templates['icon.hbs'];
     wrapper.insertAdjacentHTML('beforeEnd', iconTempl(this.#config));
 
     const icon = wrapper.firstElementChild;

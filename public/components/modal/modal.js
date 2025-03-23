@@ -1,4 +1,5 @@
-import { createID } from '/utils/createID.js';
+import { createID } from 'utils/createID.js';
+import template from './modal.hbs';
 
 class Modal {
   #parent;
@@ -27,8 +28,6 @@ class Modal {
   }
 
   render() {
-    // eslint-disable-next-line no-undef
-    const template = Handlebars.templates['modal.hbs'];
     this.#parent.insertAdjacentHTML('beforeEnd', template(this.#config));
 
     this.#applyActions();

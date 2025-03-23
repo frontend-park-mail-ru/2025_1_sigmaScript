@@ -1,0 +1,31 @@
+<footer class="footer" id="{{ id }}">
+    <div class="footer__top">
+        {{#each columns}}
+        <div class="footer__column">
+            <h2 class="footer__title">{{title}}</h2>
+            <ul class="footer__list">
+                {{#each links}}
+                <li class="footer__item">
+                    <a class="footer__link" href="{{url}}">{{text}}</a>
+                </li>
+                {{/each}}
+            </ul>
+        </div>
+        {{/each}}
+    </div>
+
+    <div class="footer__bottom">
+        <div class="footer__copyright">
+            {{{copyright}}}<br>
+            {{{bottomText}}}
+        </div>
+
+        <div class="footer__links">
+            {{#each bottomLinks}}
+            <a class="footer__link footer__link--secondary" href="{{url}}">
+                {{text}}
+            </a>
+            {{/each}}
+        </div>
+    </div>
+</footer>

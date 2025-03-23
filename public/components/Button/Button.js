@@ -1,4 +1,5 @@
-import { createID } from '/createID.js';
+import { createID } from 'utils/createID.js';
+import template from './Button.hbs';
 
 export class Button {
   #parent;
@@ -95,8 +96,7 @@ export class Button {
     if (!this.parentDefined) {
       return;
     }
-    // eslint-disable-next-line no-undef
-    const template = Handlebars.templates['Button.hbs'];
+
     this.#parent.innerHTML += template(this.#data);
   }
 }

@@ -1,13 +1,14 @@
-import { createID } from '/createID.js';
-import { Button } from '/Button/Button.js';
-import { Input } from '/Input/Input.js';
-import { Switch } from '/Switch/Switch.js';
-import { AUTH_URL } from '/consts.js';
-import { ERRORS } from '/consts.js';
-import { ERROR_HANDLERS } from '/consts.js';
-import { isValidEmail } from '/validate.js';
-import { isVaidPassword } from '/validate.js';
-import { debounce } from '/debounce.js';
+import { createID } from 'utils/createID.js';
+import { Button } from 'components/Button/Button.js';
+import { Input } from 'components/Input/Input.js';
+import { Switch } from 'components/Switch/Switch.js';
+import { AUTH_URL } from 'public/consts.js';
+import { ERRORS } from 'public/consts.js';
+import { ERROR_HANDLERS } from 'public/consts.js';
+import { isValidEmail } from 'utils/validate.js';
+import { isVaidPassword } from 'utils/validate.js';
+import { debounce } from 'utils/debounce.js';
+import template from './Login.hbs';
 
 export class Login {
   #parent;
@@ -77,8 +78,6 @@ export class Login {
     if (!this.parentDefined()) {
       return;
     }
-    // eslint-disable-next-line no-undef
-    const template = Handlebars.templates['Login.hbs'];
     this.#parent.innerHTML += template({ id: this.#id });
 
     this.switch = new Switch(this.self(), 'Вход', 'Регистрация');
@@ -282,7 +281,6 @@ export class Login {
 
       for (const [key, handler] of Object.entries(ERROR_HANDLERS)) {
         if (err.includes(key)) {
-          console.log(key);
           handler(this);
           return;
         }

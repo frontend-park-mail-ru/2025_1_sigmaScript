@@ -35,3 +35,13 @@ export const ERROR_HANDLERS = {
     context.showError(context.passwordInput, 'Пустой пароль', context.repeatInput),
   [ERRORS.ErrDefault]: (context) => context.showError(context.lastInput, 'Что-то пошло не так. Попробуйте ещё')
 };
+
+// TODO: наполнить информацией
+export const FOOTER_CONFIG = {
+  columns: [
+    {
+      title: 'FILMLOOK'
+    }
+  ],
+  copyright: '© 2025 sigmaScript'
+};

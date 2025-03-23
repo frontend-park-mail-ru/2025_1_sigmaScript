@@ -1,53 +1,42 @@
-const path = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const TsCheckerPlugin = require('fork-ts-checker-webpack-plugin');
-const CopyWebpackPlugin = require('copy-webpack-plugin');
+const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
+const CopyPlugin = require('copy-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
-const buildPath = path.join(__dirname, 'dist');
-const publicPath = path.join(__dirname, 'public');
+const path = require('path');
+const publicPath = path.resolve(__dirname, 'public');
 
 module.exports = {
-  entry: path.join(publicPath, 'index.js'),
+  entry: './public/index.js',
   output: {
-    path: buildPath,
+    path: path.resolve(__dirname, 'dist'),
+    publicPath: '/',
     filename: 'bundle.js',
-    publicPath: '/'
+    clean: true
   },
-  plugins: [
-    new HtmlWebpackPlugin({
-      template: path.join(publicPath, 'index.html')
-    }),
-    new MiniCssExtractPlugin({
-      filename: '[name]-[contenthash].css'
-    }),
-    new TsCheckerPlugin(),
-    new CopyWebpackPlugin({
-      patterns: [{ from: path.join(publicPath, 'static/img'), to: 'img' }]
-    })
-  ].filter(Boolean),
-
   module: {
     rules: [
       {
-        test: /\.[tj]s$/,
-        exclude: /node_modules|\.precompiled\.js$/,
-        use: 'babel-loader'
+        test: /\.[jt]s$/,
+        exclude: /node_modules/,
+        use: {
+          loader: 'babel-loader'
+        }
       },
       {
         test: /\.hbs$/,
-        loader: 'handlebars-loader'
+        use: 'handlebars-loader'
       },
       {
         test: /\.html$/,
         use: 'html-loader'
       },
       {
-        test: /\.s?css$/,
+        test: /\.css/,
         use: [MiniCssExtractPlugin.loader, 'css-loader']
       },
       {
-        test: /\.(png|svg|jpg|webp)$/,
+        test: /\.(png|svg|jpg|webp|ico)$/,
         type: 'asset/resource',
         generator: {
           filename: 'img/[name][ext]'
@@ -55,23 +44,46 @@ module.exports = {
       }
     ]
   },
-  resolve: {
-    extensions: ['.js', '.ts'],
-    alias: {
-      components: path.join(publicPath, 'components'),
-      pages: path.join(publicPath, 'pages'),
-      static: path.join(publicPath, 'static'),
-      utils: path.join(publicPath, 'utils'),
-      types: path.join(publicPath, 'types'),
-      public: publicPath
-    }
-  },
+  plugins: [
+    new MiniCssExtractPlugin({
+      filename: 'styles/[name]-[contenthash].css'
+    }),
+    new CopyPlugin({
+      patterns: [
+        {
+          from: path.resolve(publicPath, 'static/img'),
+          to: path.resolve(__dirname, 'dist/img')
+        }
+      ]
+    }),
+    new HtmlWebpackPlugin({
+      template: path.resolve(publicPath, 'index.html'),
+      filename: 'index.html',
+      inject: 'body',
+      minify: {
+        collapseWhitespace: true,
+        removeComments: true
+      }
+    })
+  ],
   devServer: {
+    static: publicPath,
+    compress: true,
     port: 3000,
-    historyApiFallback: true,
-    watchFiles: publicPath,
-    client: {
-      overlay: false
+    hot: true,
+    historyApiFallback: true
+  },
+  optimization: {
+    minimizer: [new CssMinimizerPlugin()]
+  },
+  resolve: {
+    alias: {
+      components: path.resolve(publicPath, 'components'),
+      pages: path.resolve(publicPath, 'pages'),
+      static: path.resolve(publicPath, 'static'),
+      types: path.resolve(publicPath, 'types'),
+      utils: path.resolve(publicPath, 'utils'),
+      public: publicPath
     }
   }
 };

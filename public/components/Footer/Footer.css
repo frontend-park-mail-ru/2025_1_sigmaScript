@@ -21,7 +21,7 @@
 
 .footer__title {
     font-size: 1.7rem;
-    margin-bottom: 0.9375rem;
+    margin-bottom: 1rem;
     color: var(--primary-text-color);
 }
 
@@ -56,7 +56,7 @@
 .footer__copyright {
     line-height: 1.5;
     color: var(--secondary-text-color);
-    margin-bottom: 0.9375rem;
+    margin-bottom: 1rem;
 }
 
 .footer__links {

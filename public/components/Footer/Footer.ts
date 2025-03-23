@@ -48,7 +48,7 @@ export class Footer {
    * @returns {boolean}
    */
   parentDefined(): boolean {
-    return !(this.#parent === null || this.#parent === undefined);
+    return this.#parent != null;
   }
 
   /**

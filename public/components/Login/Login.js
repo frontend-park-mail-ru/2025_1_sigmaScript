@@ -2,12 +2,13 @@ import { createID } from 'utils/createID.js';
 import { Button } from 'components/Button/Button.js';
 import { Input } from 'components/Input/Input.js';
 import { Switch } from 'components/Switch/Switch.js';
-import { AUTH_URL } from 'public/consts.js';
 import { ERRORS } from 'public/consts.js';
 import { ERROR_HANDLERS } from 'public/consts.js';
 import { isValidEmail } from 'utils/validate.js';
 import { isVaidPassword } from 'utils/validate.js';
 import { debounce } from 'utils/debounce.js';
+import { loginSubmit, registerSubmit } from 'flux/Actions.ts';
+import AuthStore from 'store/LoginStore';
 import template from './Login.hbs';
 
 export class Login {
@@ -26,6 +27,9 @@ export class Login {
     this.#id = 'login--' + createID();
     this.#mode = mode; // sign up - 0, sign in - 1
     this.prevPage = prevPage;
+
+    this.bindedHandleStoreChange = this.handleStoreChange.bind(this);
+    AuthStore.subscribe(this.bindedHandleStoreChange);
   }
 
   /**
@@ -239,38 +243,20 @@ export class Login {
   }
 
   /**
-   * Отправка формы
-   * @param {Event} e - событие формы
+   * Возвращает на предыдущую страницу
    */
-  async submitForm(e) {
-    e.preventDefault();
-    this.resetForm();
+  goBack() {
+    AuthStore.unsubscribe(this.bindedHandleStoreChange);
+    this.prevPage();
+  }
 
-    const email = this.emailInput.getValue().trim();
-    const pass = this.passwordInput.getValue();
-    const repeatPass = this.repeatInput.getValue();
-
-    try {
-      const url = AUTH_URL + (this.#mode === 1 ? 'login' : 'register');
-      const response = await fetch(url, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          username: email,
-          password: pass,
-          repeated_password: repeatPass
-        }),
-        credentials: 'include'
-      });
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.error || 'Unknown error');
-      }
-      this.prevPage();
-    } catch (error) {
-      const err = error.message;
+  /**
+   * Обработка изменений состояния в AuthStore.
+   * @param {AuthState} state - текущее состояние авторизации из Store
+   */
+  handleStoreChange(state) {
+    if (state.error) {
+      const err = state.error;
       this.lastInput = '';
 
       if (this.#mode === 1) {
@@ -286,6 +272,29 @@ export class Login {
         }
       }
       ERROR_HANDLERS[ERRORS.ErrDefault](this);
+      return;
+    }
+    if (state.user) {
+      this.goBack();
+    }
+  }
+
+  /**
+   * Отправка формы
+   * @param {Event} e - событие формы
+   */
+  async submitForm(e) {
+    e.preventDefault();
+    this.resetForm();
+
+    const username = this.emailInput.getValue().trim();
+    const password = this.passwordInput.getValue();
+    const repeatPassword = this.repeatInput.getValue();
+
+    if (this.#mode === 1) {
+      loginSubmit(username, password);
+    } else {
+      registerSubmit(username, password, repeatPassword);
     }
   }
 
@@ -302,7 +311,7 @@ export class Login {
     });
 
     this.backButton.addEventListener('click', () => {
-      this.prevPage();
+      this.goBack();
     });
 
     this.submitButton.self().addEventListener('click', (e) => {

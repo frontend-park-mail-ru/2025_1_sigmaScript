@@ -77,12 +77,15 @@ module.exports = {
     minimizer: [new CssMinimizerPlugin()]
   },
   resolve: {
+    extensions: ['.ts', '.js'],
     alias: {
       components: path.resolve(publicPath, 'components'),
       pages: path.resolve(publicPath, 'pages'),
       static: path.resolve(publicPath, 'static'),
       types: path.resolve(publicPath, 'types'),
       utils: path.resolve(publicPath, 'utils'),
+      flux: path.resolve(publicPath, 'flux'),
+      store: path.resolve(publicPath, 'store'),
       public: publicPath
     }
   }

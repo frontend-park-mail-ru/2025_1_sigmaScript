@@ -3,6 +3,7 @@ import { Action } from 'types/Dispatcher.types';
 import { LoginActionTypes } from 'flux/ActionTypes';
 import { AUTH_URL } from 'public/consts';
 import { Listener, AuthState, LoginPayload, RegisterPayload, AuthSuccessPayload, ErrorPayload } from 'types/Auth.types';
+import request, { ErrorWithDetails } from 'utils/fetch';
 
 class AuthStore {
   private state: AuthState;
@@ -43,6 +44,9 @@ class AuthStore {
   }
 
   private getErrorMessage(error: unknown): string {
+    if (error instanceof ErrorWithDetails) {
+      return error.errorDetails.error;
+    }
     if (error instanceof Error) {
       return error.message;
     }
@@ -55,24 +59,17 @@ class AuthStore {
   private async login({ username, password }: LoginPayload): Promise<void> {
     try {
       const url = AUTH_URL + 'login';
-      const response = await fetch(url, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, password }),
-        credentials: 'include'
-      });
-
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.error || 'Unknown error');
-      }
-
-      const user = await response.json();
+      const body = {
+        username: username,
+        password: password
+      };
+      const responseData = await request({ url, method: 'POST', body, credentials: true });
+      const user = responseData.body;
       dispatcher.dispatch({
         type: LoginActionTypes.LOGIN_SUCCESS,
         payload: { user }
       });
-    } catch (error) {
+    } catch (error: unknown) {
       dispatcher.dispatch({
         type: LoginActionTypes.LOGIN_ERROR,
         payload: { error: this.getErrorMessage(error) }
@@ -83,28 +80,18 @@ class AuthStore {
   private async register({ username, password, repeatPassword }: RegisterPayload): Promise<void> {
     try {
       const url = AUTH_URL + 'register';
-      const response = await fetch(url, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          username,
-          password,
-          repeated_password: repeatPassword
-        }),
-        credentials: 'include'
-      });
-
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.error || 'Unknown error');
-      }
-
-      const user = await response.json();
+      const body = {
+        username: username,
+        password: password,
+        repeated_password: repeatPassword
+      };
+      const responseData = await request({ url, method: 'POST', body, credentials: true });
+      const user = responseData.body;
       dispatcher.dispatch({
         type: LoginActionTypes.REGISTER_SUCCESS,
         payload: { user }
       });
-    } catch (error) {
+    } catch (error: unknown) {
       dispatcher.dispatch({
         type: LoginActionTypes.REGISTER_ERROR,
         payload: { error: this.getErrorMessage(error) }

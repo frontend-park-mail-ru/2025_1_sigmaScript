@@ -28,13 +28,13 @@ class Input {
     this.#parent = parent;
 
     this.#config.id = config.id || 'Input';
+    this.#config.name = config.name || 'noname';
     this.#config.inputClasses = config.inputClasses || '';
-    this.#config.inputFieldId = config.inputFieldId || 'InputField';
     this.#config.text = config.text || '';
     this.#config.placeholder = config.placeholder || '';
     this.#config.type = config.type || '';
 
-    this.#actions = config.actions;
+    this.#actions = config.actions || {};
   }
 
   self() {
@@ -56,8 +56,47 @@ class Input {
     }
 
     if (this.#actions.keypress) {
-      this.self().addEventListeneraddEventListener('keypress', this.#actions.keypress);
+      this.getInput().addEventListeneraddEventListener('keypress', this.#actions.keypress);
     }
+  }
+
+  /**
+   * Возвращает DOM элемент ошибки
+   * @returns {HTMLElement}
+   */
+  getErrorContainer() {
+    return this.self()?.querySelector('.u_input__error-container');
+  }
+
+  /**
+   * Возвращает DOM элемент поля ввода
+   * @returns {HTMLElement}
+   */
+  getInput() {
+    return this.self()?.querySelector('.u_input__field');
+  }
+
+  /**
+   * Очищает поле ввода
+   */
+  clearInput() {
+    if (this.#parent) {
+      this.getInput().value = '';
+    }
+  }
+
+  /**
+   * Возвращает значение из поля ввода
+   * @returns {string}
+   */
+  getValue() {
+    return this.getInput()?.value;
+  }
+  /**
+   * Задаем родителя.
+   */
+  setParent(newParent) {
+    this.#parent = newParent;
   }
 
   field() {

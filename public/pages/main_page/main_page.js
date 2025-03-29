@@ -1,5 +1,5 @@
 import Navbar from 'components/navbar/navbar.js';
-import { createID } from 'utils/createID.js';
+import { createID } from 'utils/createID.ts';
 import { BASE_URL } from 'public/consts.js';
 import { Footer } from 'components/Footer/Footer.ts';
 import { FOOTER_CONFIG } from 'public/consts.js';

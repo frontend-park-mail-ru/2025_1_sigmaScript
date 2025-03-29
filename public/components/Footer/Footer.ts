@@ -1,5 +1,5 @@
 import { FooterData } from 'types/Footer.types';
-import { createID } from 'utils/createID.js';
+import { createID } from 'utils/createID';
 import template from './Footer.hbs';
 
 export class Footer {

@@ -1,4 +1,4 @@
-import btnTempl from './button.hbs';
+import template from './button.hbs';
 
 /**
  * Обычная кнопка
@@ -27,6 +27,7 @@ import btnTempl from './button.hbs';
 class Button {
   #config = {};
   #actions = {};
+  #addClasses = [];
   #parent;
 
   constructor(parent, config) {
@@ -42,6 +43,7 @@ class Button {
     this.#config.autofocus = config.autofocus || false;
 
     this.#actions = config.actions || {};
+    this.#addClasses = config.addClasses || [];
   }
 
   self() {
@@ -49,6 +51,12 @@ class Button {
       return;
     }
     return this.#parent.querySelector('#' + this.#config.id);
+  }
+
+  setText(text) {
+    if (this.self()) {
+      this.self().getElementsByTagName('span')[0].textContent = text;
+    }
   }
 
   destroy() {
@@ -71,9 +79,37 @@ class Button {
     }
   }
 
+  #applyClasses() {
+    if (this.self()) {
+      this.#addClasses.forEach((cls) => {
+        this.self().classList.add(cls);
+      }, this);
+    }
+  }
+
+  /**
+   * Делает кнопку недоступной
+   */
+  disable() {
+    if (this.#parent) {
+      this.self().classList.add('disable');
+      this.self().disabled = true;
+    }
+  }
+
+  /**
+   * Делает кнопку доступной
+   */
+  enable() {
+    if (this.#parent) {
+      this.self().classList.remove('disable');
+      this.self().disabled = false;
+    }
+  }
+
   render() {
     let wrapper = document.createElement('div');
-    wrapper.insertAdjacentHTML('beforeEnd', btnTempl(this.#config));
+    wrapper.insertAdjacentHTML('beforeEnd', template(this.#config));
 
     const btn = wrapper.firstElementChild;
     wrapper.remove();
@@ -84,6 +120,7 @@ class Button {
       this.#parent.insertAdjacentElement('beforeEnd', btn);
     }
     this.#applyActions();
+    this.#applyClasses();
   }
 }
 

@@ -1,10 +1,11 @@
-import { createID } from 'utils/createID.js';
-import Icon from 'components/icon/icon.js';
-import Button from 'components/universal_button/button.js';
-import { Login } from 'components/Login/Login.js';
+import { createID } from 'utils/createID.ts';
+import Icon from '../icon/icon.js';
+import Button from '../universal_button/button.js';
+import { Login } from '../Login/Login';
 import { AUTH_URL } from 'public/consts.js';
-import Modal from 'components/modal/modal.js';
-import navbarTempl from './navbar.hbs';
+import Modal from '../modal/modal.js';
+import request from 'utils/fetch.ts';
+import template from './navbar.hbs';
 
 const logoSvg = 'static/svg/logo_text_border_lining.svg';
 const userSvg = 'static/svg/Avatar large.svg';
@@ -59,7 +60,7 @@ class Navbar {
     const navbar = document.createElement('navbar');
     navbar.classList.add('navbar');
     this.#parent.appendChild(navbar);
-    navbar.innerHTML = navbarTempl({});
+    navbar.innerHTML = template();
 
     const navbarLogo = document.createElement('div');
     navbarLogo.classList.add('navbar__logo');
@@ -76,96 +77,75 @@ class Navbar {
     navbarUser.classList.add('navbar__user', 'flex-box-row');
     this.#elements().appendChild(navbarUser);
 
+    let userInstance = { username: null };
     try {
       const url = AUTH_URL + 'session';
-      const response = await fetch(url, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        credentials: 'include'
-      });
-      let userInstance = { username: null };
-      if (!response.ok) {
-        const error = await response.json();
-        console.log(error.error || 'Unknown error');
-      } else {
-        userInstance = await response.json();
-        userInstance.username = userInstance.username.split('@')[0];
-      }
-
-      const logout = async () => {
-        try {
-          const url = AUTH_URL + 'logout';
-          const response = await fetch(url, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            credentials: 'include'
-          });
-          if (!response.ok) {
-            const error = await response.json();
-            throw new Error(error.error || 'Unknown error');
-          }
-          this.#renderMain();
-        } catch (err) {
-          console.log(err);
-        }
-      };
-
-      const LoginButtonAction = {
-        click: () => {
-          const rootElement = document.getElementById('root');
-          rootElement.innerHTML = '';
-          const login = new Login(rootElement, this.#renderMain);
-          login.render();
-        }
-      };
-
-      const LoginButton = new Button(navbarUser, {
-        id: 'loginbtn',
-        text: 'Войти',
-        actions: LoginButtonAction
-      });
-
-      const LogoutButtonAction = {
-        click: async () => {
-          const modal = new Modal(this.#parent, {
-            id: createID(),
-            onConfirm: logout
-          });
-          modal.render();
-        }
-      };
-
-      const LogoutButton = new Button(navbarUser, {
-        id: 'logoutbtn',
-        text: 'Выйти',
-        actions: LogoutButtonAction
-      });
-
-      const user = new Icon(navbarUser, {
-        id: 'user',
-        srcIcon: userSvg,
-        size: 'large',
-        text: userInstance.username,
-        textColor: 'secondary',
-        link: '#',
-        circular: true,
-        direction: 'row'
-      });
-
-      if (!userInstance.username) {
-        LoginButton.render();
-        LoginButton.self().classList.add('navbar__button');
-      } else {
-        user.render();
-        LogoutButton.render();
-        LogoutButton.self().classList.add('navbar__button');
-      }
+      const res = await request({ url: url, method: 'GET', credentials: true });
+      userInstance = res.body;
+      userInstance.username = userInstance.username.split('@')[0];
     } catch (error) {
-      console.log(error);
+      console.log(error.errorDetails.error || 'Unknown error');
+    }
+
+    const logout = async () => {
+      try {
+        const url = AUTH_URL + 'logout';
+        await request({ url: url, method: 'POST', credentials: true });
+        this.#renderMain();
+      } catch (error) {
+        console.log(error.errorDetails.error);
+      }
+    };
+
+    const LoginButtonAction = {
+      click: () => {
+        const rootElement = document.getElementById('root');
+        rootElement.innerHTML = '';
+        const login = new Login(rootElement, this.#renderMain);
+        login.render();
+      }
+    };
+
+    const LoginButton = new Button(navbarUser, {
+      id: 'loginbtn',
+      text: 'Войти',
+      actions: LoginButtonAction
+    });
+
+    const LogoutButtonAction = {
+      click: async () => {
+        const modal = new Modal(this.#parent, {
+          id: createID(),
+          onConfirm: logout
+        });
+        modal.render();
+      }
+    };
+
+    const LogoutButton = new Button(navbarUser, {
+      id: 'logoutbtn',
+      text: 'Выйти',
+      actions: LogoutButtonAction
+    });
+
+    const user = new Icon(navbarUser, {
+      id: 'user',
+      srcIcon: userSvg,
+      size: 'large',
+      text: userInstance.username,
+      textColor: 'secondary',
+      link: '#',
+      circular: true,
+      direction: 'row'
+    });
+
+    if (!userInstance.username) {
+      LoginButton.render();
+      LoginButton.self().classList.add('navbar__button');
+    } else {
+      user.render();
+      LogoutButton.render();
+      LogoutButton.self().classList.add('navbar__button');
     }
   }
 }

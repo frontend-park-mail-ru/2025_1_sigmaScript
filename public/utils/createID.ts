@@ -3,7 +3,7 @@
  *
  * @returns {string} случайный id.
  */
-export function createID() {
+export function createID(): string {
   let id = '';
   const alphabet = '0123456789abcdef';
   for (let i = 0; i < 32; i++) {

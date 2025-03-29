@@ -1,7 +1,3 @@
-@import "components/Button/Button.css";
-@import "components/Input/Input.css";
-@import "components/Switch/Switch.css";
-
 .main_auth {
     background-image: url('static/img/login_background.webp');
     background-size: cover;
@@ -38,4 +34,27 @@
     cursor: pointer;
     width: 10%;
     height: 10%;
+}
+
+.login__u_button {
+    width: 84%;
+    height: 12%;
+    min-height: 60px;
+}
+
+.login__u_button > .u_button__text-color_primary {
+    font-weight: 700;
+    font-size: 1.8rem;
+}
+
+.login .u_input {
+    width: 84%;
+    height: 12%;
+    min-height: 60px;
+}
+
+.u_input__field {
+    width: 100%;
+    height: 100%;
+    font-size: 2.4rem;
 }

@@ -1,4 +1,4 @@
-import { createID } from 'utils/createID.js';
+import { createID } from 'utils/createID.ts';
 import template from './modal.hbs';
 
 class Modal {

@@ -13,19 +13,15 @@ type ServerError = {
 
 export class ErrorWithDetails extends Error {
   response?: Response;
-  errorDetails?: ServerError;
+  errorDetails: ServerError;
 
-  constructor(
-    message: string,
-    options?: {
-      response?: Response;
-      errorDetails?: ServerError;
-    }
-  ) {
+  constructor(message: string) {
     super(message);
     this.name = 'ErrorWithDetails';
-    this.response = options?.response;
-    this.errorDetails = options?.errorDetails;
+    this.errorDetails = {
+      error: 'unknown',
+      message: 'none'
+    };
   }
 }
 
@@ -55,7 +51,7 @@ const request = async ({
       };
     }
 
-    const error = new Error(`Ошибка модуля request: ${response.status}`) as ErrorWithDetails;
+    const error = new ErrorWithDetails(`Ошибка модуля request: ${response.status}`);
     error.response = response;
     error.errorDetails = errorDetails;
     throw error;

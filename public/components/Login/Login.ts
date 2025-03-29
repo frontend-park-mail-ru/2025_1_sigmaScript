@@ -2,11 +2,13 @@ import { createID } from 'utils/createID';
 import Button from '../universal_button/button.js';
 import Input from '../universal_input/input.js';
 import { Switch } from '../Switch/Switch.js';
-import { ERRORS, AUTH_URL, ERROR_HANDLERS } from 'public/consts';
+import { ERRORS, ERROR_HANDLERS } from 'public/consts';
 import { isValidLogin, isVaidPassword } from 'utils/validate.js';
 import { debounce } from 'utils/debounce.js';
-import request, { ErrorWithDetails } from 'utils/fetch';
 import template from './Login.hbs';
+import { loginSubmit, registerSubmit } from 'flux/Actions';
+import AuthStore from 'store/LoginStore';
+import type { AuthState } from 'types/Auth.types';
 
 type ErrorHandler = (context: Login, input?: Input) => void;
 const TypedERROR_HANDLERS = ERROR_HANDLERS as Record<string, ErrorHandler>;
@@ -17,6 +19,7 @@ export class Login {
   #parent: HTMLElement;
   #id: string;
   #mode: number;
+  private bindedHandleStoreChange: (state: AuthState) => void;
   prevPage: () => void;
   switch!: Switch;
   loginInput!: Input;
@@ -28,29 +31,55 @@ export class Login {
   backButton!: HTMLElement;
   lastInput: Input | null = null;
 
+  /**
+   * Создаёт новую форму входа/регистрации.
+   * @param {HTMLElement} parent В какой элемент вставлять
+   * @param {Function} prevPage Функция перехода на предыдущую страницу.
+   * @param {boolean} mode Поле для сохранения состояния - вход или регистрация.
+   */
   constructor(parent: HTMLElement, prevPage: () => void, mode: number) {
     this.#parent = parent;
     this.#id = 'login--' + createID();
     this.#mode = mode;
     this.prevPage = prevPage;
+
+    this.bindedHandleStoreChange = this.handleStoreChange.bind(this);
+    AuthStore.subscribe(this.bindedHandleStoreChange);
   }
 
+  /**
+   * Возвращает родителя.
+   * @returns {HTMLElement}
+   */
   get parent(): HTMLElement {
     return this.#parent;
   }
 
+  /**
+   * Задаем родителя.
+   */
   setParent(newParent: HTMLElement): void {
     this.#parent = newParent;
   }
 
+  /**
+   * Возвращает себя из DOM.
+   * @returns {HTMLElement}
+   */
   self(): HTMLElement | null {
     return this.#parent ? document.getElementById(this.#id) : null;
   }
 
+  /**
+   * Удаляет отрисованные элементы.
+   */
   destroy(): void {
     this.self()?.remove();
   }
 
+  /**
+   * Рисует компонент на экран.
+   */
   render(): void {
     this.destroy();
     if (!this.#parent) return;
@@ -103,6 +132,9 @@ export class Login {
     }
   }
 
+  /**
+   * Функция перехода в режим входа.
+   */
   signInMode(): void {
     this.signInButton.classList.add('active');
     this.signUpButton.classList.remove('active');
@@ -113,6 +145,9 @@ export class Login {
     this.clearInputs();
   }
 
+  /**
+   * Функция перехода в режим регистрации.
+   */
   signUpMode(): void {
     this.signInButton.classList.remove('active');
     this.signUpButton.classList.add('active');
@@ -123,17 +158,30 @@ export class Login {
     this.clearInputs();
   }
 
+  /**
+   * Показывает ошибку в переданные поля ввода с указанным сообщением
+   * @param {Input} firstInput - обязательное поле ввода.
+   * @param {string} message - отображаемое сообщение об ошибке
+   * @param {Input} [secondInput] - опциональное поле ввода
+   */
   showError(firstInput: Input, message: string, secondInput: Input) {
     firstInput.getErrorContainer().innerHTML = message;
     firstInput.getInput().classList.add('error');
     secondInput?.getInput().classList.add('error');
   }
 
+  /**
+   * Очищает переданное поле ввода от ошибок
+   * @param {Input} input - очищаемое поле ввода
+   */
   removeError(input: Input): void {
     input.getErrorContainer().innerHTML = '';
     input.getInput().classList.remove('error');
   }
 
+  /**
+   * Сбрасывает форму
+   */
   resetForm(): void {
     this.removeError(this.loginInput);
     this.removeError(this.passwordInput);
@@ -141,12 +189,19 @@ export class Login {
     this.submitButton.disable();
   }
 
+  /**
+   * Очищает поля ввода
+   */
   clearInputs(): void {
     this.loginInput.clearInput();
     this.passwordInput.clearInput();
     this.repeatInput.clearInput();
   }
 
+  /**
+   * Валидация логина
+   * @returns {bool}
+   */
   validateLogin(): boolean {
     const handler = isValidLogin(this.loginInput.getValue().trim());
     if (handler) {
@@ -157,6 +212,10 @@ export class Login {
     return true;
   }
 
+  /**
+   * Валидация паролей
+   * @returns {bool}
+   */
   validatePassword(): boolean {
     let handler: ErrorHandler | undefined | null = null;
     const passwordValue = this.passwordInput.getValue() ?? '';
@@ -197,6 +256,9 @@ export class Login {
     return passwordValue.length > 0 && (this.#mode === 1 || (isSignUpMode && repeatValue.length > 0));
   }
 
+  /**
+   * Валидация полей ввода
+   */
   validate(): void {
     this.resetForm();
     if (this.validateLogin() && this.validatePassword()) {
@@ -206,41 +268,59 @@ export class Login {
     }
   }
 
-  async submitForm(e: Event): Promise<void> {
+  /**
+   * Возвращает на предыдущую страницу
+   */
+  goBack() {
+    AuthStore.unsubscribe(this.bindedHandleStoreChange);
+    this.prevPage();
+  }
+
+  /**
+   * Обработка изменений состояния в AuthStore.
+   * @param {AuthState} state - текущее состояние авторизации из Store
+   */
+  handleStoreChange(state: AuthState) {
+    if (state.error) {
+      const err = state.error;
+      this.lastInput = this.#mode === 1 ? this.passwordInput : this.repeatInput;
+
+      for (const [key, handler] of Object.entries(ERROR_HANDLERS)) {
+        if (err.includes(key)) {
+          handler(this);
+          return;
+        }
+      }
+      ERROR_HANDLERS[ERRORS.ErrDefault](this);
+      return;
+    }
+    if (state.user) {
+      this.goBack();
+    }
+  }
+
+  /**
+   * Отправка формы
+   * @param {Event} e - событие формы
+   */
+  submitForm(e: Event): void {
     e.preventDefault();
     this.resetForm();
 
     const login = this.loginInput.getValue().trim();
-    const pass = this.passwordInput.getValue();
-    const repeatPass = this.repeatInput.getValue();
+    const password = this.passwordInput.getValue();
+    const repeatPassword = this.repeatInput.getValue();
 
-    try {
-      const url = AUTH_URL + (this.#mode === 1 ? 'login' : 'register');
-      const body = {
-        username: login,
-        password: pass,
-        repeated_password: repeatPass
-      };
-      await request({ url, method: 'POST', body, credentials: true });
-      this.prevPage();
-    } catch (error: unknown) {
-      if (error instanceof ErrorWithDetails) {
-        const err = error.errorDetails?.error;
-        this.lastInput = this.#mode === 1 ? this.passwordInput : this.repeatInput;
-
-        for (const [key, handler] of Object.entries(ERROR_HANDLERS) as Array<[string, (ctx: Login) => void]>) {
-          if (err?.includes(key)) {
-            handler(this);
-            return;
-          }
-        }
-        ERROR_HANDLERS[ERRORS.ErrDefault](this);
-      } else {
-        console.error("Request error: can't handle catch block error");
-      }
+    if (this.#mode === 1) {
+      loginSubmit(login, password);
+    } else {
+      registerSubmit(login, password, repeatPassword);
     }
   }
 
+  /**
+   * Добавление событий на кнопки.
+   */
   addEvents(): void {
     this.signInButton.addEventListener('click', () => this.signInMode());
     this.signUpButton.addEventListener('click', () => this.signUpMode());

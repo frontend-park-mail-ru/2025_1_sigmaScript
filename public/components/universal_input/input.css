@@ -1,5 +1,4 @@
 .u_input {
-    box-sizing: border-box;
     border: none;
     outline: none;
     background-color: inherit;
@@ -8,7 +7,6 @@
 
 .u_input__field {
     outline: none;
-    box-sizing: border-box;
     background-color: inherit;
     color: var(--secondary-text-color);
     width: auto;

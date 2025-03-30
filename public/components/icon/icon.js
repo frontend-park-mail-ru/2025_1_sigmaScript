@@ -39,6 +39,7 @@ class Icon {
     this.#config.textColor = config.textColor || 'secondary';
     this.#config.bgColor = config.bgColor || 'none';
     this.#config.size = config.size || '';
+    this.#config.link = config.link || '#';
     this.#config.direction = config.direction || 'column';
     this.#config.circular = config.circular || false;
 

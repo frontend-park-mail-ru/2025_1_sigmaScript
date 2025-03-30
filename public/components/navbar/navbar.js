@@ -68,8 +68,7 @@ class Navbar {
 
     const logo = new Icon(navbarLogo, {
       id: 'navbarLogo',
-      srcIcon: logoSvg,
-      link: '#'
+      srcIcon: logoSvg
     });
     logo.render();
 
@@ -134,7 +133,6 @@ class Navbar {
       size: 'large',
       text: userInstance.username,
       textColor: 'secondary',
-      link: '#',
       circular: true,
       direction: 'row'
     });

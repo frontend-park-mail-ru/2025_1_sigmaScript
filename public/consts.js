@@ -1,5 +1,5 @@
 export const BACKEND_PORT = 8080;
-export const HOST = '217.16.20.177';
+export const HOST = 'localhost';
 export const AUTH_URL = `http://${HOST}:${BACKEND_PORT}/auth/`;
 export const ERRORS = {
   ErrParseJSONShort: 'parse_json_error',
@@ -31,7 +31,7 @@ export const ERROR_HANDLERS = {
   [ERRORS.ErrIncorrectLoginOrPasswordShort]: (context) =>
     context.showError(context.passwordInput, 'Неправильный логин или пароль', context.loginInput),
   [ERRORS.ErrInvalidLogin]: (context) => context.showError(context.loginInput, 'Неправильный логин'),
-  [ERRORS.ErrLengthLogin]: (context) => context.showError(context.loginInput, 'Длина логина 2-17 символов'),
+  [ERRORS.ErrLengthLogin]: (context) => context.showError(context.loginInput, 'Длина логина 2-18 символов'),
   [ERRORS.ErrAlphabetLogin]: (context) => context.showError(context.loginInput, 'Символы a-z, A-Z, 0-9, _, -'),
   [ERRORS.ErrPasswordTooShort]: (context, input) => context.showError(input, 'Длина пароля менее 6 символов'),
   [ERRORS.ErrPasswordTooLong]: (context, input) => context.showError(input, 'Длина пароля более 18 символов'),

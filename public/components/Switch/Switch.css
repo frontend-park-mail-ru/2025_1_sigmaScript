@@ -10,7 +10,6 @@
 .switch__button {
     border: none;
     cursor: pointer;
-    box-sizing: border-box;
     width: 50%;
     height: 100%;
     background: inherit;

@@ -1,4 +1,4 @@
-import { createID } from 'utils/createID.js';
+import { createID } from 'utils/createID.ts';
 import template from './Switch.hbs';
 
 export class Switch {

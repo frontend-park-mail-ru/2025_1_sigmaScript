@@ -1,5 +1,4 @@
 .search_input {
-    box-sizing: border-box;
     display: flex;
     flex-direction: row;
     justify-content: left;

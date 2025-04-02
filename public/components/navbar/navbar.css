@@ -13,7 +13,6 @@
 }
 
 .navbar_elements {
-    box-sizing: border-box;
     position: fixed;
     left: 0;
     top: 0;
@@ -50,7 +49,6 @@
 }
 
 .navbar__logo {
-    box-sizing: border-box;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -79,4 +77,24 @@
 
 .navbar__button.u_button:hover {
     border: none;
+}
+
+.navbar .u_input {
+    display: flex;
+    flex-direction: row;
+    justify-content: left;
+    align-items: center;
+    height: var(--navbar-elements-height);
+    background-color: var(--background-color);
+    padding-left: 5px;
+}
+
+.navbar .u_input__field {
+    background-color: var(--background-color);
+    min-width: 360px;
+    height: var(--navbar-elements-height);
+    padding-left: 2rem;
+    font-size: 2.4rem;
+    border: solid;
+    border-color: var(--text-field-border-color);
 }

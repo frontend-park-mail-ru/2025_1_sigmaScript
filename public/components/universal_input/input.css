@@ -1,45 +1,28 @@
 .u_input {
-    box-sizing: border-box;
-    display: flex;
-    flex-direction: row;
-    justify-content: left;
-    align-items: center;
-
-    width: auto;
-    height: var(--navbar-elements-height);
-
     border: none;
     outline: none;
-    background-color: var(--background-color);
-
-    padding-left: 5px;
-
-    &::placeholder {
-        color: var(--secondary-text-color);
-    }
+    background-color: inherit;
 }
 
 
 .u_input__field {
-    background-color: var(--background-color);
+    outline: none;
+    background-color: inherit;
     color: var(--secondary-text-color);
     width: auto;
-    min-width: 360px;
-    height: var(--navbar-elements-height);
-
+    min-width: 80px;
     padding-left: 2rem;
     font-size: 2.4rem;
-
-    border: solid;
-    border-color: var(--text-field-border-color);
+    border-style: solid;
     border-radius: 25px;
     border-width: 1px;
+    border-color: var(--text-field-border-color);
 }
 
 .u_input__field:hover {
+    border: 1px solid #72757E;
     outline: none;
 }
-
 
 .u_input__field:focus {
     caret-color: var(--primary-color);
@@ -54,4 +37,15 @@
     caret-color: var(--error-color);
     border-color: var(--error-color);
     outline: none;
+}
+
+.u_input__error-container {
+    color: #FF0000;
+    font-size: 1.4rem;
+    padding: 1% 0 0 5%
+}
+
+.error {
+    border: 1px solid #FF0000;
+    border-radius: 25px;
 }

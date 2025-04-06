@@ -3,9 +3,13 @@ import Icon from '../icon/icon.js';
 import Button from '../universal_button/button.js';
 import { Login } from '../Login/Login';
 import { AUTH_URL } from 'public/consts.js';
-import Modal from '../modal/modal.js';
 import request from 'utils/fetch.ts';
 import template from './navbar.hbs';
+import Modal from 'components/modal/modal.js';
+import { UserPage } from 'pages/UserPage/UserPage';
+import { BASE_URL } from 'public/consts';
+import { deserialize } from 'utils/Serialize';
+import { renderUserPage } from 'flux/Actions';
 
 const logoSvg = 'static/svg/logo_text_border_lining.svg';
 const userSvg = 'static/svg/Avatar large.svg';
@@ -51,6 +55,12 @@ class Navbar {
     return document.querySelector('.navbar_elements');
   }
 
+  #formatDate(date) {
+    const dateObj = new Date(date);
+    const dateOnly = dateObj.toISOString().split('T')[0];
+    return dateOnly;
+  }
+
   async render() {
     if (!this.#parent) {
       return;
@@ -70,6 +80,7 @@ class Navbar {
       id: 'navbarLogo',
       srcIcon: logoSvg
     });
+    logo.setActions({ click: () => this.#renderMain() });
     logo.render();
 
     const navbarUser = document.createElement('div');
@@ -82,6 +93,7 @@ class Navbar {
       const res = await request({ url: url, method: 'GET', credentials: true });
       userInstance = res.body;
       userInstance.username = userInstance.username.split('@')[0];
+      localStorage.setItem('username', userInstance.username);
     } catch (error) {
       console.log(error.errorDetails.error || 'Unknown error');
     }
@@ -133,8 +145,33 @@ class Navbar {
       size: 'large',
       text: userInstance.username,
       textColor: 'secondary',
+      link: '#',
       circular: true,
       direction: 'row'
+    });
+
+    user.setActions({
+      click: async () => {
+        const parentContainer = document.getElementById('root').querySelector('.content');
+        let userData;
+        try {
+          const url = BASE_URL + `users/${localStorage.getItem('username')}`;
+          const res = await request({ url: url, method: 'GET', credentials: true });
+          userData = deserialize(res.body);
+        } catch (error) {
+          // TODO: пофиксить багу в обработке ошибок в request
+          // console.log(error.errorDetails.error || 'Unknown error');
+          console.log(error || 'Unknown error');
+          return;
+        }
+
+        // форматируем дату с бека
+        userData.createdAt = this.#formatDate(userData.createdAt);
+        userData.birthDate = this.#formatDate(userData.birthDate);
+        // временное решение пока нету роутера
+        const userPage = new UserPage(parentContainer, userData);
+        renderUserPage(parentContainer, userData);
+      }
     });
 
     if (!userInstance.username) {

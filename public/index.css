@@ -4,6 +4,7 @@
 @import "static/css/flex-box.css";
 @import "components/Login/Login.css";
 @import "pages/main_page/main_page.css";
+@import "pages/UserPage/UserPage.css";
 
 * {
     box-sizing: border-box;

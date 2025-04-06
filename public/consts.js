@@ -37,8 +37,7 @@ export const ERROR_HANDLERS = {
   [ERRORS.ErrPasswordTooLong]: (context, input) => context.showError(input, 'Длина пароля более 18 символов'),
   [ERRORS.ErrEmptyPassword]: (context) =>
     context.showError(context.passwordInput, 'Пустой пароль', context.repeatInput),
-  [ERRORS.ErrDefault]: (context) =>
-    context.showError(context.lastInput, 'Неправильный логин или пароль. Попробуйте ещё')
+  [ERRORS.ErrDefault]: (context) => context.showError(context.lastInput, 'Что-то пошло не так. Попробуйте ещё')
 };
 
 // TODO: наполнить информацией

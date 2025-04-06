@@ -1,5 +1,5 @@
 import { dispatcher } from 'flux/Dispatcher';
-import { LoginActionTypes } from 'flux/ActionTypes';
+import { LoginActionTypes, RenderActionTypes } from 'flux/ActionTypes';
 
 export function loginSubmit(username: string, password: string) {
   dispatcher.dispatch({
@@ -14,3 +14,43 @@ export function registerSubmit(username: string, password: string, repeatPasswor
     payload: { username, password, repeatPassword }
   });
 }
+
+export const RenderActions = {
+  renderMainPage() {
+    dispatcher.dispatch({
+      type: RenderActionTypes.RENDER_MAIN_PAGE
+    });
+  },
+  renderNavbar() {
+    dispatcher.dispatch({
+      type: RenderActionTypes.RENDER_NAVBAR
+    });
+  },
+  renderFooter() {
+    dispatcher.dispatch({
+      type: RenderActionTypes.RENDER_NAVBAR
+    });
+  },
+  renderAuthPage() {
+    dispatcher.dispatch({
+      type: RenderActionTypes.RENDER_AUTH_REG_PAGE
+    });
+  },
+  renderMoviePage(id: number | string) {
+    dispatcher.dispatch({
+      type: RenderActionTypes.RENDER_MOVIE_PAGE,
+      payload: { id }
+    });
+  },
+  renderActorPage(id: number | string) {
+    dispatcher.dispatch({
+      type: RenderActionTypes.RENDER_PERSON_PAGE,
+      payload: id
+    });
+  },
+  renderProfilePage() {
+    dispatcher.dispatch({
+      type: RenderActionTypes.RENDER_PROFILE_PAGE
+    });
+  }
+};

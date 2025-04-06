@@ -50,9 +50,8 @@
 
 .navbar__logo {
     display: flex;
-    align-items: center;
     justify-content: center;
-    width: auto;
+    width: fit-content;
     height: 40px;
 
     margin: 2.5px 0px;
@@ -62,11 +61,11 @@
     background-color: var(--transparent-element);
 }
 
-.navbar__button.u_button >.u_button__text-color_primary{
+.navbar__button.u_button>.u_button__text-color_primary {
     color: #979AA3;
 }
 
-.navbar__button.u_button >.u_button__text-color_primary:hover {
+.navbar__button.u_button>.u_button__text-color_primary:hover {
     color: #FFFE;
 }
 

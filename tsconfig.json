@@ -16,8 +16,14 @@
     "noFallthroughCasesInSwitch": true,
     "resolveJsonModule": true,
     "experimentalDecorators": true,
-    "noImplicitAny": true
+    "noImplicitAny": true,
+    "allowImportingTsExtensions": true
   },
-  "include": ["public/**/*"],
-  "exclude": ["node_modules", "webpack.config.ts"]
+  "include": [
+    "public/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "webpack.config.ts"
+  ]
 }

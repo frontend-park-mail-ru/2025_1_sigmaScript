@@ -127,12 +127,13 @@ export class UserPage {
         id: 'changeDataBtn',
         color: 'primary',
         text: 'Изменить данные',
-        textColor: 'primary',
-        actions: {
-          click: async () => {
-            console.log('button');
-          }
-        }
+        textColor: 'primary'
+        // TODO: сделать модалку с изменением данных
+        // actions: {
+        //   click: async () => {
+        //     console.log('button');
+        //   }
+        // }
       };
 
       new Button(buttonContainer, buttonConfig).render();

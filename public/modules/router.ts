@@ -9,27 +9,32 @@ export const Urls = {
 };
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
-export const handler = (url: URL, id?: string | number, data?: any) => {
-  /* eslint-enable @typescript-eslint/no-explicit-any */
+interface handlerInput {
+  url: URL;
+  id?: string | number;
+  data?: any;
+}
+/* eslint-enable @typescript-eslint/no-explicit-any */
 
-  switch (url.pathname) {
+export const handler = (args: handlerInput) => {
+  switch (args.url.pathname) {
     case Urls.root:
       RenderActions.renderMainPage();
       break;
     case Urls.auth:
       RenderActions.renderAuthPage();
       break;
-    case `${Urls.actor}/${id}`:
-      if (id) {
-        RenderActions.renderActorPage(id);
+    case `${Urls.actor}/${args.id}`:
+      if (args.id) {
+        RenderActions.renderActorPage(args.id);
       }
       break;
-    case `${Urls.movie}/${id}`:
-      if (id && data) {
-        RenderActions.renderMoviePage(id);
-      } else if (id) {
-        if (id) {
-          RenderActions.renderMoviePage(id);
+    case `${Urls.movie}/${args.id}`:
+      if (args.id && args.data) {
+        RenderActions.renderMoviePage(args.id);
+      } else if (args.id) {
+        if (args.id) {
+          RenderActions.renderMoviePage(args.id);
         }
       }
       break;
@@ -45,13 +50,13 @@ class Router {
   startRouting() {
     const url = new URL(window.location.href);
 
-    handler(url, decodeURIComponent(this.getURLMethodAndID(url.pathname).id));
+    handler({ url: url, id: decodeURIComponent(this.getURLMethodAndID(url.pathname).id) });
 
     window.onpopstate = (e) => {
       if (e.state) {
-        handler(new URL(window.location.href), e.state.id);
+        handler({ url: new URL(window.location.href), id: e.state.id });
       } else {
-        handler(new URL(window.location.href));
+        handler({ url: new URL(window.location.href) });
       }
     };
   }
@@ -65,13 +70,16 @@ class Router {
     /* eslint-enable @typescript-eslint/no-explicit-any */
     let url = id ? new URL(`${urlPath}/${id}`, window.location.href) : new URL(urlPath, window.location.href);
     if (data && id) {
-      handler(url, id, data);
+      handler({ url: url, id: id, data: data });
       window.history.pushState({ id }, urlPath, `${urlPath}/${id}`);
     } else if (id) {
-      handler(url, id);
+      handler({ url: url, id: id });
+      window.history.pushState({ id }, urlPath, `${urlPath}/${id}`);
+    } else if (data) {
+      handler({ url: url, data: data });
       window.history.pushState({ id }, urlPath, `${urlPath}/${id}`);
     } else {
-      handler(url);
+      handler({ url: url });
       window.history.pushState({}, urlPath, urlPath);
     }
   }

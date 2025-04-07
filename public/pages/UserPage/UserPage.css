@@ -1,0 +1,118 @@
+.user-page {
+  max-width: 90rem;
+  width: 100%;
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: transparent;
+  border-radius: 0.5rem;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.user-page__upper {
+  display: flex;
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+.user-page__avatar {
+  width: 20rem;
+  height: 20rem;
+  border-radius: 50%;
+  overflow: hidden;
+  background-color: #3a3a3a;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.user-page__avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.user-page__avatar-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3rem;
+  color: #999999;
+}
+
+.user-page__info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 5rem;
+  padding-bottom: 3rem;
+}
+
+.user-page__info-top {
+  display: flex;
+  align-items: center;
+  padding-left: 6rem;
+  padding-right: 6rem;
+  justify-content: space-between;
+}
+
+.user-page__name {
+  font-size: 2.8rem;
+  font-weight: 600;
+  margin: 0;
+  color: var(--primary-text-color);
+}
+
+.user-page__info-middle {
+  /* TODO: решить, оставляем ли отзывы. если да, то раскомментируем */
+  /* display: flex;
+  gap: 4rem;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%; */
+  display: flex;
+  padding-left: 6rem;
+  gap: 15rem;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.user-page__detail {
+  font-size: 1.6rem;
+  color: var(--primary-text-color);
+  margin: 0;
+}
+
+.user-page__info-bottom {
+  display: flex;
+  padding-left: 6rem;
+  gap: 15rem;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+}
+
+.user-page__stats-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.6rem;
+  margin: 0;
+}
+
+.user-page__stats-number {
+  display: block;
+  color: var(--primary-text-color);
+}
+
+.user-page__stats-label {
+  color: var(--primary-text-color);
+  display: block;
+  text-align: center;
+}

@@ -8,4 +8,5 @@ declare module 'public/consts' {
   export const HOST: string;
   export const AUTH_URL: string;
   export const BASE_URL: string;
+  export const AVATAR_PLACEHOLDER: string;
 }

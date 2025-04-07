@@ -74,6 +74,7 @@ export class Login {
    * Удаляет отрисованные элементы.
    */
   destroy(): void {
+    AuthStore.unsubscribe(this.bindedHandleStoreChange);
     this.self()?.remove();
   }
 
@@ -81,7 +82,6 @@ export class Login {
    * Рисует компонент на экран.
    */
   render(): void {
-    this.destroy();
     if (!this.#parent) return;
 
     this.#parent.innerHTML += template({ id: this.#id });

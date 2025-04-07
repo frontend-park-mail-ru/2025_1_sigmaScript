@@ -6,3 +6,5 @@ export const LoginActionTypes = {
   REGISTER_SUCCESS: 'REGISTER_SUCCESS',
   REGISTER_ERROR: 'REGISTER_ERROR'
 };
+
+export const RENDER_USER_PAGE = 'RENDER_USER_PAGE';

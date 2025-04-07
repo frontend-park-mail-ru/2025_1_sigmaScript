@@ -9,6 +9,7 @@ import template from './Login.hbs';
 import { loginSubmit, registerSubmit } from 'flux/Actions';
 import AuthStore from 'store/LoginStore';
 import type { AuthState } from 'types/Auth.types';
+import { router } from '../../modules/router.ts';
 
 type ErrorHandler = (context: Login, input?: Input) => void;
 const TypedERROR_HANDLERS = ERROR_HANDLERS as Record<string, ErrorHandler>;
@@ -21,6 +22,7 @@ export class Login {
   #mode: number;
   private bindedHandleStoreChange: (state: AuthState) => void;
   prevPage: () => void;
+  prevPageURL: string;
   switch!: Switch;
   loginInput!: Input;
   passwordInput!: Input;
@@ -35,13 +37,22 @@ export class Login {
    * Создаёт новую форму входа/регистрации.
    * @param {HTMLElement} parent В какой элемент вставлять
    * @param {Function} prevPage Функция перехода на предыдущую страницу.
-   * @param {boolean} mode Поле для сохранения состояния - вход или регистрация.
+   * @param {boolean} mode Поле для сохранения состояния - 1 = вход, 0 = регистрация.
    */
-  constructor(parent: HTMLElement, prevPage: () => void, mode: number) {
+  constructor(parent: HTMLElement, prevPageURLPath: string, mode: number) {
     this.#parent = parent;
     this.#id = 'login--' + createID();
     this.#mode = mode;
-    this.prevPage = prevPage;
+
+    if (prevPageURLPath === '/auth') {
+      this.prevPageURL = '/';
+    } else {
+      this.prevPageURL = prevPageURLPath;
+    }
+
+    this.prevPage = () => {
+      router.go(this.prevPageURL);
+    };
 
     this.bindedHandleStoreChange = this.handleStoreChange.bind(this);
     AuthStore.subscribe(this.bindedHandleStoreChange);
@@ -83,6 +94,8 @@ export class Login {
   render(): void {
     this.destroy();
     if (!this.#parent) return;
+
+    this.parent.innerHTML = '';
 
     this.#parent.innerHTML += template({ id: this.#id });
 

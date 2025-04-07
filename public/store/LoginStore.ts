@@ -1,9 +1,12 @@
 import { dispatcher } from 'flux/Dispatcher';
 import { Action } from 'types/Dispatcher.types';
-import { LoginActionTypes } from 'flux/ActionTypes';
+import { LoginActionTypes, RenderActionTypes } from 'flux/ActionTypes.ts';
 import { AUTH_URL } from 'public/consts';
 import { Listener, AuthState, LoginPayload, RegisterPayload, AuthSuccessPayload, ErrorPayload } from 'types/Auth.types';
 import request, { ErrorWithDetails } from 'utils/fetch';
+import { Login } from 'components/Login/Login.ts';
+import { initialStore } from './InitialStore';
+import { router } from '../modules/router';
 
 class AuthStore {
   private state: AuthState;
@@ -38,9 +41,24 @@ class AuthStore {
         this.state.error = (action.payload as ErrorPayload).error;
         this.emitChange();
         break;
+      case RenderActionTypes.RENDER_AUTH_REG_PAGE:
+        this.renderAuth();
+        break;
       default:
         break;
     }
+  }
+
+  private renderAuth() {
+    const rootElement = document.getElementById('root');
+    if (!rootElement) {
+      return;
+    }
+    initialStore.destroyStored();
+    const login = new Login(rootElement, router.getCurrentPath(), 0);
+    initialStore.store(login);
+
+    login.render();
   }
 
   private getErrorMessage(error: unknown): string {

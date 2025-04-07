@@ -10,6 +10,6 @@ export function createID(): string {
     id += alphabet[Math.round(Math.random() * 15)];
   }
   return (
-    id.slice(0, 8) + '-' + id.slice(8, 12) + '-' + id.slice(12, 16) + '-' + id.slice(16, 20) + '-' + id.slice(20, 32)
+    id.slice(0, 8) + '-' + id.slice(8, 12) + '-4' + id.slice(13, 16) + '-' + id.slice(16, 20) + '-' + id.slice(20, 32)
   );
 }

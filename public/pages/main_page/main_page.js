@@ -57,6 +57,8 @@ class MainPage {
   async render() {
     this.destroy();
 
+    this.#parent.innerHTML = '';
+
     const mainElem = document.createElement('main');
     mainElem.id = this.#config.id;
     this.#parent.appendChild(mainElem);

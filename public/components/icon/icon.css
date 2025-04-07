@@ -8,8 +8,10 @@
     cursor: pointer;
     outline: none;
 
-    width: auto;
+    width: fit-content;
     height: 100%;
+
+    max-height: var(--navbar-elements-height);
 }
 
 .icon-dir_row {

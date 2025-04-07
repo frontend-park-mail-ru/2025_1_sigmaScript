@@ -11,8 +11,6 @@ import AuthStore from 'store/LoginStore';
 import type { AuthState } from 'types/Auth.types';
 import { router } from '../../modules/router.ts';
 
-// import { router } from 'public/modules/router.ts';
-
 type ErrorHandler = (context: Login, input?: Input) => void;
 const TypedERROR_HANDLERS = ERROR_HANDLERS as Record<string, ErrorHandler>;
 const TypedERRORS = ERRORS as Record<string, string>;

@@ -12,31 +12,19 @@ export const Urls = {
 export const handler = (url: URL, id?: string | number, data?: any) => {
   /* eslint-enable @typescript-eslint/no-explicit-any */
 
-  // temporaly render main page
-  // const rootElement = document.getElementById('root');
-  // const main = new MainPage(rootElement, { id: `${createID()}` });
-
-  switch (url.pathname.toString()) {
+  switch (url.pathname) {
     case Urls.root:
-      // // Actions.renderNavbar();
       RenderActions.renderMainPage();
-      // // Actions.renderFooter();
       break;
     case Urls.auth:
-      // Actions.renderNavbar();
       RenderActions.renderAuthPage();
-      // Actions.renderFooter();
       break;
     case `${Urls.actor}/${id}`:
-      // Actions.renderNavbar();
       if (id) {
         RenderActions.renderActorPage(id);
       }
-      // Actions.renderFooter();
       break;
     case `${Urls.movie}/${id}`:
-      // Actions.renderNavbar();
-
       if (id && data) {
         RenderActions.renderMoviePage(id);
       } else if (id) {
@@ -44,12 +32,9 @@ export const handler = (url: URL, id?: string | number, data?: any) => {
           RenderActions.renderMoviePage(id);
         }
       }
-      // Actions.renderFooter();
       break;
     case Urls.profile:
-      // Actions.renderNavbar();
       RenderActions.renderProfilePage();
-      // Actions.renderFooter();
       break;
     default:
       router.go('/');

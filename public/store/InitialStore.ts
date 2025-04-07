@@ -1,5 +1,6 @@
 import { Destroyable } from 'public/consts';
 
+// InitialStore is used to manually dsestroy current page and unsubscribe from stores
 class InitialStore<T extends Destroyable> {
   private storedActivePage: T | null = null;
 

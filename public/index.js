@@ -7,16 +7,16 @@ import 'store/PersonPageStore';
 
 import { router } from 'public/modules/router';
 
-import { initialStore } from 'store/InitialStore';
-import { PersonPage } from 'pages/person_page/person_page';
+// import { initialStore } from 'store/InitialStore';
+// import { PersonPage } from 'pages/person_page/person_page';
 
-const rootElement = document.getElementById('root');
+// const rootElement = document.getElementById('root');
 
-if (rootElement) {
-  const personPage = new PersonPage(rootElement, router.getCurrentPath());
-  initialStore.store(personPage);
+// if (rootElement) {
+//   const personPage = new PersonPage(rootElement, router.getCurrentPath());
+//   initialStore.store(personPage);
 
-  personPage.render();
-}
+//   personPage.render();
+// }
 
 router.startRouting();

@@ -6,6 +6,7 @@ import personTemplate from './person_page.hbs';
 import noPersonTemplate from './no_person_page.hbs';
 
 import Navbar from 'components/navbar/navbar.js';
+import { GetDataActionTypes } from 'flux/ActionTypes.ts';
 
 // temp data
 const actorInfo: PersonInfo = {
@@ -159,8 +160,12 @@ export class PersonPage {
       return;
     }
     if (state.error) {
-      this.renderEmpty();
-      return;
+      if (state.error === GetDataActionTypes.PERSON_NOT_FOUND_ERROR) {
+        this.renderEmpty();
+        return;
+      }
+      this.personData = PersonPageStore.getState().person;
+      this.render();
     }
   }
 

@@ -6,6 +6,8 @@ import Modal from '../modal/modal.js';
 import request, { ErrorWithDetails } from 'utils/fetch.ts';
 import template from './navbar.hbs';
 import { router } from 'public/modules/router.ts';
+import { dispatcher } from 'public/flux/Dispatcher.ts';
+import { GetDataActionTypes } from 'flux/ActionTypes';
 
 const logoSvg = '/static/svg/logo_text_border_lining.svg';
 const userSvg = '/static/svg/Avatar large.svg';
@@ -88,11 +90,10 @@ class Navbar {
       userInstance = res.body;
       userInstance.username = userInstance.username.split('@')[0];
     } catch (error) {
-      if (error instanceof ErrorWithDetails) {
-        console.log(error.errorDetails.error || 'Unknown error');
-      } else {
-        console.log(error || 'Unknown error');
-      }
+      dispatcher.dispatch({
+        type: GetDataActionTypes.SESSION_NOT_FOUND_ERROR,
+        payload: { error: error }
+      });
     }
 
     const logout = async () => {
@@ -102,9 +103,15 @@ class Navbar {
         this.#renderMain();
       } catch (error) {
         if (error instanceof ErrorWithDetails) {
-          console.log(error.errorDetails.error);
+          dispatcher.dispatch({
+            type: GetDataActionTypes.UNKNOWN_ERROR,
+            payload: { error: error.errorDetails.error }
+          });
         } else {
-          console.log(error);
+          dispatcher.dispatch({
+            type: GetDataActionTypes.UNKNOWN_ERROR,
+            payload: { error: error }
+          });
         }
       }
     };

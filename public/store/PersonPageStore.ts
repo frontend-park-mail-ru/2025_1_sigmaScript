@@ -65,7 +65,7 @@ class PersonPageStore {
       }
 
       const url = PERSON_URL + `${id}`;
-      const responseData = await request({ url, method: 'GET', body: undefined, credentials: true });
+      const responseData = await request({ url, method: 'GET', credentials: true });
       const jsonData = responseData.body;
       const personJSON = jsonData as PersonPayload;
 
@@ -99,7 +99,6 @@ class PersonPageStore {
       initialStore.store(personPage);
       personPage.render();
     } catch (error: unknown) {
-      console.log(error || 'Unknown error');
       dispatcher.dispatch({
         type: GetDataActionTypes.PERSON_NOT_FOUND_ERROR,
         payload: { error: this.getErrorMessage(error) }

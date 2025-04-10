@@ -1,10 +1,10 @@
 import { createID } from 'utils/createID.ts';
 import Icon from '../icon/icon.js';
 import Button from '../universal_button/button.js';
-import { Login } from '../Login/Login';
 import { AUTH_URL } from 'public/consts.js';
 import request from 'utils/fetch.ts';
 import template from './navbar.hbs';
+import { router } from 'public/modules/router.ts';
 import Modal from 'components/modal/modal.js';
 import { UserPage } from 'pages/UserPage/UserPage';
 import { BASE_URL } from 'public/consts';
@@ -74,13 +74,17 @@ class Navbar {
 
     const navbarLogo = document.createElement('div');
     navbarLogo.classList.add('navbar__logo');
+    navbarLogo.style.height = '40px';
+
     this.#elements().appendChild(navbarLogo);
 
     const logo = new Icon(navbarLogo, {
       id: 'navbarLogo',
       srcIcon: logoSvg
     });
-    logo.setActions({ click: () => this.#renderMain() });
+
+    logo.setActions({ click: () => router.go('/') });
+
     logo.render();
 
     const navbarUser = document.createElement('div');
@@ -110,10 +114,7 @@ class Navbar {
 
     const LoginButtonAction = {
       click: () => {
-        const rootElement = document.getElementById('root');
-        rootElement.innerHTML = '';
-        const login = new Login(rootElement, this.#renderMain);
-        login.render();
+        router.go('/auth');
       }
     };
 

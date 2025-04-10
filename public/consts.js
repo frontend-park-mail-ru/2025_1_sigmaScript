@@ -40,7 +40,7 @@ export const ERROR_HANDLERS = {
   [ERRORS.ErrDefault]: (context) => context.showError(context.lastInput, 'Что-то пошло не так. Попробуйте ещё')
 };
 
-// TODO: наполнить информацией
+// TODO: наполнить  информацией
 export const FOOTER_CONFIG = {
   columns: [
     {

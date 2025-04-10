@@ -1,10 +1,12 @@
 import './index.css';
-import MainPage from 'pages/main_page/main_page.js';
-import { createID } from 'utils/createID.ts';
+
 import 'store/LoginStore';
+import 'store/MainPageStore.ts';
+import 'store/InitialStore.ts';
 import 'store/UserPageStore';
 
-const rootElement = document.getElementById('root');
+import { router } from './modules/router.ts';
+import MainPage from 'pages/main_page/main_page.js';
+import { createID } from 'utils/createID.ts';
 
-const main = new MainPage(rootElement, { id: `${createID()}` });
-main.render();
+router.startRouting();

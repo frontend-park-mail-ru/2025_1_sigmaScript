@@ -13,4 +13,5 @@ declare module 'public/consts' {
     destroy(): void;
   }
   export const AVATAR_PLACEHOLDER: string;
+  export function Authable(url: string): boolean;
 }

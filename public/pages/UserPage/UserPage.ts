@@ -5,6 +5,9 @@ import Button from 'components/universal_button/button.js';
 import { AVATAR_PLACEHOLDER } from 'public/consts';
 import { UserData, UserPageData, ButtonConfig, UserPageState } from 'types/UserPage.types';
 import UserPageStore from 'store/UserPageStore';
+import Navbar from 'components/navbar/navbar';
+import { FOOTER_CONFIG } from 'public/consts.js';
+import { Footer } from 'components/Footer/Footer';
 
 export const TABS_DATA = {
   tabsData: [
@@ -18,6 +21,7 @@ export class UserPage {
   #parent: HTMLElement;
   #data: UserPageData;
   #id: string;
+  #navbar: Navbar | null;
   private bindedHandleStoreChange: (state: UserPageState) => void;
 
   /**
@@ -32,8 +36,9 @@ export class UserPage {
       id: this.#id,
       ...TABS_DATA,
       ...userData,
-      avatar: userData.avatar || AVATAR_PLACEHOLDER
+      avatar: userData?.avatar || AVATAR_PLACEHOLDER
     };
+    this.#navbar = null;
 
     this.bindedHandleStoreChange = this.handleStoreChange.bind(this);
     UserPageStore.subscribe(this.bindedHandleStoreChange);
@@ -44,28 +49,12 @@ export class UserPage {
    * @param {AuthState} state - текущее состояние авторизации из Store
    */
   handleStoreChange(state: UserPageState) {
-    const { parent, userData } = state;
-
-    let shouldRender = false;
-
-    if (parent && parent !== this.#parent) {
-      this.#parent = parent;
-      shouldRender = true;
-    }
-
-    if (userData && JSON.stringify(userData) !== JSON.stringify(this.#data)) {
-      this.#data = {
-        ...this.#data,
-        ...userData,
-        ...TABS_DATA,
-        avatar: userData.avatar || AVATAR_PLACEHOLDER
-      };
-      shouldRender = true;
-    }
-
-    if (shouldRender) {
-      this.render();
-    }
+    this.#data.username = state.userData?.username || this.#data.username;
+    this.#data.createdAt = state.userData?.createdAt || this.#data.createdAt;
+    this.#data.avatar = state.userData?.avatar || AVATAR_PLACEHOLDER;
+    this.#data.moviesCount = state.userData?.moviesCount;
+    this.#data.rating = state.userData?.rating;
+    this.update();
   }
 
   /**
@@ -109,6 +98,7 @@ export class UserPage {
   destroy(): void {
     UserPageStore.unsubscribe(this.bindedHandleStoreChange);
     this.self()?.remove();
+    this.#navbar?.destroy();
   }
 
   /**
@@ -119,8 +109,55 @@ export class UserPage {
       return;
     }
 
-    this.#parent.innerHTML = template(this.#data);
+    const mainElem = document.createElement('main');
+    mainElem.id = this.#id;
+    this.#parent.appendChild(mainElem);
 
+    const mainElemHeader = document.createElement('div');
+    mainElemHeader.classList += 'header sticky_to_top';
+    mainElem.appendChild(mainElemHeader);
+
+    this.#navbar = new Navbar(mainElemHeader);
+    this.#navbar.render();
+
+    const mainElemContent = document.createElement('div');
+    mainElemContent.classList += 'content';
+    mainElem.appendChild(mainElemContent);
+
+    mainElemContent.innerHTML += template(this.#data);
+
+    const buttonContainer = this.self()?.querySelector(`.user-page__action-button`);
+    if (buttonContainer) {
+      const buttonConfig: ButtonConfig = {
+        id: 'changeDataBtn',
+        color: 'primary',
+        text: 'Изменить данные',
+        textColor: 'primary'
+        // TODO: сделать модалку с изменением данных
+        // actions: {
+        //   click: async () => {
+        //     console.log('button');
+        //   }
+        // }
+      };
+
+      new Button(buttonContainer, buttonConfig).render();
+    }
+
+    const tabsContainer = this.self()?.querySelector<HTMLElement>(`#${this.#id} .tabs-container`);
+    if (tabsContainer && this.#data.tabsData) {
+      new Tabs(tabsContainer, this.data.tabsData).render();
+    }
+
+    const footer = new Footer(mainElem, FOOTER_CONFIG);
+    footer.render();
+  }
+
+  update() {
+    const contentElement = this.#parent.querySelector('.content');
+    if (contentElement) {
+      contentElement.innerHTML = template(this.#data);
+    }
     const buttonContainer = this.self()?.querySelector(`.user-page__action-button`);
     if (buttonContainer) {
       const buttonConfig: ButtonConfig = {

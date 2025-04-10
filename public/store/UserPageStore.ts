@@ -1,7 +1,14 @@
 import { dispatcher } from 'flux/Dispatcher';
 import { Action } from 'types/Dispatcher.types';
-import { RENDER_USER_PAGE } from 'flux/ActionTypes';
-import { UserPageState, Listener } from 'types/UserPage.types';
+import { RenderActionTypes, UserPageTypes } from 'flux/ActionTypes';
+import { UserPageState, Listener, UserData } from 'types/UserPage.types';
+import { initialStore } from './InitialStore';
+import { UserPage } from 'pages/UserPage/UserPage';
+import { AUTH_URL } from 'public/consts';
+import request from 'utils/fetch';
+import { deserialize } from 'utils/Serialize';
+import { noSession, updateUserPage } from 'flux/Actions';
+import { router } from 'modules/router';
 
 class UserPageStore {
   private state: UserPageState;
@@ -17,17 +24,71 @@ class UserPageStore {
     dispatcher.register(this.handleActions.bind(this));
   }
 
-  private handleActions(action: Action): void {
-    const payload = action.payload as UserPageState;
+  #formatDate(date: string) {
+    const dateObj = new Date(date);
+    const dateOnly = dateObj.toISOString().split('T')[0];
+    return dateOnly;
+  }
+
+  private async handleActions(action: Action): Promise<void> {
     switch (action.type) {
-      case RENDER_USER_PAGE:
-        this.state.parent = payload.parent;
-        this.state.userData = payload.userData;
+      case RenderActionTypes.RENDER_PROFILE_PAGE:
+        this.state.userData = action.payload as UserData;
+        this.renderUserPage(this.state.userData);
+        break;
+      case UserPageTypes.UPDATE_USER_PAGE:
+        this.state.userData = action.payload as UserData;
         this.emitChange();
+        break;
+      case UserPageTypes.NO_SESSION:
+        if (router.getCurrentPath() === '/profile') {
+          router.go('/auth');
+        }
+        break;
+      case UserPageTypes.GET_USER:
+        try {
+          const url = AUTH_URL + 'session';
+          const res = await request({ url: url, method: 'GET', credentials: true });
+
+          let userData = deserialize(res.body) as UserData;
+          userData.createdAt = this.#formatDate(userData.createdAt);
+          this.state.userData = userData;
+
+          updateUserPage(userData);
+        } catch (error) {
+          // TODO: пофиксить ошибку
+          // console.log(error.errorDetails.error || 'Unknown error');
+          console.log(error || 'Unknown error');
+          noSession();
+        }
+        break;
+      case UserPageTypes.LOGOUT_USER:
+        this.state.userData = null;
+        try {
+          const url = AUTH_URL + 'logout';
+          await request({ url: url, method: 'POST', credentials: true });
+        } catch (error) {
+          // TODO: пофиксить ошибку
+          // console.log(error.errorDetails.error);
+          console.log(error);
+        }
         break;
       default:
         break;
     }
+  }
+
+  private renderUserPage(userData: UserData) {
+    const rootElement = document.getElementById('root');
+    if (!rootElement) {
+      return;
+    }
+
+    initialStore.destroyStored();
+    const userPage = new UserPage(rootElement, userData);
+    initialStore.store(userPage);
+
+    userPage.render();
   }
 
   subscribe(listener: Listener): void {

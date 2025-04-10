@@ -6,13 +6,11 @@ export type UserPageState = {
 export type Listener = (state: UserPageState) => void;
 
 export interface UserData {
-  login: string;
+  username: string;
   avatar?: string;
-  birthDate?: string;
-  registrationDate: string;
+  createdAt: string;
   rating?: number;
   moviesCount?: number;
-  seriesCount?: number;
 }
 
 export type TabData = {
@@ -23,6 +21,7 @@ export type TabData = {
 export interface UserPageData extends UserData {
   id: string;
   tabsData?: TabData[];
+  userData?: UserData;
 }
 
 export type ButtonConfig = {
@@ -30,7 +29,7 @@ export type ButtonConfig = {
   color: string;
   text: string;
   textColor: string;
-  actions: {
+  actions?: {
     click: () => Promise<void>;
   };
 };

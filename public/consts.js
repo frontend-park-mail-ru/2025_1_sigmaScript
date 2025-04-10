@@ -1,5 +1,6 @@
 export const BACKEND_PORT = 8080;
-export const HOST = '217.16.20.177';
+// export const HOST = '217.16.20.177';
+export const HOST = 'localhost';
 export const AUTH_URL = `http://${HOST}:${BACKEND_PORT}/auth/`;
 export const ERRORS = {
   ErrParseJSONShort: 'parse_json_error',
@@ -51,3 +52,9 @@ export const FOOTER_CONFIG = {
 };
 
 export const AVATAR_PLACEHOLDER = 'static/img/avatar_placeholder.png';
+
+export function Authable(url) {
+  return AUTHABLE.includes(url);
+}
+
+export const AUTHABLE = ['/profile'];

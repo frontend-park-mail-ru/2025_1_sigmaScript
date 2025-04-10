@@ -1,15 +1,12 @@
 import { createID } from 'utils/createID.ts';
 import Icon from '../icon/icon.js';
 import Button from '../universal_button/button.js';
-import { AUTH_URL } from 'public/consts.js';
-import request from 'utils/fetch.ts';
 import template from './navbar.hbs';
 import { router } from 'public/modules/router.ts';
 import Modal from 'components/modal/modal.js';
-import { UserPage } from 'pages/UserPage/UserPage';
-import { BASE_URL } from 'public/consts';
-import { deserialize } from 'utils/Serialize';
-import { renderUserPage } from 'flux/Actions';
+import UserPageStore from 'store/UserPageStore';
+import NavbarStore from 'store/NavbarStore';
+import { logoutUser } from 'flux/Actions';
 
 const logoSvg = 'static/svg/logo_text_border_lining.svg';
 const userSvg = 'static/svg/Avatar large.svg';
@@ -34,11 +31,29 @@ const userSvg = 'static/svg/Avatar large.svg';
 class Navbar {
   #parent;
 
-  #renderMain = () => {};
-
-  constructor(parent, renderMain) {
+  constructor(parent) {
     this.#parent = parent;
-    this.#renderMain = renderMain;
+
+    this.bindedHandleStoreChange = this.handleStoreChange.bind(this);
+    NavbarStore.subscribe(this.bindedHandleStoreChange);
+  }
+
+  handleStoreChange(state) {
+    let userData = UserPageStore.getState().userData;
+    if (!userData?.username) {
+      this.user.destroy();
+      this.LogoutButton.destroy();
+      this.LoginButton.render();
+      this.LoginButton.self().classList.add('navbar__button');
+    } else {
+      this.LoginButton.destroy();
+      this.user.changeConfig({
+        text: userData.username
+      });
+      this.user.render();
+      this.LogoutButton.render();
+      this.LogoutButton.self().classList.add('navbar__button');
+    }
   }
 
   self() {
@@ -46,26 +61,18 @@ class Navbar {
   }
 
   destroy() {
-    if (this.self()) {
-      this.self().remove();
-    }
+    this.self()?.remove();
   }
 
   #elements() {
     return document.querySelector('.navbar_elements');
   }
 
-  #formatDate(date) {
-    const dateObj = new Date(date);
-    const dateOnly = dateObj.toISOString().split('T')[0];
-    return dateOnly;
-  }
-
   async render() {
     if (!this.#parent) {
       return;
     }
-    this.destroy();
+    // this.destroy();
 
     const navbar = document.createElement('navbar');
     navbar.classList.add('navbar');
@@ -91,40 +98,24 @@ class Navbar {
     navbarUser.classList.add('navbar__user', 'flex-box-row');
     this.#elements().appendChild(navbarUser);
 
-    let userInstance = { username: null };
-    try {
-      const url = AUTH_URL + 'session';
-      const res = await request({ url: url, method: 'GET', credentials: true });
-      userInstance = res.body;
-      userInstance.username = userInstance.username.split('@')[0];
-      localStorage.setItem('username', userInstance.username);
-    } catch (error) {
-      console.log(error.errorDetails.error || 'Unknown error');
-    }
-
     const logout = async () => {
-      try {
-        const url = AUTH_URL + 'logout';
-        await request({ url: url, method: 'POST', credentials: true });
-        this.#renderMain();
-      } catch (error) {
-        console.log(error.errorDetails.error);
-      }
+      logoutUser();
+      router.go('/');
     };
 
-    const LoginButtonAction = {
+    this.LoginButtonAction = {
       click: () => {
         router.go('/auth');
       }
     };
 
-    const LoginButton = new Button(navbarUser, {
+    this.LoginButton = new Button(navbarUser, {
       id: 'loginbtn',
       text: 'Войти',
-      actions: LoginButtonAction
+      actions: this.LoginButtonAction
     });
 
-    const LogoutButtonAction = {
+    this.LogoutButtonAction = {
       click: async () => {
         const modal = new Modal(this.#parent, {
           id: createID(),
@@ -134,54 +125,35 @@ class Navbar {
       }
     };
 
-    const LogoutButton = new Button(navbarUser, {
+    this.LogoutButton = new Button(navbarUser, {
       id: 'logoutbtn',
       text: 'Выйти',
-      actions: LogoutButtonAction
+      actions: this.LogoutButtonAction
     });
 
-    const user = new Icon(navbarUser, {
+    this.user = new Icon(navbarUser, {
       id: 'user',
       srcIcon: userSvg,
       size: 'large',
-      text: userInstance.username,
+      text: UserPageStore.getState().userData?.username,
       textColor: 'secondary',
-      link: '#',
       circular: true,
       direction: 'row'
     });
 
-    user.setActions({
+    this.user.setActions({
       click: async () => {
-        const parentContainer = document.getElementById('root').querySelector('.content');
-        let userData;
-        try {
-          const url = BASE_URL + `users/${localStorage.getItem('username')}`;
-          const res = await request({ url: url, method: 'GET', credentials: true });
-          userData = deserialize(res.body);
-        } catch (error) {
-          // TODO: пофиксить багу в обработке ошибок в request
-          // console.log(error.errorDetails.error || 'Unknown error');
-          console.log(error || 'Unknown error');
-          return;
-        }
-
-        // форматируем дату с бека
-        userData.createdAt = this.#formatDate(userData.createdAt);
-        userData.birthDate = this.#formatDate(userData.birthDate);
-        // временное решение пока нету роутера
-        const userPage = new UserPage(parentContainer, userData);
-        renderUserPage(parentContainer, userData);
+        router.go('/profile', UserPageStore.getState().userData);
       }
     });
 
-    if (!userInstance.username) {
-      LoginButton.render();
-      LoginButton.self().classList.add('navbar__button');
+    if (!UserPageStore.getState().userData?.username) {
+      this.LoginButton.render();
+      this.LoginButton.self().classList.add('navbar__button');
     } else {
-      user.render();
-      LogoutButton.render();
-      LogoutButton.self().classList.add('navbar__button');
+      this.user.render();
+      this.LogoutButton.render();
+      this.LogoutButton.self().classList.add('navbar__button');
     }
   }
 }

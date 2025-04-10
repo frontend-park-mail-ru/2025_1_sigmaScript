@@ -55,23 +55,6 @@
   width: fit-content;
 }
 
-.favorite-button {
-  padding: 8px 15px;
-  cursor: pointer;
-  background-color: var(--primary-color);
-  border-radius: 4px;
-}
-
-.favorite-button:hover {
-  background-color: #ddd;
-}
-
-.person__details ul {
-  list-style: none;
-  padding: 0;
-  margin: 0 0 15px 0;
-}
-
 .person__details,
 .details-label,
 .details-value {
@@ -91,37 +74,24 @@
 }
 
 
-/* Стили для таблицы с детальной информацией */
 .details-table {
   width: 100%;
-  /* Таблица занимает всю доступную ширину контейнера */
   border-collapse: collapse;
-  /* Убирает двойные рамки между ячейками */
   margin-bottom: 18px;
-  /* Отступ снизу от таблицы */
 }
 
-/* Стили для всех ячеек таблицы */
 .details-table td {
   padding: 6px 0;
-  /* Вертикальный отступ внутри ячеек */
   vertical-align: top;
-  /* Выравнивание текста по верху ячейки */
-  /* border-bottom: 1px solid #eee; */
-  /* Тонкая линия между строками */
 }
 
-/* Стили для левой колонки (названия полей) */
 .details-label {
   font-weight: bold;
   color: var(--primary-text-color);
   width: 150px;
-  /* Фиксированная ширина для выравнивания, подберите значение */
   padding-right: 10px;
-  /* Небольшой отступ справа от названия */
 }
 
-/* Стили для правой колонки (значения полей) */
 .details-value {
   color: var(--primary-text-color);
 }

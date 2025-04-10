@@ -114,7 +114,7 @@ class MainPage {
 
     const vButtonAction = {
       click: () => {
-        router.go('/person', 2);
+        router.go('/person/11');
       }
     };
 

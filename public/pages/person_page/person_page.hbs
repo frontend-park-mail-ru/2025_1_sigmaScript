@@ -7,13 +7,6 @@
       <h1 class="person__name-ru">{{nameRu}}</h1>
       <p class="person__name-en">{{nameEn}}</p>
       <div class="favorite-button__container">
-        <button class="favorite-button">
-          {{#if favorite}}
-          ★ В избранном
-          {{else}}
-          ☆ Добавить в избранное
-          {{/if}}
-        </button>
       </div>
     </div>
 
@@ -28,17 +21,20 @@
           <tr>
             <td class="details-label">Рост</td>
             <td class="details-value">
-              {{#if height}} {{! Check if height exists }}
+              {{#if height}}
               {{height}} м
               {{else}}
-              - {{! Display dash if height is not provided }}
+              -
               {{/if}}
             </td>
           </tr>
+          {{#if gender}}
           <tr>
             <td class="details-label">Пол</td>
             <td class="details-value">{{gender}}</td>
           </tr>
+          {{/if}}
+
           <tr>
             <td class="details-label">Дата рождения</td>
             <td class="details-value">{{dateOfBirth}}</td>

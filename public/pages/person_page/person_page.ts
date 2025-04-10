@@ -1,34 +1,33 @@
 import { createID } from 'utils/createID';
-import { PersonState } from 'types/Person.types.ts';
+import { PersonInfo, PersonState } from 'types/Person.types.ts';
 import PersonPageStore from 'store/PersonPageStore.ts';
 import { router } from '../../modules/router.ts';
 import personTemplate from './person_page.hbs';
+import noPersonTemplate from './no_person_page.hbs';
 
 import Navbar from 'components/navbar/navbar.js';
 
 // temp data
-const actorInfo: PersonState = {
-  photoUrl: 'https://i.pinimg.com/originals/a3/70/0b/a3700bdf15fcceabf740e1f347dbb5a2.jpg',
-  nameRu: 'Киану Ривз',
-  nameEn: 'Keanu Reeves',
-  favorite: false, // Initial state
-  career: 'Актёр, Продюсер, Режиссёр',
-  height: '1.86', // Or "1.86"
-  gender: 'Мужской',
-  dateOfBirth: '2 сентября 1964',
-  genres: 'Боевик, Фантастика, Триллер',
-  totalFilms: 'Более 100', // As requested "строка"
-  biography: `
-    Киану Чарльз Ривз — канадский актёр, кинорежиссёр, кинопродюсер и музыкант.
-    Наиболее известен своими ролями в киносериях «Матрица», «Билл и Тед», «Джон Уик», а также в фильмах «На гребне волны», «Скорость», «Адвокат дьявола», «Константин: Повелитель тьмы».
-    Обладатель звезды на Голливудской «Аллее славы».
-  ` // Example biography with HTML
+const actorInfo: PersonInfo = {
+  personID: null,
+  photoUrl: '/static/avatars/avatar_default_picture.svg',
+  nameRu: null,
+  nameEn: null,
+  favorite: false,
+  career: null,
+  height: null,
+  gender: null,
+  dateOfBirth: null,
+  genres: null,
+  totalFilms: null,
+  biography: null,
+  dateOfDeath: null
 };
 
 export class PersonPage {
   private parent: HTMLElement;
   private id: string;
-  private personData: PersonState | null;
+  private personData: PersonInfo | null;
 
   private bindedHandleStoreChange: (state: PersonState) => void;
   prevPage: () => void;
@@ -38,14 +37,15 @@ export class PersonPage {
    * Создаёт новую форму входа/регистрации.
    * @param {HTMLElement} parent В какой элемент вставлять
    */
-  constructor(parent: HTMLElement, prevPageURLPath: string, personData: PersonState | null = null) {
+  constructor(parent: HTMLElement, prevPageURLPath: string, personData: PersonInfo | null = null) {
     this.parent = parent;
 
     this.id = 'person-page--' + createID();
 
-    this.personData = personData;
-    if (personData === null) {
+    if (!personData) {
       this.personData = actorInfo;
+    } else {
+      this.personData = personData;
     }
 
     this.prevPageURL = prevPageURLPath;
@@ -120,12 +120,46 @@ export class PersonPage {
   }
 
   /**
+   * Рисует компонент на экран.
+   */
+  renderEmpty(): void {
+    if (!this.parent) {
+      return;
+    }
+    this.parent.innerHTML = '';
+
+    const mainElemHeader = document.createElement('div');
+    mainElemHeader.classList += 'header sticky_to_top';
+    mainElemHeader.id = createID();
+    this.parent.appendChild(mainElemHeader);
+
+    const nav = new Navbar(mainElemHeader, () => {
+      const rootElement = document.getElementById('root');
+      if (!rootElement) {
+        return;
+      }
+      rootElement.innerHTML = '';
+      const main = new PersonPage(rootElement, router.getCurrentPath());
+      main.render();
+    });
+    nav.render();
+
+    this.parent.insertAdjacentHTML('beforeend', noPersonTemplate(this.personData));
+
+    this.addEvents();
+  }
+
+  /**
    * Обработка изменений состояния в Store.
-   * @param {PersonState} state - текущее состояние из Store
+   * @param {PersonInfo} state - текущее состояние из Store
    */
   handleStoreChange(state: PersonState) {
-    if (state.favorite) {
+    if (state.person && state.person.favorite) {
       // TODO favorite actor
+      return;
+    }
+    if (state.error) {
+      this.renderEmpty();
       return;
     }
   }

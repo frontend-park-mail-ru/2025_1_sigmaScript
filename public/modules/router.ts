@@ -48,6 +48,7 @@ export const handler = (args: handlerInput) => {
       RenderActions.renderProfilePage();
       break;
     default:
+      window.location.pathname = '/';
       router.go('/');
   }
 };
@@ -70,8 +71,7 @@ class Router {
       lastURLhref: window.location.href
     };
 
-    const { method, id } = this.getURLMethodAndID(url.pathname);
-    this.go(method, id);
+    this.go(url.pathname);
 
     window.onpopstate = (e) => {
       if (e.state.id) {
@@ -101,16 +101,18 @@ class Router {
   }
 
   /* eslint-disable @typescript-eslint/no-explicit-any */
-  go(urlPath: string, id?: number | string, data?: any) {
+  go(urlPath: string, data?: any) {
     /* eslint-enable @typescript-eslint/no-explicit-any */
-    let url = id ? new URL(`${urlPath}/${id}`, window.location.href) : new URL(urlPath, window.location.href);
+    const { method, id } = this.getURLMethodAndID(urlPath);
+
+    let url = id ? new URL(`${method}/${id}`, window.location.href) : new URL(method, window.location.href);
 
     if (data && id) {
       handler({ url: url, id: id, data: data });
-      window.history.pushState({ id }, urlPath, `${urlPath}/${id}`);
+      window.history.pushState({ id }, urlPath, urlPath);
     } else if (id) {
       handler({ url: url, id: id });
-      window.history.pushState({ id }, urlPath, `${urlPath}/${id}`);
+      window.history.pushState({ id }, urlPath, urlPath);
     } else if (data) {
       handler({ url: url, data: data });
       window.history.pushState({}, urlPath, urlPath);
@@ -130,7 +132,7 @@ class Router {
     }
   }
 
-  getURLMethodAndID(url: string): { method: string; id: string } {
+  getURLMethodAndID(url: string): { method: string; id: string | undefined } {
     try {
       const urlParts = url.split('/').filter((part) => part !== '');
 
@@ -140,13 +142,13 @@ class Router {
         const method = methodParts.length > 0 ? '/' + methodParts.join('/') : '/';
         return { method: method, id: id };
       } else if (urlParts.length === 1) {
-        return { method: '/' + urlParts[0], id: '' };
+        return { method: '/' + urlParts[0], id: undefined };
       } else {
-        return { method: '/', id: '' }; // Empty or root path
+        return { method: '/', id: undefined }; // Empty or root path
       }
     } catch (error) {
       console.error('Invalid URL:', error);
-      return { method: '/', id: '' };
+      return { method: '/', id: undefined };
     }
   }
 }

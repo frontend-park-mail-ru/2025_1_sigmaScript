@@ -1,31 +1,41 @@
-export type PersonState = {
-  photoUrl: string | null;
+export type PersonInfo = {
+  personID: number | string | null;
   nameRu: string | null;
   nameEn: string | null;
-  career: string | null;
-  height: string | null;
+  photoUrl: string | null;
+  biography: string | null;
   gender: string | null;
+  height: string | null;
   dateOfBirth: string | null;
+  dateOfDeath: string | null;
+  career: string | null;
   genres: string | null;
   totalFilms: string | null;
-  biography: string | null;
 
   favorite: boolean | null;
+};
+
+export type PersonState = {
+  person: PersonInfo | null;
+  error: string | null;
 };
 
 export type PersonListener = (state: PersonState) => void;
 
 export interface PersonPayload {
-  photoUrl: string;
-  nameRu: string;
-  nameEn: string | null;
+  id: number | string;
+  full_name: string;
+  en_full_name: string | null;
+  photo: string;
+  about: string | null;
+  sex: string | null;
+  growth: string | null;
+  birthday: string | null;
+  death: string | null;
+
   career: string | null;
-  height: string | null;
-  gender: string | null;
-  dateOfBirth: string | null;
   genres: string | null;
-  totalFilms: string | null;
-  biography: string | null;
+  total_films: string | null;
 
   favorite: boolean | null;
 }

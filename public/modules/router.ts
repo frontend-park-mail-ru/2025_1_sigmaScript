@@ -1,4 +1,5 @@
 import { RenderActions } from 'flux/Actions';
+import { ScrollPositionState } from 'public/consts';
 
 export const Urls = {
   root: '/',
@@ -6,6 +7,11 @@ export const Urls = {
   movie: '/movie',
   person: '/person',
   profile: '/profile'
+};
+
+type lastScrollState = {
+  scrollPosition: ScrollPositionState | null;
+  lastURLhref: string | null;
 };
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -47,17 +53,46 @@ export const handler = (args: handlerInput) => {
 };
 
 class Router {
+  private pageLastScrollState: lastScrollState;
+
+  constructor() {
+    this.pageLastScrollState = {
+      scrollPosition: null,
+      lastURLhref: null
+    };
+  }
+
   startRouting() {
     const url = new URL(window.location.href);
 
-    handler({ url: url, id: decodeURIComponent(this.getURLMethodAndID(url.pathname).id) });
+    this.pageLastScrollState = {
+      scrollPosition: this.saveScrollPosition(),
+      lastURLhref: window.location.href
+    };
+
+    const { method, id } = this.getURLMethodAndID(url.pathname);
+    this.go(method, id);
 
     window.onpopstate = (e) => {
-      if (e.state) {
+      if (e.state.id) {
         handler({ url: new URL(window.location.href), id: e.state.id });
       } else {
         handler({ url: new URL(window.location.href) });
       }
+      if (e.state.scrollPosition) {
+        const { scrollX, scrollY } = e.state.scrollPosition;
+
+        setTimeout(() => {
+          window.scrollTo(scrollX, scrollY);
+        }, 0);
+      }
+    };
+  }
+
+  saveScrollPosition(): ScrollPositionState {
+    return {
+      scrollX: window.scrollX,
+      scrollY: window.scrollY
     };
   }
 
@@ -69,6 +104,7 @@ class Router {
   go(urlPath: string, id?: number | string, data?: any) {
     /* eslint-enable @typescript-eslint/no-explicit-any */
     let url = id ? new URL(`${urlPath}/${id}`, window.location.href) : new URL(urlPath, window.location.href);
+
     if (data && id) {
       handler({ url: url, id: id, data: data });
       window.history.pushState({ id }, urlPath, `${urlPath}/${id}`);
@@ -82,6 +118,16 @@ class Router {
       handler({ url: url });
       window.history.pushState({}, urlPath, urlPath);
     }
+
+    if (window.location.href === this.pageLastScrollState.lastURLhref && this.pageLastScrollState.scrollPosition) {
+      window.scrollTo(this.pageLastScrollState.scrollPosition.scrollX, this.pageLastScrollState.scrollPosition.scrollY);
+    } else {
+      this.pageLastScrollState = {
+        scrollPosition: this.saveScrollPosition(),
+        lastURLhref: window.location.href
+      };
+      window.scrollTo(0, 0);
+    }
   }
 
   getURLMethodAndID(url: string): { method: string; id: string } {
@@ -91,16 +137,16 @@ class Router {
       if (urlParts.length >= 2) {
         const id = urlParts[urlParts.length - 1]; // Last part is the ID
         const methodParts = urlParts.slice(0, urlParts.length - 1);
-        const method = methodParts.length > 0 ? methodParts.join('/') : '';
+        const method = methodParts.length > 0 ? '/' + methodParts.join('/') : '/';
         return { method: method, id: id };
       } else if (urlParts.length === 1) {
-        return { method: urlParts[0], id: '' };
+        return { method: '/' + urlParts[0], id: '' };
       } else {
-        return { method: '', id: '' }; // Empty or root path
+        return { method: '/', id: '' }; // Empty or root path
       }
     } catch (error) {
       console.error('Invalid URL:', error);
-      return { method: '', id: '' };
+      return { method: '/', id: '' };
     }
   }
 }

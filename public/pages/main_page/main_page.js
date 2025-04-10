@@ -4,6 +4,8 @@ import { BASE_URL } from 'public/consts.js';
 import { Footer } from 'components/Footer/Footer.ts';
 import { FOOTER_CONFIG } from 'public/consts.js';
 import compilationTempl from './compilation.hbs';
+import { router } from 'public/modules/router';
+import Button from 'components/universal_button/button';
 
 class MainPage {
   #parent;
@@ -109,6 +111,20 @@ class MainPage {
 
     const footer = new Footer(mainElem, FOOTER_CONFIG);
     footer.render();
+
+    const vButtonAction = {
+      click: () => {
+        router.go('/person', 2);
+      }
+    };
+
+    const vButton = new Button(compilationsElem, {
+      id: 'loginbtn',
+      text: 'sdss',
+      actions: vButtonAction
+    });
+
+    vButton.render();
   }
 }
 

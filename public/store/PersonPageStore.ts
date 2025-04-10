@@ -47,7 +47,6 @@ class PersonPageStore {
   private renderPersonPage() {
     const rootElement = document.getElementById('root');
     if (!rootElement) {
-      console.log('!!!!!!!!!!');
       return;
     }
 

@@ -12,4 +12,9 @@ declare module 'public/consts' {
   export interface Destroyable {
     destroy(): void;
   }
+
+  interface ScrollPositionState {
+    scrollX: number;
+    scrollY: number;
+  }
 }

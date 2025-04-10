@@ -3,12 +3,14 @@ import Icon from '../icon/icon.js';
 import Button from '../universal_button/button.js';
 import { AUTH_URL } from 'public/consts.js';
 import Modal from '../modal/modal.js';
-import request from 'utils/fetch.ts';
+import request, { ErrorWithDetails } from 'utils/fetch.ts';
 import template from './navbar.hbs';
 import { router } from 'public/modules/router.ts';
+import { dispatcher } from 'public/flux/Dispatcher.ts';
+import { GetDataActionTypes } from 'flux/ActionTypes';
 
-const logoSvg = 'static/svg/logo_text_border_lining.svg';
-const userSvg = 'static/svg/Avatar large.svg';
+const logoSvg = '/static/svg/logo_text_border_lining.svg';
+const userSvg = '/static/svg/Avatar large.svg';
 
 /**
  * Навигационная панель
@@ -88,7 +90,10 @@ class Navbar {
       userInstance = res.body;
       userInstance.username = userInstance.username.split('@')[0];
     } catch (error) {
-      console.log(error.errorDetails.error || 'Unknown error');
+      dispatcher.dispatch({
+        type: GetDataActionTypes.SESSION_NOT_FOUND_ERROR,
+        payload: { error: error }
+      });
     }
 
     const logout = async () => {
@@ -97,7 +102,17 @@ class Navbar {
         await request({ url: url, method: 'POST', credentials: true });
         this.#renderMain();
       } catch (error) {
-        console.log(error.errorDetails.error);
+        if (error instanceof ErrorWithDetails) {
+          dispatcher.dispatch({
+            type: GetDataActionTypes.UNKNOWN_ERROR,
+            payload: { error: error.errorDetails.error }
+          });
+        } else {
+          dispatcher.dispatch({
+            type: GetDataActionTypes.UNKNOWN_ERROR,
+            payload: { error: error }
+          });
+        }
       }
     };
 

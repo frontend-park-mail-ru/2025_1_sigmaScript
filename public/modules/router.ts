@@ -1,35 +1,46 @@
 import { RenderActions } from 'flux/Actions';
+import { ScrollPositionState } from 'public/consts';
 
 export const Urls = {
   root: '/',
   auth: '/auth',
   movie: '/movie',
-  actor: '/person',
+  person: '/person',
   profile: '/profile'
 };
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
-export const handler = (url: URL, id?: string | number, data?: any) => {
-  /* eslint-enable @typescript-eslint/no-explicit-any */
+type lastScrollState = {
+  scrollPosition: ScrollPositionState | null;
+  lastURLhref: string | null;
+};
 
-  switch (url.pathname) {
+/* eslint-disable @typescript-eslint/no-explicit-any */
+interface handlerInput {
+  url: URL;
+  id?: string | number;
+  data?: any;
+}
+/* eslint-enable @typescript-eslint/no-explicit-any */
+
+export const handler = (args: handlerInput) => {
+  switch (args.url.pathname) {
     case Urls.root:
       RenderActions.renderMainPage();
       break;
     case Urls.auth:
       RenderActions.renderAuthPage();
       break;
-    case `${Urls.actor}/${id}`:
-      if (id) {
-        RenderActions.renderActorPage(id);
+    case `${Urls.person}/${args.id}`:
+      if (args.id) {
+        RenderActions.renderPersonPage(args.id);
       }
       break;
-    case `${Urls.movie}/${id}`:
-      if (id && data) {
-        RenderActions.renderMoviePage(id);
-      } else if (id) {
-        if (id) {
-          RenderActions.renderMoviePage(id);
+    case `${Urls.movie}/${args.id}`:
+      if (args.id && args.data) {
+        RenderActions.renderMoviePage(args.id);
+      } else if (args.id) {
+        if (args.id) {
+          RenderActions.renderMoviePage(args.id);
         }
       }
       break;
@@ -37,22 +48,51 @@ export const handler = (url: URL, id?: string | number, data?: any) => {
       RenderActions.renderProfilePage();
       break;
     default:
+      window.location.pathname = '/';
       router.go('/');
   }
 };
 
 class Router {
+  private pageLastScrollState: lastScrollState;
+
+  constructor() {
+    this.pageLastScrollState = {
+      scrollPosition: null,
+      lastURLhref: null
+    };
+  }
+
   startRouting() {
     const url = new URL(window.location.href);
 
-    handler(url, decodeURIComponent(this.getURLMethodAndID(url.pathname).id));
+    this.pageLastScrollState = {
+      scrollPosition: this.saveScrollPosition(),
+      lastURLhref: window.location.href
+    };
+
+    this.go(url.pathname);
 
     window.onpopstate = (e) => {
-      if (e.state) {
-        handler(new URL(window.location.href), e.state.id);
+      if (e.state.id) {
+        handler({ url: new URL(window.location.href), id: e.state.id });
       } else {
-        handler(new URL(window.location.href));
+        handler({ url: new URL(window.location.href) });
       }
+      if (e.state.scrollPosition) {
+        const { scrollX, scrollY } = e.state.scrollPosition;
+
+        setTimeout(() => {
+          window.scrollTo(scrollX, scrollY);
+        }, 0);
+      }
+    };
+  }
+
+  saveScrollPosition(): ScrollPositionState {
+    return {
+      scrollX: window.scrollX,
+      scrollY: window.scrollY
     };
   }
 
@@ -61,38 +101,54 @@ class Router {
   }
 
   /* eslint-disable @typescript-eslint/no-explicit-any */
-  go(urlPath: string, id?: number | string, data?: any) {
+  go(urlPath: string, data?: any) {
     /* eslint-enable @typescript-eslint/no-explicit-any */
-    let url = id ? new URL(`${urlPath}/${id}`, window.location.href) : new URL(urlPath, window.location.href);
+    const { method, id } = this.getURLMethodAndID(urlPath);
+
+    let url = id ? new URL(`${method}/${id}`, window.location.href) : new URL(method, window.location.href);
+
     if (data && id) {
-      handler(url, id, data);
-      window.history.pushState({ id }, urlPath, `${urlPath}/${id}`);
+      handler({ url: url, id: id, data: data });
+      window.history.pushState({ id }, urlPath, urlPath);
     } else if (id) {
-      handler(url, id);
-      window.history.pushState({ id }, urlPath, `${urlPath}/${id}`);
-    } else {
-      handler(url);
+      handler({ url: url, id: id });
+      window.history.pushState({ id }, urlPath, urlPath);
+    } else if (data) {
+      handler({ url: url, data: data });
       window.history.pushState({}, urlPath, urlPath);
+    } else {
+      handler({ url: url });
+      window.history.pushState({}, urlPath, urlPath);
+    }
+
+    if (window.location.href === this.pageLastScrollState.lastURLhref && this.pageLastScrollState.scrollPosition) {
+      window.scrollTo(this.pageLastScrollState.scrollPosition.scrollX, this.pageLastScrollState.scrollPosition.scrollY);
+    } else {
+      this.pageLastScrollState = {
+        scrollPosition: this.saveScrollPosition(),
+        lastURLhref: window.location.href
+      };
+      window.scrollTo(0, 0);
     }
   }
 
-  getURLMethodAndID(url: string): { method: string; id: string } {
+  getURLMethodAndID(url: string): { method: string; id: string | undefined } {
     try {
       const urlParts = url.split('/').filter((part) => part !== '');
 
       if (urlParts.length >= 2) {
         const id = urlParts[urlParts.length - 1]; // Last part is the ID
         const methodParts = urlParts.slice(0, urlParts.length - 1);
-        const method = methodParts.length > 0 ? methodParts.join('/') : '';
+        const method = methodParts.length > 0 ? '/' + methodParts.join('/') : '/';
         return { method: method, id: id };
       } else if (urlParts.length === 1) {
-        return { method: urlParts[0], id: '' };
+        return { method: '/' + urlParts[0], id: undefined };
       } else {
-        return { method: '', id: '' }; // Empty or root path
+        return { method: '/', id: undefined }; // Empty or root path
       }
     } catch (error) {
       console.error('Invalid URL:', error);
-      return { method: '', id: '' };
+      return { method: '/', id: undefined };
     }
   }
 }

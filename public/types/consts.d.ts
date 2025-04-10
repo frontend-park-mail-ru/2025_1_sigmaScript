@@ -8,8 +8,14 @@ declare module 'public/consts' {
   export const HOST: string;
   export const AUTH_URL: string;
   export const BASE_URL: string;
+  export const PERSON_URL: string;
 
   export interface Destroyable {
     destroy(): void;
+  }
+
+  interface ScrollPositionState {
+    scrollX: number;
+    scrollY: number;
   }
 }

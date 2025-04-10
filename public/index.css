@@ -4,6 +4,7 @@
 @import "static/css/flex-box.css";
 @import "components/Login/Login.css";
 @import "pages/main_page/main_page.css";
+@import "pages/person_page/person_page.css";
 
 * {
     box-sizing: border-box;
@@ -26,6 +27,14 @@
     --navbar-content-height: 9rem;
     --navbar-elements-height: 4.5rem;
     --button-height: 9rem;
+
+    --header-1-text: 3.2rem;
+    --header-2-text: 2.4rem;
+    --paragraph-text: 1.4rem;
+    --button-inner-text: 1.6rem;
+    --element-subscription-text: 1.4rem;
+
+    --peragraph-line-height: 2.2rem;
 }
 
 html {
@@ -45,6 +54,7 @@ body {
 
 #root {
     background-color: var(--background-color);
+    min-height: 1024px;
 }
 
 html {
@@ -52,8 +62,6 @@ html {
 }
 
 #wrapper {
-
-
     height: 4000px;
 }
 
@@ -64,6 +72,8 @@ main {
     flex-direction: column;
     min-height: 100dvh;
     background-color: var(--background-color-light);
+
+    color: var(--primary-text-color);
 }
 
 .flex-dir-row {

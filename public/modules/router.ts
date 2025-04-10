@@ -4,7 +4,7 @@ export const Urls = {
   root: '/',
   auth: '/auth',
   movie: '/movie',
-  actor: '/person',
+  person: '/person',
   profile: '/profile'
 };
 
@@ -24,9 +24,9 @@ export const handler = (args: handlerInput) => {
     case Urls.auth:
       RenderActions.renderAuthPage();
       break;
-    case `${Urls.actor}/${args.id}`:
+    case `${Urls.person}/${args.id}`:
       if (args.id) {
-        RenderActions.renderActorPage(args.id);
+        RenderActions.renderPersonPage(args.id);
       }
       break;
     case `${Urls.movie}/${args.id}`:
@@ -77,7 +77,7 @@ class Router {
       window.history.pushState({ id }, urlPath, `${urlPath}/${id}`);
     } else if (data) {
       handler({ url: url, data: data });
-      window.history.pushState({ id }, urlPath, `${urlPath}/${id}`);
+      window.history.pushState({}, urlPath, urlPath);
     } else {
       handler({ url: url });
       window.history.pushState({}, urlPath, urlPath);

@@ -25,7 +25,7 @@ export const ERRORS = {
 export const BASE_URL = `http://${HOST}:${BACKEND_PORT}/`;
 
 export const ERROR_HANDLERS = {
-  [ERRORS.ErrAlreadyExistsShort]: (context) => context.showError(context.loginInput, 'Вы уже зарегистрированы'),
+  [ERRORS.ErrAlreadyExistsShort]: (context) => context.showError(context.loginInput, 'Такой логин уже существует'),
   [ERRORS.ErrPasswordsMismatchShort]: (context) =>
     context.showError(context.passwordInput, 'Пароли не совпадают', context.repeatInput),
   [ERRORS.ErrIncorrectLoginOrPasswordShort]: (context) =>

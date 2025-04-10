@@ -1,0 +1,127 @@
+.person-page {
+  display: flex;
+  gap: 40px;
+  flex-direction: row;
+  max-width: 1200px;
+  overflow: hidden;
+
+  margin: auto auto;
+  /* Center the page */
+  padding: 50px 50px 0px 50px;
+
+  color: var(--primary-text-color);
+}
+
+.person__photo-container {
+  flex-shrink: 0;
+  /* Prevent photo from shrinking */
+  height: 460px;
+  width: 300px;
+}
+
+.person__photo {
+  width: 100%;
+  height: auto;
+  border-radius: 25px;
+  display: block;
+}
+
+.person__info-container {
+  flex-grow: 1;
+  /* Allow info section to take remaining space */
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.person__header {
+  margin-bottom: 15px;
+  padding-bottom: 10px;
+}
+
+.person__name-ru {
+  margin: 0 0 5px 0;
+  font-size: var(--header-1-text);
+}
+
+.person__name-en {
+  margin: 0 0 10px 0;
+  font-style: italic;
+  font-size: var(--header-2-text);
+}
+
+.favorite-button__container {
+  height: fit-content;
+  width: fit-content;
+}
+
+.favorite-button {
+  padding: 8px 15px;
+  cursor: pointer;
+  background-color: var(--primary-color);
+  border-radius: 4px;
+}
+
+.favorite-button:hover {
+  background-color: #ddd;
+}
+
+.person__details ul {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 15px 0;
+}
+
+.person__details,
+.details-label,
+.details-value {
+  font-size: var(--paragraph-text);
+}
+
+.person__biography h2,
+.person__details h2 {
+  margin-top: 0;
+  margin-bottom: 10px;
+  font-size: var(--header-2-text);
+}
+
+.person__biography {
+  line-height: var(--peragraph-line-height);
+  font-size: var(--paragraph-text);
+}
+
+
+/* Стили для таблицы с детальной информацией */
+.details-table {
+  width: 100%;
+  /* Таблица занимает всю доступную ширину контейнера */
+  border-collapse: collapse;
+  /* Убирает двойные рамки между ячейками */
+  margin-bottom: 18px;
+  /* Отступ снизу от таблицы */
+}
+
+/* Стили для всех ячеек таблицы */
+.details-table td {
+  padding: 6px 0;
+  /* Вертикальный отступ внутри ячеек */
+  vertical-align: top;
+  /* Выравнивание текста по верху ячейки */
+  /* border-bottom: 1px solid #eee; */
+  /* Тонкая линия между строками */
+}
+
+/* Стили для левой колонки (названия полей) */
+.details-label {
+  font-weight: bold;
+  color: var(--primary-text-color);
+  width: 150px;
+  /* Фиксированная ширина для выравнивания, подберите значение */
+  padding-right: 10px;
+  /* Небольшой отступ справа от названия */
+}
+
+/* Стили для правой колонки (значения полей) */
+.details-value {
+  color: var(--primary-text-color);
+}

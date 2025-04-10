@@ -1,0 +1,64 @@
+<div class="person-page">
+  <div class="person__photo-container">
+    <img src="{{photoUrl}}" alt="{{nameRu}} - Фото" class="person__photo">
+  </div>
+  <div class="person__info-container">
+    <div class="person__header">
+      <h1 class="person__name-ru">{{nameRu}}</h1>
+      <p class="person__name-en">{{nameEn}}</p>
+      <div class="favorite-button__container">
+        <button class="favorite-button">
+          {{#if favorite}}
+          ★ В избранном
+          {{else}}
+          ☆ Добавить в избранное
+          {{/if}}
+        </button>
+      </div>
+    </div>
+
+    <div class="person__details">
+      <h2>Информация</h2>
+      <table class="details-table">
+        <tbody>
+          <tr>
+            <td class="details-label">Карьера</td>
+            <td class="details-value">{{career}}</td>
+          </tr>
+          <tr>
+            <td class="details-label">Рост</td>
+            <td class="details-value">
+              {{#if height}} {{! Check if height exists }}
+              {{height}} м
+              {{else}}
+              - {{! Display dash if height is not provided }}
+              {{/if}}
+            </td>
+          </tr>
+          <tr>
+            <td class="details-label">Пол</td>
+            <td class="details-value">{{gender}}</td>
+          </tr>
+          <tr>
+            <td class="details-label">Дата рождения</td>
+            <td class="details-value">{{dateOfBirth}}</td>
+          </tr>
+          <tr>
+            <td class="details-label">Жанры</td>
+            <td class="details-value">{{genres}}</td>
+          </tr>
+          <tr>
+            <td class="details-label">Всего фильмов</td>
+            <td class="details-value">{{totalFilms}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+
+    <div class="person__biography">
+      <h2>Биография</h2>
+      {{{biography}}} {{! Use triple braces if biography contains HTML }}
+    </div>
+  </div>
+</div>

@@ -42,7 +42,7 @@ export const RenderActions = {
       payload: { id }
     });
   },
-  renderActorPage(id: number | string) {
+  renderPersonPage(id: number | string) {
     dispatcher.dispatch({
       type: RenderActionTypes.RENDER_PERSON_PAGE,
       payload: id

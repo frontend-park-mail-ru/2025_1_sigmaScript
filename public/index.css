@@ -5,6 +5,7 @@
 @import "components/Login/Login.css";
 @import "pages/main_page/main_page.css";
 @import "pages/person_page/person_page.css";
+@import "pages/movie/movie.css";
 
 * {
     box-sizing: border-box;

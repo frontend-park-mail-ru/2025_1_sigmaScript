@@ -1,0 +1,40 @@
+.textarea__field {
+    background-color: inherit;
+    color: var(--secondary-text-color);
+    min-height: 50px;
+    max-height: 500px;
+    padding-left: 2rem;
+    font-size: 1.4rem;
+    border-radius: 25px;
+    border: 1px solid var(--text-field-border-color);
+}
+
+.textarea__field:hover {
+    border: 1px solid #72757E;
+    outline: none;
+}
+
+.textarea__field:focus {
+    caret-color: var(--primary-color);
+    border-color: var(--primary-color);
+    color: var(--primary-text-color);
+    outline: none;
+}
+
+
+.textarea__field-error {
+    color: var(--error-color);
+    caret-color: var(--error-color);
+    border-color: var(--error-color);
+    outline: none;
+}
+
+.textarea__error-container {
+    color: #FF0000;
+    font-size: 1.4rem;
+    padding: 1% 0 0 5%
+}
+
+.error {
+    border: 1px solid #FF0000;
+}

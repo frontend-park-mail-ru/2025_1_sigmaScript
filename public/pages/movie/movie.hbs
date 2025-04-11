@@ -1,0 +1,63 @@
+<div class="movie-page flex-dir-col flex-start content" id="{{this.id}}">
+<div class="movie-page__movie flex-dir-row flex-start">
+  <div class="movie__left-column flex-dir-col flex-start">
+    <div class="movie__poster js-poster"></div>
+  </div>
+  <div class="movie__center-column flex-dir-col flex-start">
+    <div class="movie__name">{{fightClub.name}} ({{fightClub.releaseYear}})</div>
+    <div class="movie__about">{{#if fightClub.about }}{{fightClub.about}}{{else}}Здесь будет описание фильма{{/if}}</div>
+    <div class="movie__buttons flex-dir-row flex-start js-movie-buttons"></div>
+    <div class="movie__info flex-dir-col">
+      <div class="movie__info-header">О фильме:</div>
+      {{#each this.info}}
+        <div class="movie__info-field flex-dir-row">
+          <div class="movie__field-element">{{ title }}</div>
+          <div class="movie__field-element">{{ value }}</div>
+        </div>
+      {{/each}}
+    </div>
+  </div>
+  <div class="movie__right-column flex-dir-col flex-center">
+    <div class="right-column__rating flex-dir-col flex-center js-movie__rating">
+      <div class="right-column__rating-value-block flex-dir-row flex-center">
+        <img class="right-column__rating-star" src="static/svg/star.svg">
+        <div class="right-column__rating-value">{{#if fightClub.rating}}{{fightClub.rating}}{{else}}Нет оценки{{/if}}</div>
+      </div>
+    </div>
+    <div class="right-column__review-button flex-dir-col flex-center js-movie__review">
+      {{!-- TODO --}}
+      {{!-- <div class="right-column__review-counter">{{#if fightClub.reviews.length}}Отзывы {{fightClub.reviews.length}}{{else}}Нет отзывов{{/if}}</div> --}}
+    </div>
+  </div>
+</div>
+
+<div class="movie__staff flex-dir-col flex-start">
+  <div class="staff__title">Состав:</div>
+  <div class="staff__list flex-dir-row flex-start js-staff-list"></div>
+</div>
+
+<div class="movie__reviews flex-dir-col flex-start js-reviews">
+  <div class="reviews__title">Отзывы:</div>
+  <div class="reviews__review-form flex-dir-col flex-start js-review-form"></div>
+  <div class="reviews__reviews flex-dir-col flex-start">
+    {{#each fightClub.reviews}}
+      <div class="review-card flex-dir-col flex-start">
+        <div class="review-card__header flex-dir-row">
+          <div class="header__rating flex-dir-row movie-page__header">
+            <img class="review-card__star" src="static/svg/star.svg">
+            <div class="review-card__rating">{{ score }}</div>
+          </div>
+          <div class="review-card__info flex-dir-row flex-center">
+            <div class="review-card__user flex-dir-row">
+              <div class="review-card__name"><b> {{ user.login }} </b></div>
+              <img class="review-card__avatar" src="{{#if user.avatar}} {{ user.avatar }} {{else}} static/svg/Avatar large.svg {{/if}}">
+            </div>
+            <div class="review-card__date">{{ createdAt }}</div>
+          </div>
+        </div>
+        <div class="review-card__text">{{ reviewText }}</div>
+      </div>
+    {{/each}}
+  </div>
+</div>
+</div>

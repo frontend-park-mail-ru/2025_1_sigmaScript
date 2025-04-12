@@ -1,5 +1,6 @@
 import { dispatcher } from 'flux/Dispatcher';
-import { LoginActionTypes, RenderActionTypes } from 'flux/ActionTypes';
+import { LoginActionTypes, RenderActionTypes, MovieActionTypes } from 'flux/ActionTypes';
+import { MovieData } from 'types/movie_page.types';
 
 export function loginSubmit(username: string, password: string) {
   dispatcher.dispatch({
@@ -12,6 +13,27 @@ export function registerSubmit(username: string, password: string, repeatPasswor
   dispatcher.dispatch({
     type: LoginActionTypes.REGISTER_SUBMIT,
     payload: { username, password, repeatPassword }
+  });
+}
+
+export function loadMovieData(movieId: string | number) {
+  dispatcher.dispatch({
+    type: MovieActionTypes.LOAD_MOVIE_DATA,
+    payload: movieId
+  });
+}
+
+export function movieDataLoaded(movieData: MovieData) {
+  dispatcher.dispatch({
+    type: MovieActionTypes.MOVIE_DATA_LOADED,
+    payload: movieData
+  });
+}
+
+export function movieDataError(error: string) {
+  dispatcher.dispatch({
+    type: MovieActionTypes.MOVIE_DATA_ERROR,
+    payload: error
   });
 }
 
@@ -39,7 +61,7 @@ export const RenderActions = {
   renderMoviePage(id: number | string) {
     dispatcher.dispatch({
       type: RenderActionTypes.RENDER_MOVIE_PAGE,
-      payload: { id }
+      payload: id
     });
   },
   renderPersonPage(id: number | string) {

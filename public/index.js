@@ -4,6 +4,7 @@ import 'store/LoginStore';
 import 'store/MainPageStore.ts';
 import 'store/InitialStore';
 import 'store/PersonPageStore';
+import 'store/MoviePageStore';
 
 import { router } from 'public/modules/router';
 

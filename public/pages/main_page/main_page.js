@@ -1,4 +1,6 @@
 import Navbar from 'components/navbar/navbar.js';
+import Scroll from 'components/Scroll/Scroll';
+import MovieCard from 'components/Card/Card';
 import { createID } from 'utils/createID.ts';
 import { BASE_URL } from 'public/consts.js';
 import { Footer } from 'components/Footer/Footer.ts';
@@ -6,6 +8,8 @@ import { FOOTER_CONFIG } from 'public/consts.js';
 import compilationTempl from './compilation.hbs';
 import { dispatcher } from 'flux/Dispatcher';
 import { GetDataActionTypes } from 'flux/ActionTypes';
+import { deserialize } from 'utils/Serialize';
+import { Urls } from 'public/modules/router.ts';
 
 class MainPage {
   #parent;
@@ -100,16 +104,24 @@ class MainPage {
       const compData = compilationsData.data[key];
 
       const compilationElem = document.createElement('compilation');
-      compilationElem.classList.add('compilation');
+      compilationElem.classList.add('compilation', 'flex-dir-col');
+
       compilationElem.insertAdjacentHTML(
         'beforeEnd',
         compilationTempl({
-          title: key,
-          movies: Object.values(compData)
+          title: key
         })
       );
 
       compilationsElem.insertAdjacentElement('beforeEnd', compilationElem);
+      const scroll = new Scroll(compilationElem);
+      scroll.render();
+      scroll.self().classList.add('compilation__scroll');
+
+      Object.values(compData).forEach((movie) => {
+        movie.url = `${Urls.movie}/${movie.id}`;
+        new MovieCard(scroll.getContentContainer(), deserialize(movie)).render();
+      });
     }
 
     const footer = new Footer(mainElem, FOOTER_CONFIG);

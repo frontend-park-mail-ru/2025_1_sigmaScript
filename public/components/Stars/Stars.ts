@@ -62,6 +62,14 @@ export class Stars {
   }
 
   /**
+   * Возвращает текущий рейтинг.
+   * @returns {number}
+   */
+  get currentRating(): number {
+    return this.#currentRating;
+  }
+
+  /**
    * Возвращает цвет звезд при заданном рейтинге.
    * @param {number} rating - рейтинг
    * @returns {string}

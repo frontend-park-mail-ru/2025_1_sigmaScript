@@ -9,6 +9,7 @@ declare module 'public/consts' {
   export const AUTH_URL: string;
   export const BASE_URL: string;
   export const PERSON_URL: string;
+  export const MOVIE_URL: string;
 
   export interface Destroyable {
     destroy(): void;

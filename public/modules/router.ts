@@ -5,7 +5,7 @@ export const Urls = {
   root: '/',
   auth: '/auth',
   movie: '/movie',
-  person: '/person',
+  person: '/name',
   profile: '/profile'
 };
 
@@ -36,12 +36,10 @@ export const handler = (args: handlerInput) => {
       }
       break;
     case `${Urls.movie}/${args.id}`:
-      if (args.id && args.data) {
+      if (args.id) {
         RenderActions.renderMoviePage(args.id);
-      } else if (args.id) {
-        if (args.id) {
-          RenderActions.renderMoviePage(args.id);
-        }
+      } else {
+        router.go(Urls.root);
       }
       break;
     case Urls.profile:

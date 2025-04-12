@@ -4,6 +4,7 @@ import template from './Card.hbs';
 type CardConfig = {
   id?: string;
   previewUrl?: string;
+  url?: string;
   title?: string;
   width?: string;
   height?: string;
@@ -18,6 +19,7 @@ export class MovieCard {
    * @param {HTMLElement} parent - родительский элемент
    * @param {Object} config - конфигурация
    * @param {string} config.id - уникальный id элемента
+   * @param {string} config.url - ссылка для перехода
    * @param {string} config.previewUrl - ссылка на изображение
    * @param {string} config.title - заголовок карточки
    * @param {string} config.width - ширина карточки
@@ -30,6 +32,7 @@ export class MovieCard {
     this.#parent = parent;
     this.#config = {};
     this.#config.id = config.id || 'card--' + createID();
+    this.#config.url = config.url || '';
     this.#config.previewUrl = config.previewUrl || '#';
     this.#config.title = config.title || '';
     this.#config.width = config.width || '200';

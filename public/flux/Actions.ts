@@ -1,6 +1,6 @@
 import { dispatcher } from 'flux/Dispatcher';
 import { LoginActionTypes, RenderActionTypes, UserPageTypes } from 'flux/ActionTypes';
-import { UserData } from 'types/UserPage.types';
+import { UpdateUserData, UserData } from 'types/UserPage.types';
 
 export function loginSubmit(username: string, password: string) {
   dispatcher.dispatch({
@@ -67,6 +67,13 @@ export function updateUserPage(userData: UserData) {
 export function getUser() {
   dispatcher.dispatch({
     type: UserPageTypes.GET_USER
+  });
+}
+
+export function updateUser(userData: UpdateUserData) {
+  dispatcher.dispatch({
+    type: UserPageTypes.UPDATE_USER,
+    payload: userData
   });
 }
 

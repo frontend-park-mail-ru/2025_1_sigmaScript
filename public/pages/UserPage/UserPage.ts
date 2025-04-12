@@ -8,6 +8,8 @@ import UserPageStore from 'store/UserPageStore';
 import Navbar from 'components/navbar/navbar';
 import { FOOTER_CONFIG } from 'public/consts.js';
 import { Footer } from 'components/Footer/Footer';
+import UniversalModal from 'components/modal/modal';
+import { updateUser } from 'flux/Actions';
 
 export const TABS_DATA = {
   tabsData: [
@@ -132,13 +134,54 @@ export class UserPage {
         id: 'changeDataBtn',
         color: 'primary',
         text: 'Изменить данные',
-        textColor: 'primary'
-        // TODO: сделать модалку с изменением данных
-        // actions: {
-        //   click: async () => {
-        //     console.log('button');
-        //   }
-        // }
+        textColor: 'primary',
+        actions: {
+          click: async () => {
+            const modal = new UniversalModal(document.body, {
+              title: 'Редактирование данных',
+              message: 'Измените логин и/или пароль',
+              confirmText: 'Сохранить',
+              cancelText: 'Отмена',
+              inputs: [
+                {
+                  id: 'loginInput',
+                  name: 'login',
+                  placeholder: 'Введите новый логин',
+                  type: 'text',
+                  text: UserPageStore.getState().userData?.username
+                },
+                {
+                  id: 'oldPasswordInput',
+                  name: 'oldPassword',
+                  placeholder: 'Введите старый пароль',
+                  type: 'password'
+                },
+                {
+                  id: 'newPasswordInput',
+                  name: 'newPassword',
+                  placeholder: 'Введите новый пароль',
+                  type: 'password'
+                },
+                {
+                  id: 'repeatedNewPasswordInput',
+                  name: 'repeatedNewPassword',
+                  placeholder: 'Повторите новый пароль',
+                  type: 'password'
+                }
+              ],
+              onConfirm: () => {
+                const username = modal.getInputByName('login').getValue();
+                const oldPassword = modal.getInputByName('oldPassword').getValue();
+                const newPassword = modal.getInputByName('newPassword').getValue();
+                const repeatedNewPassword = modal.getInputByName('repeatedNewPassword').getValue();
+                updateUser({ username, oldPassword, newPassword, repeatedNewPassword });
+              }
+            });
+
+            modal.render();
+            modal.open();
+          }
+        }
       };
 
       new Button(buttonContainer, buttonConfig).render();
@@ -164,13 +207,54 @@ export class UserPage {
         id: 'changeDataBtn',
         color: 'primary',
         text: 'Изменить данные',
-        textColor: 'primary'
-        // TODO: сделать модалку с изменением данных
-        // actions: {
-        //   click: async () => {
-        //     console.log('button');
-        //   }
-        // }
+        textColor: 'primary',
+        actions: {
+          click: async () => {
+            const modal = new UniversalModal(document.body, {
+              title: 'Редактирование данных',
+              message: 'Измените логин и/или пароль',
+              confirmText: 'Сохранить',
+              cancelText: 'Отмена',
+              inputs: [
+                {
+                  id: 'loginInput',
+                  name: 'login',
+                  placeholder: 'Введите новый логин',
+                  type: 'text',
+                  text: UserPageStore.getState().userData?.username
+                },
+                {
+                  id: 'oldPasswordInput',
+                  name: 'oldPassword',
+                  placeholder: 'Введите старый пароль',
+                  type: 'password'
+                },
+                {
+                  id: 'newPasswordInput',
+                  name: 'newPassword',
+                  placeholder: 'Введите новый пароль',
+                  type: 'password'
+                },
+                {
+                  id: 'repeatedNewPasswordInput',
+                  name: 'repeatedNewPassword',
+                  placeholder: 'Повторите новый пароль',
+                  type: 'password'
+                }
+              ],
+              onConfirm: () => {
+                const username = modal.getInputByName('login').getValue();
+                const oldPassword = modal.getInputByName('oldPassword').getValue();
+                const newPassword = modal.getInputByName('newPassword').getValue();
+                const repeatedNewPassword = modal.getInputByName('repeatedNewPassword').getValue();
+                updateUser({ username, oldPassword, newPassword, repeatedNewPassword });
+              }
+            });
+
+            modal.render();
+            modal.open();
+          }
+        }
       };
 
       new Button(buttonContainer, buttonConfig).render();

@@ -27,6 +27,7 @@ export const GetDataActionTypes = {
 export const UserPageTypes = {
   UPDATE_USER_PAGE: 'UPDATE_USER_PAGE',
   GET_USER: 'GET_USER',
+  UPDATE_USER: 'UPDATE_USER',
   LOGOUT_USER: 'LOGOUT_USER',
   NO_SESSION: 'NO_SESSION'
 };

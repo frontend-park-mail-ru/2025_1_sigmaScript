@@ -5,7 +5,7 @@ export const Urls = {
   root: '/',
   auth: '/auth',
   movie: '/movie',
-  person: '/person',
+  person: '/name',
   profile: '/profile'
 };
 

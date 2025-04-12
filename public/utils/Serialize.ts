@@ -50,7 +50,7 @@ export function serialize(obj: unknown): unknown {
 
 export function deserialize(obj: unknown): unknown {
   if (Array.isArray(obj)) {
-    return obj.map(serialize);
+    return obj.map(deserialize);
   } else if (obj === null || typeof obj !== 'object') {
     // если не объект
     return obj;

@@ -1,14 +1,15 @@
 import { dispatcher } from 'flux/Dispatcher';
 import { Action } from 'types/Dispatcher.types';
 import { RenderActionTypes, UserPageTypes } from 'flux/ActionTypes';
-import { UserPageState, Listener, UserData } from 'types/UserPage.types';
+import { UserPageState, Listener, UserData, UpdateUserData } from 'types/UserPage.types';
 import { initialStore } from './InitialStore';
 import { UserPage } from 'pages/UserPage/UserPage';
 import { AUTH_URL } from 'public/consts';
 import request from 'utils/fetch';
-import { deserialize } from 'utils/Serialize';
-import { noSession, updateUserPage } from 'flux/Actions';
+import { serialize, deserialize } from 'utils/Serialize';
+import { getUser, noSession, updateUserPage } from 'flux/Actions';
 import { router } from 'modules/router';
+import { BASE_URL } from 'public/consts';
 
 class UserPageStore {
   private state: UserPageState;
@@ -60,6 +61,24 @@ class UserPageStore {
           // console.log(error.errorDetails.error || 'Unknown error');
           console.log(error || 'Unknown error');
           noSession();
+        }
+        break;
+      case UserPageTypes.UPDATE_USER:
+        try {
+          const payload = action.payload as UpdateUserData;
+
+          const url = BASE_URL + 'users';
+          const body = serialize({
+            ...this.state.userData,
+            ...payload
+          }) as Record<string, unknown>;
+          await request({ url: url, method: 'POST', body, credentials: true });
+
+          getUser();
+        } catch (error) {
+          // TODO: пофиксить ошибку
+          // console.log(error.errorDetails.error);
+          console.log(error);
         }
         break;
       case UserPageTypes.LOGOUT_USER:

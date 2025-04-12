@@ -24,6 +24,14 @@ export interface UserPageData extends UserData {
   userData?: UserData;
 }
 
+export type UpdateUserData = {
+  username: string;
+  avatar?: string;
+  oldPassword: string;
+  newPassword: string;
+  repeatedNewPassword: string;
+};
+
 export type ButtonConfig = {
   id: string;
   color: string;

@@ -315,7 +315,6 @@ export class Login {
       return;
     }
     if (state.user) {
-      debugger;
       // после успешного логина или регистрации запрашиваем данные юзера в стор
       getUser();
       this.goBack(true);

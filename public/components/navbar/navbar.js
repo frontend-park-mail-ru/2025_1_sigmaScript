@@ -1,9 +1,8 @@
-import { createID } from 'utils/createID.ts';
 import Icon from '../icon/icon.js';
 import Button from '../universal_button/button.js';
 import template from './navbar.hbs';
 import { router } from 'public/modules/router.ts';
-import Modal from 'components/modal/modal.js';
+import UniversalModal from 'components/modal/modal';
 import UserPageStore from 'store/UserPageStore';
 import NavbarStore from 'store/NavbarStore';
 import { logoutUser } from 'flux/Actions';
@@ -117,11 +116,18 @@ class Navbar {
 
     this.LogoutButtonAction = {
       click: async () => {
-        const modal = new Modal(this.#parent, {
-          id: createID(),
-          onConfirm: logout
+        const modal = new UniversalModal(this.#parent, {
+          title: 'Подтверждение действия',
+          message: 'Вы уверены, что хотите выйти?',
+          confirmText: 'Да',
+          cancelText: 'Нет',
+          onConfirm: () => {
+            logout();
+          }
         });
+
         modal.render();
+        modal.open();
       }
     };
 

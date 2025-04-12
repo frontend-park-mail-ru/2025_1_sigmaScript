@@ -36,9 +36,9 @@ class Button {
     this.#config.id = config.id || 'btn';
     this.#config.color = config.color || 'primary';
     this.#config.disabled = config.disabled || false;
-    this.#config.form = config.form || '';
-    this.#config.srcIcon = config.srcIcon || '';
-    this.#config.text = config.text || '';
+    this.#config.form = config.form;
+    this.#config.srcIcon = config.srcIcon;
+    this.#config.text = config.text;
     this.#config.textColor = config.textColor || 'primary';
     this.#config.autofocus = config.autofocus || false;
 
@@ -108,6 +108,10 @@ class Button {
   }
 
   render() {
+    if (!this.#parent) {
+      return;
+    }
+
     let wrapper = document.createElement('div');
     wrapper.insertAdjacentHTML('beforeEnd', template(this.#config));
 

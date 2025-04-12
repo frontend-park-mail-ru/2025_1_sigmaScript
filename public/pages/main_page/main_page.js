@@ -4,6 +4,8 @@ import { BASE_URL } from 'public/consts.js';
 import { Footer } from 'components/Footer/Footer.ts';
 import { FOOTER_CONFIG } from 'public/consts.js';
 import compilationTempl from './compilation.hbs';
+import { dispatcher } from 'flux/Dispatcher';
+import { GetDataActionTypes } from 'flux/ActionTypes';
 
 class MainPage {
   #parent;
@@ -84,7 +86,10 @@ class MainPage {
 
     const compilationsData = await this.GetCompilations();
     if (compilationsData.err) {
-      console.log('Ошибка: ', compilationsData.err);
+      dispatcher.dispatch({
+        type: GetDataActionTypes.UNKNOWN_ERROR,
+        payload: { error: compilationsData.error }
+      });
       return;
     }
 

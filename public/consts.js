@@ -2,6 +2,7 @@ export const BACKEND_PORT = 8080;
 // export const HOST = '217.16.20.177';
 export const HOST = 'localhost';
 export const AUTH_URL = `http://${HOST}:${BACKEND_PORT}/auth/`;
+export const PERSON_URL = `http://${HOST}:${BACKEND_PORT}/name/`;
 export const ERRORS = {
   ErrParseJSONShort: 'parse_json_error',
   ErrAlreadyExistsShort: 'already_exists',
@@ -21,12 +22,13 @@ export const ERRORS = {
   ErrDefault: 'internal_error',
   ErrInvalidLogin: 'invalid_login',
   ErrLengthLogin: 'length_login',
-  ErrAlphabetLogin: 'alphabet_login'
+  ErrAlphabetLogin: 'alphabet_login',
+  ErrNotFound: 'not_found'
 };
 export const BASE_URL = `http://${HOST}:${BACKEND_PORT}/`;
 
 export const ERROR_HANDLERS = {
-  [ERRORS.ErrAlreadyExistsShort]: (context) => context.showError(context.loginInput, 'Вы уже зарегистрированы'),
+  [ERRORS.ErrAlreadyExistsShort]: (context) => context.showError(context.loginInput, 'Такой логин уже существует'),
   [ERRORS.ErrPasswordsMismatchShort]: (context) =>
     context.showError(context.passwordInput, 'Пароли не совпадают', context.repeatInput),
   [ERRORS.ErrIncorrectLoginOrPasswordShort]: (context) =>
@@ -38,7 +40,9 @@ export const ERROR_HANDLERS = {
   [ERRORS.ErrPasswordTooLong]: (context, input) => context.showError(input, 'Длина пароля более 18 символов'),
   [ERRORS.ErrEmptyPassword]: (context) =>
     context.showError(context.passwordInput, 'Пустой пароль', context.repeatInput),
-  [ERRORS.ErrDefault]: (context) => context.showError(context.lastInput, 'Что-то пошло не так. Попробуйте ещё')
+  [ERRORS.ErrDefault]: (context) => context.showError(context.lastInput, 'Что-то пошло не так. Попробуйте ещё'),
+
+  [ERRORS.ErrNotFound]: (context) => context.showError(context.lastInput, 'Что-то пошло не так. Попробуйте ещё')
 };
 
 // TODO: наполнить  информацией

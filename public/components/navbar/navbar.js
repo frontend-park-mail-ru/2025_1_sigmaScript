@@ -8,8 +8,8 @@ import UserPageStore from 'store/UserPageStore';
 import NavbarStore from 'store/NavbarStore';
 import { logoutUser } from 'flux/Actions';
 
-const logoSvg = 'static/svg/logo_text_border_lining.svg';
-const userSvg = 'static/svg/Avatar large.svg';
+const logoSvg = '/static/svg/logo_text_border_lining.svg';
+const userSvg = '/static/svg/Avatar large.svg';
 
 /**
  * Навигационная панель

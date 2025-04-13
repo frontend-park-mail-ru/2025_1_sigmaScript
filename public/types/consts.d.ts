@@ -19,4 +19,6 @@ declare module 'public/consts' {
     scrollX: number;
     scrollY: number;
   }
+  export const AVATAR_PLACEHOLDER: string;
+  export function Authable(url: string): boolean;
 }

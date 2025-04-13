@@ -78,8 +78,8 @@ class AuthStore {
     try {
       const url = AUTH_URL + 'login';
       const body = {
-        username: username,
-        password: password
+        username,
+        password
       };
       const responseData = await request({ url, method: 'POST', body, credentials: true });
       const user = responseData.body;
@@ -99,8 +99,8 @@ class AuthStore {
     try {
       const url = AUTH_URL + 'register';
       const body = {
-        username: username,
-        password: password,
+        username,
+        password,
         repeated_password: repeatPassword
       };
       const responseData = await request({ url, method: 'POST', body, credentials: true });

@@ -43,7 +43,7 @@ export const handler = (args: handlerInput) => {
       }
       break;
     case Urls.profile:
-      RenderActions.renderProfilePage();
+      RenderActions.renderProfilePage(args.data);
       break;
     default:
       window.location.pathname = '/';

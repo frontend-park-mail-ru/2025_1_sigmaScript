@@ -37,6 +37,7 @@ class MainPage {
       return;
     }
     this.self().remove();
+    this.navbar.destroy();
   }
 
   async GetCompilations() {
@@ -61,7 +62,7 @@ class MainPage {
   }
 
   async render() {
-    this.destroy();
+    // this.destroy();
 
     this.#parent.innerHTML = '';
 
@@ -74,12 +75,8 @@ class MainPage {
     mainElemHeader.id = this.#config.headerId;
     mainElem.appendChild(mainElemHeader);
 
-    const nav = new Navbar(mainElemHeader, () => {
-      const rootElement = document.getElementById('root');
-      rootElement.innerHTML = '';
-      const main = new MainPage(rootElement, { id: `${createID()}` });
-      main.render();
-    });
+    const nav = new Navbar(mainElemHeader);
+    this.navbar = nav;
     nav.render();
 
     const mainElemContent = document.createElement('div');

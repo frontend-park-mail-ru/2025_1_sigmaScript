@@ -1,4 +1,5 @@
 export const BACKEND_PORT = 8080;
+// export const HOST = '217.16.20.177';
 export const HOST = 'localhost';
 export const AUTH_URL = `http://${HOST}:${BACKEND_PORT}/auth/`;
 export const PERSON_URL = `http://${HOST}:${BACKEND_PORT}/name/`;
@@ -28,7 +29,7 @@ export const ERRORS = {
 export const BASE_URL = `http://${HOST}:${BACKEND_PORT}/`;
 
 export const ERROR_HANDLERS = {
-  [ERRORS.ErrAlreadyExistsShort]: (context) => context.showError(context.loginInput, 'Такой логин уже существует'),
+  [ERRORS.ErrAlreadyExistsShort]: (context) => context.showError(context.loginInput, 'Вы уже зарегистрированы'),
   [ERRORS.ErrPasswordsMismatchShort]: (context) =>
     context.showError(context.passwordInput, 'Пароли не совпадают', context.repeatInput),
   [ERRORS.ErrIncorrectLoginOrPasswordShort]: (context) =>
@@ -40,9 +41,7 @@ export const ERROR_HANDLERS = {
   [ERRORS.ErrPasswordTooLong]: (context, input) => context.showError(input, 'Длина пароля более 18 символов'),
   [ERRORS.ErrEmptyPassword]: (context) =>
     context.showError(context.passwordInput, 'Пустой пароль', context.repeatInput),
-  [ERRORS.ErrDefault]: (context) => context.showError(context.lastInput, 'Что-то пошло не так. Попробуйте ещё'),
-
-  [ERRORS.ErrNotFound]: (context) => context.showError(context.lastInput, 'Что-то пошло не так. Попробуйте ещё')
+  [ERRORS.ErrDefault]: (context) => context.showError(context.lastInput, 'Что-то пошло не так. Попробуйте ещё')
 };
 
 // TODO: наполнить  информацией
@@ -54,3 +53,11 @@ export const FOOTER_CONFIG = {
   ],
   copyright: '© 2025 sigmaScript'
 };
+
+export const AVATAR_PLACEHOLDER = 'static/img/avatar_placeholder.png';
+
+export function Authable(url) {
+  return AUTHABLE.includes(url);
+}
+
+export const AUTHABLE = ['/profile'];

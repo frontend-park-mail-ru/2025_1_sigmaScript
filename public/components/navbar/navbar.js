@@ -1,13 +1,11 @@
-import { createID } from 'utils/createID.ts';
 import Icon from '../icon/icon.js';
 import Button from '../universal_button/button.js';
-import { AUTH_URL } from 'public/consts.js';
-import Modal from '../modal/modal.js';
-import request, { ErrorWithDetails } from 'utils/fetch.ts';
 import template from './navbar.hbs';
 import { router } from 'public/modules/router.ts';
-import { dispatcher } from 'public/flux/Dispatcher.ts';
-import { GetDataActionTypes } from 'flux/ActionTypes';
+import UniversalModal from 'components/modal/modal';
+import UserPageStore from 'store/UserPageStore';
+import NavbarStore from 'store/NavbarStore';
+import { logoutUser } from 'flux/Actions';
 
 const logoSvg = '/static/svg/logo_text_border_lining.svg';
 const userSvg = '/static/svg/Avatar large.svg';
@@ -32,11 +30,29 @@ const userSvg = '/static/svg/Avatar large.svg';
 class Navbar {
   #parent;
 
-  #renderMain = () => {};
-
-  constructor(parent, renderMain) {
+  constructor(parent) {
     this.#parent = parent;
-    this.#renderMain = renderMain;
+
+    this.bindedHandleStoreChange = this.handleStoreChange.bind(this);
+    NavbarStore.subscribe(this.bindedHandleStoreChange);
+  }
+
+  handleStoreChange(state) {
+    let userData = UserPageStore.getState().userData;
+    if (!userData?.username) {
+      this.user.destroy();
+      this.LogoutButton.destroy();
+      this.LoginButton.render();
+      this.LoginButton.self().classList.add('navbar__button');
+    } else {
+      this.LoginButton.destroy();
+      this.user.changeConfig({
+        text: userData.username
+      });
+      this.user.render();
+      this.LogoutButton.render();
+      this.LogoutButton.self().classList.add('navbar__button');
+    }
   }
 
   self() {
@@ -44,9 +60,7 @@ class Navbar {
   }
 
   destroy() {
-    if (this.self()) {
-      this.self().remove();
-    }
+    this.self()?.remove();
   }
 
   #elements() {
@@ -57,7 +71,7 @@ class Navbar {
     if (!this.#parent) {
       return;
     }
-    this.destroy();
+    // this.destroy();
 
     const navbar = document.createElement('navbar');
     navbar.classList.add('navbar');
@@ -83,84 +97,69 @@ class Navbar {
     navbarUser.classList.add('navbar__user', 'flex-box-row');
     this.#elements().appendChild(navbarUser);
 
-    let userInstance = { username: null };
-    try {
-      const url = AUTH_URL + 'session';
-      const res = await request({ url: url, method: 'GET', credentials: true });
-      userInstance = res.body;
-      userInstance.username = userInstance.username.split('@')[0];
-    } catch (error) {
-      dispatcher.dispatch({
-        type: GetDataActionTypes.SESSION_NOT_FOUND_ERROR,
-        payload: { error: error }
-      });
-    }
-
     const logout = async () => {
-      try {
-        const url = AUTH_URL + 'logout';
-        await request({ url: url, method: 'POST', credentials: true });
-        this.#renderMain();
-      } catch (error) {
-        if (error instanceof ErrorWithDetails) {
-          dispatcher.dispatch({
-            type: GetDataActionTypes.UNKNOWN_ERROR,
-            payload: { error: error.errorDetails.error }
-          });
-        } else {
-          dispatcher.dispatch({
-            type: GetDataActionTypes.UNKNOWN_ERROR,
-            payload: { error: error }
-          });
-        }
-      }
+      logoutUser();
+      router.go('/');
     };
 
-    const LoginButtonAction = {
+    this.LoginButtonAction = {
       click: () => {
         router.go('/auth');
       }
     };
 
-    const LoginButton = new Button(navbarUser, {
+    this.LoginButton = new Button(navbarUser, {
       id: 'loginbtn',
       text: 'Войти',
-      actions: LoginButtonAction
+      actions: this.LoginButtonAction
     });
 
-    const LogoutButtonAction = {
+    this.LogoutButtonAction = {
       click: async () => {
-        const modal = new Modal(this.#parent, {
-          id: createID(),
-          onConfirm: logout
+        const modal = new UniversalModal(this.#parent, {
+          title: 'Подтверждение действия',
+          message: 'Вы уверены, что хотите выйти?',
+          confirmText: 'Да',
+          cancelText: 'Нет',
+          onConfirm: () => {
+            logout();
+          }
         });
+
         modal.render();
+        modal.open();
       }
     };
 
-    const LogoutButton = new Button(navbarUser, {
+    this.LogoutButton = new Button(navbarUser, {
       id: 'logoutbtn',
       text: 'Выйти',
-      actions: LogoutButtonAction
+      actions: this.LogoutButtonAction
     });
 
-    const user = new Icon(navbarUser, {
+    this.user = new Icon(navbarUser, {
       id: 'user',
       srcIcon: userSvg,
       size: 'large',
-      text: userInstance.username,
+      text: UserPageStore.getState().userData?.username,
       textColor: 'secondary',
       circular: true,
       direction: 'row'
     });
 
-    if (!userInstance.username) {
-      LoginButton.render();
-      LoginButton.self().classList.add('navbar__button');
+    this.user.setActions({
+      click: async () => {
+        router.go('/profile', UserPageStore.getState().userData);
+      }
+    });
+
+    if (!UserPageStore.getState().userData?.username) {
+      this.LoginButton.render();
+      this.LoginButton.self().classList.add('navbar__button');
     } else {
-      user.render();
-      LogoutButton.render();
-      LogoutButton.self().classList.add('navbar__button');
+      this.user.render();
+      this.LogoutButton.render();
+      this.LogoutButton.self().classList.add('navbar__button');
     }
   }
 }

@@ -103,15 +103,7 @@ export class PersonPage {
     mainElemHeader.id = createID();
     this.parent.appendChild(mainElemHeader);
 
-    const nav = new Navbar(mainElemHeader, () => {
-      const rootElement = document.getElementById('root');
-      if (!rootElement) {
-        return;
-      }
-      rootElement.innerHTML = '';
-      const main = new PersonPage(rootElement, router.getCurrentPath());
-      main.render();
-    });
+    const nav = new Navbar(mainElemHeader);
     nav.render();
 
     this.parent.insertAdjacentHTML('beforeend', personTemplate(this.personData));
@@ -133,15 +125,7 @@ export class PersonPage {
     mainElemHeader.id = createID();
     this.parent.appendChild(mainElemHeader);
 
-    const nav = new Navbar(mainElemHeader, () => {
-      const rootElement = document.getElementById('root');
-      if (!rootElement) {
-        return;
-      }
-      rootElement.innerHTML = '';
-      const main = new PersonPage(rootElement, router.getCurrentPath());
-      main.render();
-    });
+    const nav = new Navbar(mainElemHeader);
     nav.render();
 
     this.parent.insertAdjacentHTML('beforeend', noPersonTemplate(this.personData));

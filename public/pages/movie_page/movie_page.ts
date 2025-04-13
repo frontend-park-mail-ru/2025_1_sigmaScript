@@ -76,7 +76,6 @@ class MoviePage {
       } else if (key === 'budget' || key.startsWith('boxOffice')) {
         formattedValue = `$${value.toLocaleString('us-US')}`;
       } else if (key === 'duration') {
-        // !!!
         formattedValue = `${value}`;
       } else {
         formattedValue = String(value);

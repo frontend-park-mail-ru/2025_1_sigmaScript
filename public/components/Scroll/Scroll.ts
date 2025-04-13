@@ -12,7 +12,7 @@ export class Scroll {
    * @returns {Class}
    * @example
    * const scroll = new Scroll(parent).render();
-   * scroll.getContentContainer(); // !!!!
+   * scroll.getContentContainer();
    */
   constructor(parent: HTMLElement) {
     this.#parent = parent;

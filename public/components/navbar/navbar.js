@@ -37,7 +37,7 @@ class Navbar {
     NavbarStore.subscribe(this.bindedHandleStoreChange);
   }
 
-  handleStoreChange(state) {
+  handleStoreChange() {
     let userData = UserPageStore.getState().userData;
     if (!userData?.username) {
       this.user.destroy();

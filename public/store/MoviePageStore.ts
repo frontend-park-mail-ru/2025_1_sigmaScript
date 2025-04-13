@@ -1,15 +1,21 @@
 import { dispatcher } from 'flux/Dispatcher';
 import { Action } from 'types/Dispatcher.types';
 import { RenderActionTypes, MovieActionTypes } from 'flux/ActionTypes';
-import { MovieData } from 'types/movie_page.types';
+import { MovieData, NewReviewDataJSON, Reviews } from 'types/movie_page.types';
+import { serializeTimeZToHumanTime } from '../modules/time_serialiser';
 import { initialStore } from './InitialStore';
 import MoviePage from 'pages/movie_page/movie_page';
 import request, { ErrorWithDetails } from 'utils/fetch';
-import { movieDataLoaded, movieDataError, loadMovieData } from 'flux/Actions';
-import { MOVIE_URL } from 'public/consts';
-import { deserialize } from 'utils/Serialize';
-// import { fightClub } from 'types/movie_page.types';
-// import { BASE_URL } from 'public/consts';
+import {
+  movieDataLoaded,
+  movieDataError,
+  loadMovieData,
+  movieReviewsDataLoaded,
+  loadMovieReviewsData
+} from 'flux/Actions';
+
+import { MOVIE_URL, MOVIE_REVIEWS_PATH } from 'public/consts';
+import { deserialize, serialize } from 'utils/Serialize';
 
 type MoviePageState = {
   movieId: number | string | null;
@@ -52,10 +58,16 @@ class MoviePageStore {
           return;
         }
         try {
-          console.log(this.state.movieId);
           const url = `${MOVIE_URL}/${this.state.movieId}`;
           const response = await request({ url: url, method: 'GET', credentials: true });
           const movieData = deserialize(response.body) as MovieData;
+
+          if (movieData.reviews) {
+            for (let i = 0; i < movieData.reviews.length; i++) {
+              movieData.reviews[i].createdAt = serializeTimeZToHumanTime(movieData.reviews[i].createdAt);
+            }
+          }
+
           movieDataLoaded(movieData as MovieData);
         } catch (error: unknown) {
           console.error('Failed to load movie data:', error);
@@ -67,8 +79,47 @@ class MoviePageStore {
         }
         break;
 
+      case MovieActionTypes.LOAD_MOVIE_REVIEWS_DATA:
+        if (!this.state.movieId) {
+          movieDataError('Movie ID is missing');
+          return;
+        }
+        try {
+          const url = `${MOVIE_URL}/${this.state.movieId}/${MOVIE_REVIEWS_PATH}`;
+          const response = await request({ url: url, method: 'GET', credentials: true });
+          const reviewData = deserialize(response.body) as Reviews;
+          movieReviewsDataLoaded(reviewData);
+        } catch (error: unknown) {
+          console.error('Failed to load movie reviews data:', error);
+          const errorMessage =
+            error instanceof ErrorWithDetails
+              ? error.errorDetails.error || error.message
+              : 'Не удалось загрузить данные отзывов фильма';
+          movieDataError(errorMessage);
+        }
+        break;
+
       case MovieActionTypes.MOVIE_DATA_LOADED:
         this.state.movieData = action.payload as MovieData;
+        this.state.isLoading = false;
+        this.state.error = null;
+        this.emitChange();
+        break;
+
+      case MovieActionTypes.MOVIE_REVIEWS_DATA_LOADED:
+        if (this.state.movieData && this.state.movieId) {
+          this.state.movieData.reviews = action.payload as Reviews;
+
+          for (let i = 0; i < this.state.movieData.reviews.length; i++) {
+            this.state.movieData.reviews[i].createdAt = serializeTimeZToHumanTime(
+              this.state.movieData.reviews[i].createdAt
+            );
+          }
+        } else {
+          movieDataError('Movie ID is missing');
+          return;
+        }
+
         this.state.isLoading = false;
         this.state.error = null;
         this.emitChange();
@@ -79,6 +130,31 @@ class MoviePageStore {
         this.state.isLoading = false;
         this.state.error = action.payload as string;
         this.emitChange();
+        break;
+
+      case MovieActionTypes.POST_MOVIE_REVIEW:
+        if (!this.state.movieId) {
+          movieDataError('Movie ID is missing');
+          return;
+        }
+        try {
+          const payload = action.payload as NewReviewDataJSON;
+
+          const url = `${MOVIE_URL}/${this.state.movieId}/${MOVIE_REVIEWS_PATH}`;
+          const body = serialize({
+            ...payload
+          }) as Record<string, unknown>;
+          await request({ url: url, method: 'POST', body, credentials: true });
+
+          loadMovieReviewsData(this.state.movieId);
+        } catch (error: unknown) {
+          console.error('Failed to post new movie review data:', error);
+          const errorMessage =
+            error instanceof ErrorWithDetails
+              ? error.errorDetails.error || error.message
+              : 'Не удалось отправить данные нового отзыва фильма';
+          movieDataError(errorMessage);
+        }
         break;
 
       default:

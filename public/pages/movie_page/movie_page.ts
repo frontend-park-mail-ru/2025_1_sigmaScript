@@ -9,10 +9,13 @@ import { Person, Genre, MovieData, DisplayField, fieldTranslations, keysToShow }
 import MoviePageStore from 'store/MoviePageStore';
 import Loading from 'components/Loading/loading';
 import Navbar from 'components/navbar/navbar';
-import MainPage from 'pages/main_page/main_page';
+
 import { Footer } from 'components/Footer/Footer';
-import { FOOTER_CONFIG } from 'public/consts.js';
-import { Urls } from 'public/modules/router';
+import { FOOTER_CONFIG } from '../../consts.js';
+import { Urls } from '../../modules/router';
+import { FooterData } from 'types/Footer.types.js';
+import { postMovieReview } from 'flux/Actions.ts';
+import UserPageStore from 'store/UserPageStore.ts';
 
 type MoviePageStateFromStore = {
   movieId: number | string | null;
@@ -102,7 +105,7 @@ class MoviePage {
     mainElemContent.id = this.#id;
     mainElem.appendChild(mainElemContent);
 
-    const footer = new Footer(mainElem, FOOTER_CONFIG);
+    const footer = new Footer(mainElem, FOOTER_CONFIG as FooterData);
     footer.render();
 
     this.update();
@@ -173,10 +176,12 @@ class MoviePage {
         srcIcon: '/static/svg/play.svg',
         actions: {
           click: () => {
+            // TODO
             console.log(`Play trailer for movie ${movie.id}`);
           }
         }
       }).render();
+
       new Button(movieButtons, {
         id: 'button--favourite-' + createID(),
         type: 'button',
@@ -185,6 +190,7 @@ class MoviePage {
         srcIcon: '/static/svg/favourite.svg',
         actions: {
           click: () => {
+            // TODO
             console.log(`Toggle favourite for movie ${movie.id}`);
           }
         }
@@ -271,13 +277,21 @@ class MoviePage {
 
     formElement.addEventListener('submit', (event) => {
       event.preventDefault();
-      const rating = this.#stars?.currentRating;
+
+      const rating = this.#stars?.currentRating === 0 ? 5 : this.#stars?.currentRating;
       const text = textarea.getValue();
 
-      console.log(`Rating: ${rating}, Text: ${text}`);
-    });
+      if (!rating || !UserPageStore.getState().userData?.username || text === undefined) {
+        // TODO error
+        console.log(`No user or data inside form: Rating: ${rating}, Text: ${text}`);
+        return;
+      }
 
-    // TODO: добавить саму отправку отзыва (возможно, через handlebars)
+      postMovieReview({
+        reviewText: text,
+        score: rating
+      });
+    });
   }
 }
 

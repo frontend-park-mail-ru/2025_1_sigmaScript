@@ -1,7 +1,7 @@
 import { dispatcher } from 'flux/Dispatcher';
 import { LoginActionTypes, RenderActionTypes, UserPageTypes, MovieActionTypes } from 'flux/ActionTypes';
 import { UpdateUserData, UserData } from 'types/UserPage.types';
-import { MovieData } from 'types/movie_page.types';
+import { MovieData, NewReviewDataJSON, Reviews } from 'types/movie_page.types';
 
 export function loginSubmit(username: string, password: string) {
   dispatcher.dispatch({
@@ -24,6 +24,13 @@ export function loadMovieData(movieId: string | number) {
   });
 }
 
+export function loadMovieReviewsData(movieId: string | number) {
+  dispatcher.dispatch({
+    type: MovieActionTypes.LOAD_MOVIE_REVIEWS_DATA,
+    payload: movieId
+  });
+}
+
 export function movieDataLoaded(movieData: MovieData) {
   dispatcher.dispatch({
     type: MovieActionTypes.MOVIE_DATA_LOADED,
@@ -31,10 +38,24 @@ export function movieDataLoaded(movieData: MovieData) {
   });
 }
 
+export function movieReviewsDataLoaded(movieReviewsData: Reviews) {
+  dispatcher.dispatch({
+    type: MovieActionTypes.MOVIE_REVIEWS_DATA_LOADED,
+    payload: movieReviewsData
+  });
+}
+
 export function movieDataError(error: string) {
   dispatcher.dispatch({
     type: MovieActionTypes.MOVIE_DATA_ERROR,
     payload: error
+  });
+}
+
+export function postMovieReview(reviewData: NewReviewDataJSON) {
+  dispatcher.dispatch({
+    type: MovieActionTypes.POST_MOVIE_REVIEW,
+    payload: reviewData
   });
 }
 

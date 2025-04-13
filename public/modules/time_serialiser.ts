@@ -1,4 +1,4 @@
-export const serializeTime = (timeString: string): string => {
+export const serializeTimeZToHumanTimeAndYearsOld = (timeString: string): string => {
   try {
     const timeStringRegex =
       /(\d{4})-(\d{2})-(\d{2})\s(\d{2}):(\d{2}):(\d{2})\.(\d+)\s([+-]\d{4})\s(\w+)\sm=\+(\d+\.\d+)/;
@@ -61,3 +61,38 @@ function pluralizeYears(years: number): string {
       return 'лет';
   }
 }
+
+export const serializeTimeZToHumanTime = (timeString: string): string => {
+  try {
+    const timeStringRegex =
+      /(\d{4})-(\d{2})-(\d{2})\s(\d{2}):(\d{2}):(\d{2})\.(\d+)\s([+-]\d{4})\s(\w+)\sm=\+(\d+\.\d+)/;
+    const match = timeString.match(timeStringRegex);
+
+    if (!match) {
+      return 'Некорректный формат времени';
+    }
+
+    const year = parseInt(match[1], 10);
+    const month = parseInt(match[2], 10) - 1;
+    const day = parseInt(match[3], 10);
+    const hour = parseInt(match[4], 10);
+    const minute = parseInt(match[5], 10);
+    const offsetHours = parseInt(match[8].slice(0, 3), 10);
+
+    const utcHour = hour - offsetHours;
+    const adjustedHour = utcHour < 0 ? utcHour + 24 : utcHour;
+
+    const date = new Date(year, month, day, adjustedHour, minute);
+
+    const optionsDate: Intl.DateTimeFormatOptions = { day: 'numeric', month: 'long', year: 'numeric' };
+    const formattedDate = date.toLocaleDateString('ru-RU', optionsDate);
+
+    const optionsTime: Intl.DateTimeFormatOptions = { hour: 'numeric', minute: 'numeric' };
+    const formattedTime = date.toLocaleTimeString('ru-RU', optionsTime);
+
+    return `${formattedDate} в ${formattedTime}`;
+  } catch (error) {
+    console.error('Ошибка при обработке строки времени:', error);
+    return 'Ошибка при обработке времени';
+  }
+};

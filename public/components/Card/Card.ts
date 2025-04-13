@@ -1,5 +1,6 @@
 import { createID } from 'utils/createID';
 import template from './Card.hbs';
+import { router } from 'modules/router';
 
 type CardConfig = {
   id?: string;
@@ -86,6 +87,11 @@ export class MovieCard {
     }
     const cardHTML = template(this.#config);
     this.#parent.insertAdjacentHTML('beforeend', cardHTML);
+
+    this.self()?.addEventListener('click', (event) => {
+      event.preventDefault();
+      router.go(this.#config.url!);
+    });
   }
 }
 

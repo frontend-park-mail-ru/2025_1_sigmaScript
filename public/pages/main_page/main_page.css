@@ -11,11 +11,13 @@
   position: relative;
   width: 100%;
   height: auto;
+  gap: 50px;
 }
 
 .compilation {
   position: relative;
   width: 100%;
+  align-items: center;
 }
 
 .compilation__title {
@@ -105,4 +107,8 @@
 .details-link:hover {
   background-color: #0056b3;
   /* Более темный синий при наведении */
+}
+
+.compilation__scroll {
+  max-width: 95%;
 }

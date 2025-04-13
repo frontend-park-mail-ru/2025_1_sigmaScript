@@ -24,6 +24,11 @@ export const GetDataActionTypes = {
   UNKNOWN_ERROR: 'UNKNOWN_ERROR'
 };
 
+export const MovieActionTypes = {
+  LOAD_MOVIE_DATA: 'LOAD_MOVIE_DATA',
+  MOVIE_DATA_LOADED: 'MOVIE_DATA_LOADED',
+  MOVIE_DATA_ERROR: 'MOVIE_DATA_ERROR'
+
 export const UserPageTypes = {
   UPDATE_USER_PAGE: 'UPDATE_USER_PAGE',
   GET_USER: 'GET_USER',

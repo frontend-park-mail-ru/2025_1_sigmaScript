@@ -23,6 +23,7 @@ class Input {
   #parent;
   #config = {};
   #actions = {};
+  #addClasses = [];
 
   constructor(parent, config) {
     this.#parent = parent;
@@ -35,6 +36,7 @@ class Input {
     this.#config.type = config.type || '';
 
     this.#actions = config.actions || {};
+    this.#addClasses = config.addClasses || [];
   }
 
   self() {
@@ -57,6 +59,14 @@ class Input {
 
     if (this.#actions.keypress) {
       this.getInput().addEventListeneraddEventListener('keypress', this.#actions.keypress);
+    }
+  }
+
+  #applyClasses() {
+    if (this.self()) {
+      this.#addClasses.forEach((cls) => {
+        this.self().classList.add(cls);
+      }, this);
     }
   }
 
@@ -125,6 +135,7 @@ class Input {
       this.#parent.insertAdjacentElement('beforeEnd', input);
     }
     this.#applyActions();
+    this.#applyClasses();
   }
 }
 

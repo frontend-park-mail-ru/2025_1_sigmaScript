@@ -1,0 +1,27 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  border: 1px solid #555;
+  border-radius: 5px;
+  overflow: hidden;
+  transition: transform 0.3s ease-in-out;
+}
+
+.card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 8px rgba(255, 255, 255, 0.35);
+}
+
+.card__preview {
+  width: 100%;
+  object-fit: cover;
+}
+
+.card__title {
+  margin: 10px 0;
+  font-size: 1.4rem;
+  color: var(--primary-text-color);
+  text-align: center;
+}

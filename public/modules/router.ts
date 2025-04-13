@@ -72,7 +72,7 @@ class Router {
     handler({ url: url, id: this.getURLMethodAndID(url.pathname).id });
 
     window.onpopstate = (e) => {
-      if (e.state.id) {
+      if (e.state && e.state.id) {
         handler({ url: new URL(window.location.href), id: e.state.id });
       } else {
         handler({ url: new URL(window.location.href) });

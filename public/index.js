@@ -12,7 +12,5 @@ import { router } from 'public/modules/router';
 
 import { initialStore } from 'store/InitialStore';
 
-const rootElement = document.getElementById('root');
-
 router.startRouting();
 initialStore.start();

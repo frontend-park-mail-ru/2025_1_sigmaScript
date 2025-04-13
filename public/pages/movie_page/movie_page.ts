@@ -94,12 +94,7 @@ class MoviePage {
     mainElemHeader.classList += 'header sticky_to_top';
     mainElem.appendChild(mainElemHeader);
 
-    const nav = new Navbar(mainElemHeader, () => {
-      const rootElement = document.getElementById('root')!;
-      rootElement.innerHTML = '';
-      const main = new MainPage(rootElement, { id: `${createID()}` });
-      main.render();
-    });
+    const nav = new Navbar(mainElemHeader);
     nav.render();
 
     const mainElemContent = document.createElement('div');

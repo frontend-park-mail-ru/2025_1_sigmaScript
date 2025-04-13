@@ -1,4 +1,5 @@
 import { Destroyable } from 'public/consts';
+import { getUser } from 'flux/Actions';
 
 // InitialStore is used to manually dsestroy current page and unsubscribe from stores
 class InitialStore<T extends Destroyable> {
@@ -17,7 +18,9 @@ class InitialStore<T extends Destroyable> {
     }
   }
 
-  async start() {}
+  async start() {
+    getUser();
+  }
 }
 
 export const initialStore = new InitialStore();

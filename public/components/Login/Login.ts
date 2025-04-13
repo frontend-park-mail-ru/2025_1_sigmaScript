@@ -6,10 +6,12 @@ import { ERRORS, ERROR_HANDLERS } from 'public/consts';
 import { isValidLogin, isVaidPassword } from 'utils/validate.js';
 import { debounce } from 'utils/debounce.js';
 import template from './Login.hbs';
-import { loginSubmit, registerSubmit } from 'flux/Actions';
+import { getUser, loginSubmit, registerSubmit } from 'flux/Actions';
 import AuthStore from 'store/LoginStore';
 import type { AuthState } from 'types/Auth.types';
-import { router } from '../../modules/router.ts';
+import { router } from 'modules/router';
+import UserPageStore from 'store/UserPageStore';
+import { Authable } from 'public/consts';
 
 type ErrorHandler = (context: Login, input?: Input) => void;
 const TypedERROR_HANDLERS = ERROR_HANDLERS as Record<string, ErrorHandler>;
@@ -85,14 +87,15 @@ export class Login {
    * Удаляет отрисованные элементы.
    */
   destroy(): void {
-    this.self()?.remove();
+    AuthStore.unsubscribe(this.bindedHandleStoreChange);
+    // this.self()?.remove();
+    document.querySelector('.main_auth')?.remove();
   }
 
   /**
    * Рисует компонент на экран.
    */
   render(): void {
-    this.destroy();
     if (!this.#parent) return;
 
     this.parent.innerHTML = '';
@@ -284,8 +287,12 @@ export class Login {
   /**
    * Возвращает на предыдущую страницу
    */
-  goBack() {
+  goBack(force: boolean) {
     AuthStore.unsubscribe(this.bindedHandleStoreChange);
+    if (!force && Authable(this.prevPageURL) && !UserPageStore.getState().userData) {
+      router.go('/auth');
+      return;
+    }
     this.prevPage();
   }
 
@@ -308,7 +315,9 @@ export class Login {
       return;
     }
     if (state.user) {
-      this.goBack();
+      // после успешного логина или регистрации запрашиваем данные юзера в стор
+      getUser();
+      this.goBack(true);
     }
   }
 
@@ -337,7 +346,7 @@ export class Login {
   addEvents(): void {
     this.signInButton.addEventListener('click', () => this.signInMode());
     this.signUpButton.addEventListener('click', () => this.signUpMode());
-    this.backButton.addEventListener('click', () => this.prevPage());
+    this.backButton.addEventListener('click', () => this.goBack(false));
     this.submitButton.self()!.addEventListener('click', (e: Event) => this.submitForm(e));
 
     const debouncedValidate = debounce(this.validate.bind(this), 300);

@@ -5,6 +5,7 @@
 @import "components/Login/Login.css";
 @import "pages/main_page/main_page.css";
 @import "pages/person_page/person_page.css";
+@import "pages/UserPage/UserPage.css";
 
 * {
     box-sizing: border-box;
@@ -50,11 +51,12 @@ body {
 body {
     height: 100%;
     margin: 0;
+    background-color: var(--background-color);
 }
 
 #root {
     background-color: var(--background-color);
-    min-height: 1024px;
+    /* min-height: 1024px; */
 }
 
 html {

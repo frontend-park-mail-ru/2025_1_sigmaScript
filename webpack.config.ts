@@ -86,6 +86,7 @@ module.exports = {
       utils: path.resolve(publicPath, 'utils'),
       flux: path.resolve(publicPath, 'flux'),
       store: path.resolve(publicPath, 'store'),
+      modules: path.resolve(publicPath, 'modules'),
       public: publicPath
     }
   }

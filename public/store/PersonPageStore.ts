@@ -64,6 +64,11 @@ class PersonPageStore {
         return;
       }
 
+      initialStore.destroyStored();
+      const tempPersonPage = new PersonPage(rootElement, router.getCurrentPath(), null);
+      initialStore.store(tempPersonPage);
+      tempPersonPage.render();
+
       const url = PERSON_URL + `${id}`;
       const responseData = await request({ url, method: 'GET', credentials: true });
       const jsonData = responseData.body;
@@ -94,6 +99,7 @@ class PersonPageStore {
         }
       };
 
+      tempPersonPage.destroy();
       initialStore.destroyStored();
       const personPage = new PersonPage(rootElement, router.getCurrentPath(), personState.person);
       initialStore.store(personPage);

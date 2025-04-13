@@ -1,5 +1,6 @@
 import { dispatcher } from 'flux/Dispatcher';
-import { LoginActionTypes, RenderActionTypes } from 'flux/ActionTypes';
+import { LoginActionTypes, RenderActionTypes, UserPageTypes } from 'flux/ActionTypes';
+import { UpdateUserData, UserData } from 'types/UserPage.types';
 
 export function loginSubmit(username: string, password: string) {
   dispatcher.dispatch({
@@ -28,7 +29,7 @@ export const RenderActions = {
   },
   renderFooter() {
     dispatcher.dispatch({
-      type: RenderActionTypes.RENDER_NAVBAR
+      type: RenderActionTypes.RENDER_FOOTER
     });
   },
   renderAuthPage() {
@@ -48,9 +49,42 @@ export const RenderActions = {
       payload: id
     });
   },
-  renderProfilePage() {
+  renderProfilePage(userData: UserData) {
     dispatcher.dispatch({
-      type: RenderActionTypes.RENDER_PROFILE_PAGE
+      type: RenderActionTypes.RENDER_PROFILE_PAGE,
+      payload: userData
     });
   }
 };
+
+export function updateUserPage(userData: UserData) {
+  dispatcher.dispatch({
+    type: UserPageTypes.UPDATE_USER_PAGE,
+    payload: userData
+  });
+}
+
+export function getUser() {
+  dispatcher.dispatch({
+    type: UserPageTypes.GET_USER
+  });
+}
+
+export function updateUser(userData: UpdateUserData) {
+  dispatcher.dispatch({
+    type: UserPageTypes.UPDATE_USER,
+    payload: userData
+  });
+}
+
+export function logoutUser() {
+  dispatcher.dispatch({
+    type: UserPageTypes.LOGOUT_USER
+  });
+}
+
+export function noSession() {
+  dispatcher.dispatch({
+    type: UserPageTypes.NO_SESSION
+  });
+}

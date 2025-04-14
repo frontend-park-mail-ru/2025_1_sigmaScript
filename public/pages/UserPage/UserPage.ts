@@ -9,7 +9,7 @@ import Navbar from 'components/navbar/navbar';
 import { FOOTER_CONFIG } from '../../consts.js';
 import { Footer } from 'components/Footer/Footer';
 import UniversalModal from 'components/modal/modal';
-import { updateUser } from 'flux/Actions';
+import { updateUser, updateUserAvatar } from 'flux/Actions';
 import { FooterData } from 'types/Footer.types.js';
 
 export const TABS_DATA = {
@@ -185,7 +185,48 @@ export class UserPage {
         }
       };
 
+      const changeUserAvatarButtonConfig: ButtonConfig = {
+        id: 'changeAvatarBtn',
+        color: 'primary',
+        text: 'Изменить аватар',
+        textColor: 'primary',
+        actions: {
+          click: async () => {
+            const modal = new UniversalModal(document.body, {
+              title: 'Редактирование данных',
+              message: 'Измените логин и/или пароль',
+              confirmText: 'Сохранить',
+              cancelText: 'Отмена',
+              inputs: [
+                {
+                  id: 'modalAvatarImageInput',
+                  name: 'modalAvatarImage',
+                  type: 'file'
+                }
+              ],
+              onConfirm: () => {
+                let selectedFile = null;
+                const modalAvatarImageInput = document.getElementsByName('modalAvatarImage ')[0] as HTMLInputElement;
+                if (modalAvatarImageInput && modalAvatarImageInput.files) {
+                  selectedFile = modalAvatarImageInput.files[0];
+                }
+
+                if (!selectedFile) {
+                  alert('Выберите изображение вашего нового аватара');
+                } else {
+                  updateUserAvatar(selectedFile);
+                }
+              }
+            });
+
+            modal.render();
+            modal.open();
+          }
+        }
+      };
+
       new Button(buttonContainer, buttonConfig).render();
+      new Button(buttonContainer, changeUserAvatarButtonConfig).render();
     }
 
     const tabsContainer = this.self()?.querySelector<HTMLElement>(`#${this.#id} .tabs-container`);
@@ -204,7 +245,7 @@ export class UserPage {
     }
     const buttonContainer = this.self()?.querySelector(`.user-page__action-button`);
     if (buttonContainer) {
-      const buttonConfig: ButtonConfig = {
+      const changeUserDataButtonConfig: ButtonConfig = {
         id: 'changeDataBtn',
         color: 'primary',
         text: 'Изменить данные',
@@ -258,7 +299,48 @@ export class UserPage {
         }
       };
 
-      new Button(buttonContainer, buttonConfig).render();
+      const changeUserAvatarButtonConfig: ButtonConfig = {
+        id: 'changeAvatarBtn',
+        color: 'primary',
+        text: 'Изменить аватар',
+        textColor: 'primary',
+        actions: {
+          click: async () => {
+            const modal = new UniversalModal(document.body, {
+              title: 'Редактирование данных',
+              message: 'Измените логин и/или пароль',
+              confirmText: 'Сохранить',
+              cancelText: 'Отмена',
+              inputs: [
+                {
+                  id: 'modalAvatarImageInput',
+                  name: 'modalAvatarImage',
+                  type: 'file'
+                }
+              ],
+              onConfirm: () => {
+                let selectedFile = null;
+                const modalAvatarImageInput = document.getElementsByName('modalAvatarImage ')[0] as HTMLInputElement;
+                if (modalAvatarImageInput && modalAvatarImageInput.files) {
+                  selectedFile = modalAvatarImageInput.files[0];
+                }
+
+                if (!selectedFile) {
+                  alert('Выберите изображение вашего нового аватара');
+                } else {
+                  updateUserAvatar(selectedFile);
+                }
+              }
+            });
+
+            modal.render();
+            modal.open();
+          }
+        }
+      };
+
+      new Button(buttonContainer, changeUserDataButtonConfig).render();
+      new Button(buttonContainer, changeUserAvatarButtonConfig).render();
     }
 
     const tabsContainer = this.self()?.querySelector<HTMLElement>(`#${this.#id} .tabs-container`);

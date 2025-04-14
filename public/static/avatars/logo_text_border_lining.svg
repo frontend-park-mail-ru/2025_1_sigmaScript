@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="170.68625mm"
+   height="36.504757mm"
+   viewBox="0 0 170.68625 36.504757"
+   version="1.1"
+   id="svg5"
+   shape-rendering="crispEdges"
+   inkscape:version="1.1.2 (0a00cf5339, 2022-02-04)"
+   sodipodi:docname="logo_text_border_lining.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview7"
+     pagecolor="#202122"
+     bordercolor="#666666"
+     borderopacity="1"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="false"
+     inkscape:document-units="mm"
+     showgrid="false"
+     showborder="true"
+     inkscape:zoom="1.4574355"
+     inkscape:cx="116.64324"
+     inkscape:cy="71.01515"
+     inkscape:window-width="1920"
+     inkscape:window-height="1003"
+     inkscape:window-x="0"
+     inkscape:window-y="40"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs2">
+    <color-profile
+       name="HDMI"
+       xlink:href="../.local/share/icc/edid-3e51069b20da49e6f04b685b0c88212d.icc"
+       id="color-profile5121" />
+    <color-profile
+       name="BenQ-XL2430T"
+       xlink:href="../.local/share/icc/edid-2e76ba603a460a453afd08144fc87977.icc"
+       id="color-profile5123" />
+    <rect
+       x="-0.34306836"
+       y="252.92715"
+       width="787.59918"
+       height="482.52563"
+       id="rect8613" />
+  </defs>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-4.1928038,-74.363374)">
+    <g
+       id="g5118">
+      <text
+         xml:space="preserve"
+         transform="matrix(0.22582804,0,0,0.26486129,0.63185425,-0.09729983)"
+         id="text8611"
+         style="font-style:normal;font-weight:normal;font-size:186.667px;line-height:1.25;font-family:sans-serif;white-space:pre;shape-inside:url(#rect8613);fill:#1a1a1a;fill-opacity:1;stroke:#ffffff;stroke-width:1.88976;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"><tspan
+           x="-0.34375"
+           y="418.08429"
+           id="tspan5136"><tspan
+             style="font-weight:bold;-inkscape-font-specification:'sans-serif Bold'"
+             id="tspan5134">FILMLK</tspan></tspan></text>
+      <rect
+         style="fill:#ffffff;fill-opacity:0;stroke:#ffffff;stroke-width:0.161448;stroke-opacity:0"
+         id="rect1666"
+         width="1.435623"
+         height="36.38493"
+         x="2.7122371"
+         y="74.423096" />
+    </g>
+  </g>
+</svg>

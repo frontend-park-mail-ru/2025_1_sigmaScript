@@ -92,6 +92,27 @@ class UserPageStore {
           console.log(error);
         }
         break;
+      case UserPageTypes.UPDATE_USER_AVATAR:
+        try {
+          const selectedFile = action.payload as Blob;
+          const formData = new FormData();
+          formData.append('image', selectedFile);
+
+          const url = BASE_URL + 'users/avatar';
+
+          await fetch(url, {
+            method: 'POST',
+            body: formData,
+            credentials: 'include'
+          });
+
+          getUser();
+        } catch (error) {
+          // TODO: пофиксить ошибку
+          // console.log(error.errorDetails.error);
+          console.log(error);
+        }
+        break;
       default:
         break;
     }

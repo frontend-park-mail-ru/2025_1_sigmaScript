@@ -1,3 +1,5 @@
+import { ButtonConfig } from './UserPage.types';
+
 export type InputConfig = {
   id: string;
   name: string;
@@ -15,6 +17,7 @@ export type UniversalModalConfig = {
   confirmText?: string;
   cancelText?: string;
   inputs?: InputConfig[];
+  buttons?: ButtonConfig[];
   onConfirm?: () => void;
   onCancel?: () => void;
 };

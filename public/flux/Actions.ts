@@ -120,6 +120,13 @@ export function updateUser(userData: UpdateUserData) {
   });
 }
 
+export function updateUserAvatar(selectedFile: Blob) {
+  dispatcher.dispatch({
+    type: UserPageTypes.UPDATE_USER_AVATAR,
+    payload: selectedFile
+  });
+}
+
 export function logoutUser() {
   dispatcher.dispatch({
     type: UserPageTypes.LOGOUT_USER

@@ -3,6 +3,7 @@ import template from './modal.hbs';
 import Input from 'components/universal_input/input';
 import Button from 'components/universal_button/button.js';
 import { UniversalModalConfig, InputConfig } from 'types/Modal.types';
+import { ButtonConfig } from 'types/UserPage.types';
 
 class UniversalModal {
   #parent: HTMLElement;
@@ -19,7 +20,8 @@ class UniversalModal {
       message: config.message || '',
       confirmText: config.confirmText !== undefined ? config.confirmText : 'Да',
       cancelText: config.cancelText !== undefined ? config.cancelText : 'Нет',
-      inputs: config.inputs || []
+      inputs: config.inputs || [],
+      buttons: config.buttons || []
     };
 
     this.#inputs = {};
@@ -83,6 +85,16 @@ class UniversalModal {
           const input = new Input(inputsContainer, inputConfig);
           this.#inputs[inputConfig.name] = input;
           input.render();
+        });
+      }
+    }
+
+    if (this.#config.buttons && this.#config.buttons.length > 0) {
+      const bttnsContainer = this.self()?.querySelector('.modal_content__buttons');
+      if (bttnsContainer) {
+        this.#config.buttons.forEach((bttnConfig: ButtonConfig) => {
+          const buttn = new Button(bttnsContainer, bttnConfig);
+          buttn.render();
         });
       }
     }

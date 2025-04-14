@@ -4,22 +4,26 @@
       <div class='modal_content__header'>
         <span class='modal_close'>&times;</span>
         {{#if title}}
-          <div class='modal_content__title'>{{title}}</div>
+        <div class='modal_content__title'>{{title}}</div>
         {{/if}}
       </div>
       {{#if message}}
-        <p class='modal_content__message'>{{message}}</p>
+      <p class='modal_content__message'>{{message}}</p>
       {{/if}}
       {{#if inputs}}
-        <div class='modal_content__inputs'>
-        </div>
+      <div class='modal_content__inputs'>
+      </div>
+      {{/if}}
+      {{#if buttons}}
+      <div class='modal_content__buttons'>
+      </div>
       {{/if}}
       <div class='modal_content-actions'>
         {{#if confirmText}}
-          <div class='modal_button modal_confirm_btn_container'></div>
+        <div class='modal_button modal_confirm_btn_container'></div>
         {{/if}}
         {{#if cancelText}}
-          <div class='modal_button modal_cancel_btn_container'></div>
+        <div class='modal_button modal_cancel_btn_container'></div>
         {{/if}}
       </div>
     </div>

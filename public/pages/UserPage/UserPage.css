@@ -116,3 +116,10 @@
   display: block;
   text-align: center;
 }
+
+.user-page__action-button {
+  display: flex;
+  flex-direction: column;
+
+  gap: 10px;
+}

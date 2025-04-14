@@ -4,6 +4,7 @@ export const HOST = 'localhost';
 export const AUTH_URL = `http://${HOST}:${BACKEND_PORT}/auth/`;
 export const PERSON_URL = `http://${HOST}:${BACKEND_PORT}/name/`;
 export const MOVIE_URL = `http://${HOST}:${BACKEND_PORT}/movie`;
+export const MOVIE_REVIEWS_PATH = `reviews`;
 export const ERRORS = {
   ErrParseJSONShort: 'parse_json_error',
   ErrAlreadyExistsShort: 'already_exists',

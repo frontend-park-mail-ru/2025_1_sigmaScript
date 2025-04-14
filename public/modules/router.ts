@@ -69,15 +69,15 @@ class Router {
       lastURLhref: window.location.href
     };
 
-    this.go(url.pathname);
+    handler({ url: url, id: this.getURLMethodAndID(url.pathname).id });
 
     window.onpopstate = (e) => {
-      if (e.state.id) {
+      if (e.state && e.state.id) {
         handler({ url: new URL(window.location.href), id: e.state.id });
       } else {
         handler({ url: new URL(window.location.href) });
       }
-      if (e.state.scrollPosition) {
+      if (e.state && e.state.scrollPosition) {
         const { scrollX, scrollY } = e.state.scrollPosition;
 
         setTimeout(() => {

@@ -6,10 +6,11 @@ import { AVATAR_PLACEHOLDER } from 'public/consts';
 import { UserData, UserPageData, ButtonConfig, UserPageState } from 'types/UserPage.types';
 import UserPageStore from 'store/UserPageStore';
 import Navbar from 'components/navbar/navbar';
-import { FOOTER_CONFIG } from 'public/consts.js';
+import { FOOTER_CONFIG } from '../../consts.js';
 import { Footer } from 'components/Footer/Footer';
 import UniversalModal from 'components/modal/modal';
 import { updateUser } from 'flux/Actions';
+import { FooterData } from 'types/Footer.types.js';
 
 export const TABS_DATA = {
   tabsData: [
@@ -192,7 +193,7 @@ export class UserPage {
       new Tabs(tabsContainer, this.data.tabsData).render();
     }
 
-    const footer = new Footer(mainElem, FOOTER_CONFIG);
+    const footer = new Footer(mainElem, FOOTER_CONFIG as FooterData);
     footer.render();
   }
 

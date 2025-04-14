@@ -10,7 +10,7 @@ import { initialStore } from './InitialStore';
 import { PersonPage } from 'pages/person_page/person_page';
 import { router } from '../modules/router';
 import { PERSON_URL } from 'public/consts';
-import { serializeTime } from '../modules/time_serialiser';
+import { serializeTimeZToHumanTimeAndYearsOld } from '../modules/time_serialiser';
 import { cmToMeters } from '../modules/smToMetersSerialiser';
 import { ErrorPayload } from 'types/Auth.types';
 
@@ -76,7 +76,7 @@ class PersonPageStore {
 
       let personBirthDate = null;
       if (personJSON.birthday) {
-        personBirthDate = serializeTime(personJSON.birthday as string);
+        personBirthDate = serializeTimeZToHumanTimeAndYearsOld(personJSON.birthday as string);
       }
 
       let personState: PersonState = {

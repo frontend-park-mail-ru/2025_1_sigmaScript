@@ -77,7 +77,7 @@ class Router {
       } else {
         handler({ url: new URL(window.location.href) });
       }
-      if (e.state.scrollPosition) {
+      if (e.state && e.state.scrollPosition) {
         const { scrollX, scrollY } = e.state.scrollPosition;
 
         setTimeout(() => {

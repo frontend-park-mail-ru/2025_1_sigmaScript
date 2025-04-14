@@ -2,7 +2,7 @@ import { createID } from 'utils/createID';
 import template from './Card.hbs';
 import { router } from 'modules/router';
 
-type CardConfig = {
+export type CardConfig = {
   id?: string;
   previewUrl?: string;
   url?: string;

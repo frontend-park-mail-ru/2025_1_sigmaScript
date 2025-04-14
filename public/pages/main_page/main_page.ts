@@ -1,28 +1,35 @@
 import Navbar from 'components/navbar/navbar.js';
 import Scroll from 'components/Scroll/Scroll';
-import MovieCard from 'components/Card/Card';
+import MovieCard, { CardConfig } from 'components/Card/Card';
 import { createID } from 'utils/createID.ts';
-import { BASE_URL } from 'public/consts.js';
+import { BASE_URL } from '../../consts.js';
 import { Footer } from 'components/Footer/Footer.ts';
-import { FOOTER_CONFIG } from 'public/consts.js';
+import { FOOTER_CONFIG } from '../../consts.js';
 import compilationTempl from './compilation.hbs';
 import { dispatcher } from 'flux/Dispatcher';
 import { GetDataActionTypes } from 'flux/ActionTypes';
-import { deserialize } from 'utils/Serialize';
-import { Urls } from 'public/modules/router.ts';
+
+import { Urls } from '../../modules/router.ts';
+import { MainPageConfig, MovieCollection } from 'types/main_page.types.ts';
+import { FooterData } from 'types/Footer.types.ts';
+import { ErrorWithDetails } from 'utils/fetch.ts';
 
 class MainPage {
-  #parent;
-  #config = {};
+  #parent: HTMLElement;
+  #config: MainPageConfig;
+  navbar: Navbar | null;
 
-  constructor(parent, config) {
+  constructor(parent: HTMLElement, config: MainPageConfig) {
     this.#parent = parent;
 
-    this.#config.id = config.id || 'main_page';
+    this.#config = {
+      id: config.id || 'main_page',
+      headerId: createID(),
+      contentId: createID(),
+      footerId: createID()
+    };
 
-    this.#config.headerId = createID();
-    this.#config.contentId = createID();
-    this.#config.footerId = createID();
+    this.navbar = null;
   }
 
   self() {
@@ -36,8 +43,8 @@ class MainPage {
     if (!this.self()) {
       return;
     }
-    this.self().remove();
-    this.navbar.destroy();
+    this.self()?.remove();
+    this.navbar?.destroy();
   }
 
   async GetCompilations() {
@@ -55,10 +62,21 @@ class MainPage {
 
       const compilations = await response.json();
       return { data: compilations, error: null };
-    } catch (error) {
-      console.error(error.message);
-      return { data: null, error: error.message };
+    } catch (error: unknown) {
+      console.error('Failed to post new movie review data:', error);
+      let errorMessage = null;
+      if (error instanceof ErrorWithDetails) {
+        errorMessage = error.errorDetails.error || error.message;
+      } else {
+        errorMessage = 'Не удалось отправить данные нового отзыва фильма';
+      }
+      return { data: null, error: errorMessage };
     }
+
+    // catch (error) {
+    //   console.error(error.message);
+    //   return { data: null, error: error.message };
+    // }
   }
 
   async render() {
@@ -89,7 +107,7 @@ class MainPage {
     mainElemContent.appendChild(compilationsElem);
 
     const compilationsData = await this.GetCompilations();
-    if (compilationsData.err) {
+    if (compilationsData.error) {
       dispatcher.dispatch({
         type: GetDataActionTypes.UNKNOWN_ERROR,
         payload: { error: compilationsData.error }
@@ -104,24 +122,36 @@ class MainPage {
       compilationElem.classList.add('compilation', 'flex-dir-col');
 
       compilationElem.insertAdjacentHTML(
-        'beforeEnd',
+        'beforeend',
         compilationTempl({
           title: key
         })
       );
 
-      compilationsElem.insertAdjacentElement('beforeEnd', compilationElem);
+      compilationsElem.insertAdjacentElement('beforeend', compilationElem);
       const scroll = new Scroll(compilationElem);
       scroll.render();
-      scroll.self().classList.add('compilation__scroll');
+      scroll.self()?.classList.add('compilation__scroll');
 
-      Object.values(compData).forEach((movie) => {
-        movie.url = `${Urls.movie}/${movie.id}`;
-        new MovieCard(scroll.getContentContainer(), deserialize(movie)).render();
+      Object.values(compData as MovieCollection).forEach((movie) => {
+        let movie_url = `${Urls.movie}/${movie.id}`;
+        let newCardConfig: CardConfig = {};
+
+        newCardConfig.id = String(movie.id);
+        newCardConfig.previewUrl = movie.preview_url;
+        newCardConfig.title = movie.title;
+        newCardConfig.url = movie_url;
+
+        const contentContainer = scroll.getContentContainer();
+
+        if (!contentContainer) {
+          return;
+        }
+        new MovieCard(contentContainer, newCardConfig).render();
       });
     }
 
-    const footer = new Footer(mainElem, FOOTER_CONFIG);
+    const footer = new Footer(mainElem, FOOTER_CONFIG as FooterData);
     footer.render();
   }
 }

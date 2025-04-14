@@ -12,7 +12,7 @@ import Navbar from 'components/navbar/navbar';
 
 import { Footer } from 'components/Footer/Footer';
 import { FOOTER_CONFIG } from '../../consts.js';
-import { Urls } from '../../modules/router';
+import { router, Urls } from '../../modules/router';
 import { FooterData } from 'types/Footer.types.js';
 import { postMovieReview } from 'flux/Actions.ts';
 import UserPageStore from 'store/UserPageStore.ts';
@@ -282,8 +282,7 @@ class MoviePage {
       const text = textarea.getValue();
 
       if (!rating || !UserPageStore.getState().userData?.username || text === undefined) {
-        // TODO error
-        console.log(`No user or data inside form: Rating: ${rating}, Text: ${text}`);
+        router.go('/auth');
         return;
       }
 

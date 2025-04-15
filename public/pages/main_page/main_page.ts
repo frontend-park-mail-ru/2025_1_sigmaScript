@@ -95,6 +95,10 @@ class MainPage {
     mainElemContent.id = this.#config.contentId;
     mainElem.appendChild(mainElemContent);
 
+    const promoElem = document.createElement('promo');
+    promoElem.classList += 'flex-dir-col promo';
+    mainElemContent.appendChild(promoElem);
+
     const compilationsElem = document.createElement('compilations');
     compilationsElem.classList += 'flex-dir-col compilations';
     mainElemContent.appendChild(compilationsElem);
@@ -109,6 +113,47 @@ class MainPage {
     }
 
     for (const key in compilationsData.data) {
+      if (key === 'promo') {
+        const promoData = compilationsData.data[key];
+        let cardWidth = '800';
+        let cardHeight = '500';
+
+        const promoCompilationElem = document.createElement('compilation');
+        promoCompilationElem.classList.add('compilation', 'flex-dir-col');
+
+        promoCompilationElem.insertAdjacentHTML(
+          'beforeend',
+          compilationTempl({
+            // title: key
+          })
+        );
+
+        promoElem.insertAdjacentElement('beforeend', promoCompilationElem);
+        const scroll = new Scroll(promoCompilationElem);
+        scroll.render();
+        scroll.self()?.classList.add('compilation__scroll');
+
+        Object.values(promoData as MovieCollection).forEach((movie) => {
+          let movie_url = `${Urls.movie}/${movie.id}`;
+          let newCardConfig: CardConfig = {};
+
+          newCardConfig.id = String(movie.id);
+          newCardConfig.previewUrl = movie.preview_url;
+          newCardConfig.title = movie.title;
+          newCardConfig.url = movie_url;
+          newCardConfig.width = cardWidth;
+          newCardConfig.height = cardHeight;
+
+          const contentContainer = scroll.getContentContainer();
+
+          if (!contentContainer) {
+            return;
+          }
+          new MovieCard(contentContainer, newCardConfig).render();
+        });
+
+        continue;
+      }
       const compData = compilationsData.data[key];
 
       const compilationElem = document.createElement('compilation');

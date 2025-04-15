@@ -36,6 +36,14 @@ module.exports = {
         use: [MiniCssExtractPlugin.loader, 'css-loader']
       },
       {
+        test: /\.scss$/,
+        use: [
+          'style-loader', // Injects CSS into the DOM
+          'css-loader',   // Interprets `@import` and `url()` like `import`/`require()` and resolves them
+          'sass-loader'
+        ]
+      },
+      {
         test: /\.(png|svg|jpg|webp|ico)$/,
         type: 'asset/resource',
         generator: {

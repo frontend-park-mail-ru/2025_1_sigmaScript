@@ -1,0 +1,39 @@
+.card-carousel {
+  position: relative;
+  overflow: hidden;
+
+  &__container {
+    display: flex;
+    transition: transform 0.3s ease-in-out;
+  }
+
+  &__item {
+    flex-shrink: 0;
+    /* Чтобы карточки не сжимались */
+    margin-right: 10px;
+    /* Отступ между карточками */
+
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+
+  &__button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    padding: 10px;
+
+    &--prev {
+      left: 10px;
+    }
+
+    &--next {
+      right: 10px;
+    }
+  }
+}

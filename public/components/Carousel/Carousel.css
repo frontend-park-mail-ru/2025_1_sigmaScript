@@ -1,0 +1,39 @@
+.card-carousel {
+  position: relative;
+  overflow: hidden;
+}
+
+.card-carousel__container {
+  display: flex;
+  transition: transform 0.3s ease-in-out;
+}
+
+.card-carousel__item {
+  flex-shrink: 0;
+  /* Чтобы карточки не сжимались */
+  margin-right: 10px;
+  /* Отступ между карточками */
+}
+
+.card-carousel__item:last-child {
+  margin-right: 0;
+}
+
+.card-carousel__button {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  padding: 10px;
+}
+
+.card-carousel__button--prev {
+  left: 10px;
+}
+
+.card-carousel__button--next {
+  right: 10px;
+}

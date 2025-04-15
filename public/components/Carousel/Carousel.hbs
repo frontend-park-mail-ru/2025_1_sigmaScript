@@ -1,4 +1,15 @@
-<div class="card-carousel" id="{{this.id}}">
-  <div class="card-carousel__content">
+<div class="carousel" id="{{ _id }}">
+  <div class="carousel__slider">
+    {{#each images}}
+    {{!-- <div class="carousel__slide" style="background-image: url('{{this}}');"></div> --}}
+    <a href="{{this.url}}" id="{{this.id}}">
+      <div class="card" style="width: {{ this.width }}px; height: {{ this.height }}px;">
+        <img src="{{this.previewUrl}}" alt="{{this.title}} card__preview" class="card__preview">
+      </div>
+      {{#if this.title}}
+      <div class="card__title" style="width: {{ this.width }}px;">{{this.title}}</div>
+      {{/if}}
+    </a>
+    {{/each}}
   </div>
 </div>

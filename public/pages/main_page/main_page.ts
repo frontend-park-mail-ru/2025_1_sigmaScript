@@ -115,6 +115,7 @@ class MainPage {
     for (const key in compilationsData.data) {
       if (key === 'promo') {
         const promoData = compilationsData.data[key];
+        // let promoDataArray = Object.values(promoData as MovieCollection);
         let cardWidth = '800';
         let cardHeight = '500';
 
@@ -124,7 +125,7 @@ class MainPage {
         promoCompilationElem.insertAdjacentHTML(
           'beforeend',
           compilationTempl({
-            // title: key
+            title: key
           })
         );
 

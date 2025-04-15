@@ -111,7 +111,7 @@ export class UserPage {
     if (!this.parentDefined()) {
       return;
     }
-
+    this.#parent.innerHTML = '';
     const mainElem = document.createElement('main');
     mainElem.id = this.#id;
     this.#parent.appendChild(mainElem);

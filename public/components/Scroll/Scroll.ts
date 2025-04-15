@@ -67,11 +67,34 @@ export class Scroll {
   /**
    * Рисует компонент на экран.
    */
-  render(): void {
+  async render(): Promise<void> {
     if (this.self()) {
       this.destroy();
     }
+
     this.#parent.innerHTML += template({ id: this.#id });
+  }
+
+  /**
+   * Скроллит вперед (вправо).
+   * @param {number} amount - расстояние прокрутки в пикселях
+   */
+  scrollForward(amount: number = 100): void {
+    const container = this.getContentContainer();
+    if (container) {
+      container.scrollBy(amount, 0);
+    }
+  }
+
+  /**
+   * Скроллит назад (влево).
+   * @param {number} amount - расстояние прокрутки в пикселях
+   */
+  scrollBackward(amount: number = 100): void {
+    const container = this.getContentContainer();
+    if (container) {
+      container.scrollBy({ left: -amount, behavior: 'smooth' });
+    }
   }
 }
 

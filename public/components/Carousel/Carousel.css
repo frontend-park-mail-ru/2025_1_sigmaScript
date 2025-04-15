@@ -1,3 +1,9 @@
+/* *,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
 .card-carousel {
   position: relative;
   overflow: hidden;
@@ -10,9 +16,8 @@
 
 .card-carousel__item {
   flex-shrink: 0;
-  /* Чтобы карточки не сжимались */
+
   margin-right: 10px;
-  /* Отступ между карточками */
 }
 
 .card-carousel__item:last-child {
@@ -20,20 +25,40 @@
 }
 
 .card-carousel__button {
+  all: unset;
+  display: block;
   position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  background: none;
-  border: none;
-  font-size: 20px;
+  padding: 1rem;
   cursor: pointer;
-  padding: 10px;
+
+  height: 100%;
+
+  transition: background-color 100ms ease-out;
 }
 
-.card-carousel__button--prev {
-  left: 10px;
+.card-carousel__button:hover {
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+.card-carousel__button>* {
+  stroke: white;
+  fill: black;
 }
 
 .card-carousel__button--next {
-  right: 10px;
+  left: 0;
 }
+
+.card-carousel__button--prev {
+  right: 0;
+}
+
+.carousel__slider {
+  display: flex;
+  flex-direction: row;
+
+  overflow: hidden;
+  width: 400px;
+
+  position: relative;
+} */

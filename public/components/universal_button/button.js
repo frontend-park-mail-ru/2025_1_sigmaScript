@@ -1,3 +1,4 @@
+import { createID } from 'utils/createID';
 import template from './button.hbs';
 
 /**
@@ -33,7 +34,7 @@ class Button {
   constructor(parent, config) {
     this.#parent = parent;
 
-    this.#config.id = config.id || 'btn';
+    this.#config.id = config.id + createID() || 'btn' + createID();
     this.#config.color = config.color || 'primary';
     this.#config.disabled = config.disabled || false;
     this.#config.form = config.form;

@@ -9,6 +9,7 @@ export type CardConfig = {
   title?: string;
   width?: string;
   height?: string;
+  text?: string;
 };
 
 export class MovieCard {

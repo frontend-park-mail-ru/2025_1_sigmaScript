@@ -1,5 +1,7 @@
 import './Carousel.scss';
-import template from './Carousel.handlebars';
+import template from './Carousel.hbs';
+import { createID } from 'utils/createID.ts';
+// import { CardConfig } from 'components/Card/Card';
 
 /**
  * Карусель изображений
@@ -14,11 +16,12 @@ import template from './Carousel.handlebars';
  * @returns
  */
 export const Carousel = (parent, config) => {
-  config.images = config.images || [];
+  config.images = config.images || []; // CardConfig type
   config.current = config.current || 0;
   config.visibleCount = config.visibleCount || 3;
   config.outbound = config.outbound || false;
   config.onSlideChange = config.onSlideChange || (() => {});
+  config._id = config._id || createID();
 
   const self = () => {
     return parent.querySelector('.carousel');

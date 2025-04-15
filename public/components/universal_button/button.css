@@ -8,7 +8,9 @@
 
     height: var(--navbar-elements-height);
     border-radius: 25px;
-    border: none;
+    border: solid;
+    border-width: 1px;
+    border-color: var(--transparent-element);
 
     cursor: pointer;
 }

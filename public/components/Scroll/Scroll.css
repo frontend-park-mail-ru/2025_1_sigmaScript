@@ -2,7 +2,7 @@
   width: 100%;
   overflow-x: auto;
   overflow-y: hidden;
-  scrollbar-color: var(--background-color) var(--background-color-light); 
+  scrollbar-color: var(--background-color) var(--background-color-light);
 }
 
 .scroll::-webkit-scrollbar-thumb:hover {
@@ -10,11 +10,29 @@
 }
 
 .scroll__content {
-  display: flex; 
+  display: flex;
   gap: 15px;
   padding: 10px 5px;
 }
 
-.scroll__content > * {
+.scroll__content {
+  overflow-x: auto;
+  white-space: nowrap;
+  /* If children are inline or inline-block */
+}
+
+.scroll__content>* {
   flex-shrink: 0;
+}
+
+.scroll-forward-button {
+  background-color: blueviolet;
+  width: 30px;
+  height: 20px;
+}
+
+.scroll-backward-button {
+  background-color: blueviolet;
+  width: 30px;
+  height: 20px;
 }

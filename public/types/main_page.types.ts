@@ -9,6 +9,7 @@ export type MovieDataJSON = {
   id: number;
   title: string;
   preview_url: string;
+  duration?: string;
 };
 
 export type MovieCollection = MovieDataJSON[];

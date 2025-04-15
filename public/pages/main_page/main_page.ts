@@ -17,7 +17,7 @@ import { ErrorWithDetails } from 'utils/fetch.ts';
 class MainPage {
   #parent: HTMLElement;
   #config: MainPageConfig;
-  navbar: Navbar | null;
+  #navbar: Navbar | null;
 
   constructor(parent: HTMLElement, config: MainPageConfig) {
     this.#parent = parent;
@@ -29,7 +29,7 @@ class MainPage {
       footerId: createID()
     };
 
-    this.navbar = null;
+    this.#navbar = null;
   }
 
   self() {
@@ -44,7 +44,7 @@ class MainPage {
       return;
     }
     this.self()?.remove();
-    this.navbar?.destroy();
+    this.#navbar?.destroy();
   }
 
   async GetCompilations() {
@@ -72,16 +72,9 @@ class MainPage {
       }
       return { data: null, error: errorMessage };
     }
-
-    // catch (error) {
-    //   console.error(error.message);
-    //   return { data: null, error: error.message };
-    // }
   }
 
   async render() {
-    // this.destroy();
-
     this.#parent.innerHTML = '';
 
     const mainElem = document.createElement('main');
@@ -94,7 +87,7 @@ class MainPage {
     mainElem.appendChild(mainElemHeader);
 
     const nav = new Navbar(mainElemHeader);
-    this.navbar = nav;
+    this.#navbar = nav;
     nav.render();
 
     const mainElemContent = document.createElement('div');

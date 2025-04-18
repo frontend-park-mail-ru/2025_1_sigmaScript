@@ -122,12 +122,7 @@ class MainPage {
         const promoCompilationElem = document.createElement('compilation');
         promoCompilationElem.classList.add('compilation', 'flex-dir-col');
 
-        promoCompilationElem.insertAdjacentHTML(
-          'beforeend',
-          compilationTempl({
-            title: key
-          })
-        );
+        promoCompilationElem.insertAdjacentHTML('beforeend', compilationTempl());
 
         promoElem.insertAdjacentElement('beforeend', promoCompilationElem);
         const scroll = new Scroll(promoCompilationElem);

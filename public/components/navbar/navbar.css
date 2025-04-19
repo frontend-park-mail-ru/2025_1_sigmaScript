@@ -99,6 +99,8 @@
 }
 
 .login_modal .modal_content {
-    min-width: 20%;
-    min-height: 25%
-  }
+    min-width: 25%;
+    max-width: 25%;
+    min-height: 30%;
+    max-height: 30%;
+}

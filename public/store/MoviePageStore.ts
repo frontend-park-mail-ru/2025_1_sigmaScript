@@ -70,7 +70,6 @@ class MoviePageStore {
 
           movieDataLoaded(movieData as MovieData);
         } catch (error: unknown) {
-          console.error('Failed to load movie data:', error);
           const errorMessage =
             error instanceof ErrorWithDetails
               ? error.errorDetails.error || error.message
@@ -90,7 +89,6 @@ class MoviePageStore {
           const reviewData = deserialize(response.body) as Reviews;
           movieReviewsDataLoaded(reviewData);
         } catch (error: unknown) {
-          console.error('Failed to load movie reviews data:', error);
           const errorMessage =
             error instanceof ErrorWithDetails
               ? error.errorDetails.error || error.message
@@ -147,13 +145,10 @@ class MoviePageStore {
           await request({ url: url, method: 'POST', body, credentials: true });
 
           loadMovieReviewsData(this.state.movieId);
-        } catch (error: unknown) {
-          console.error('Failed to post new movie review data:', error);
-          const errorMessage =
-            error instanceof ErrorWithDetails
-              ? error.errorDetails.error || error.message
-              : 'Не удалось отправить данные нового отзыва фильма';
-          movieDataError(errorMessage);
+        } catch {
+          const errorMessage = 'Не удалось отправить данные нового отзыва фильма';
+          // movieDataError(errorMessage);
+          alert(errorMessage);
         }
         break;
 

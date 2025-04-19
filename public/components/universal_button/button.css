@@ -18,7 +18,8 @@
 .u_button:hover {
     border: solid;
     border-width: 1px;
-    border-color: var(--primary-text-color);
+    border-color: #72757E;
+    /* border-color: var(--primary-text-color); */
 }
 
 .u_button:disabled {
@@ -26,10 +27,9 @@
     cursor: default;
 }
 
-.u_button:focus {
+.u_button:active {
     border-color: var(--primary-color);
-    border-width: 3px;
-
+    border-width: 2px;
     outline: none;
 }
 

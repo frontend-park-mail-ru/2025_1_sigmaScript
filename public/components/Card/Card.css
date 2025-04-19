@@ -29,4 +29,10 @@
   font-size: 1.4rem;
   color: var(--primary-text-color);
   text-align: center;
+
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  white-space: pre-line;
+  width: 100%;
+  overflow: visible; 
 }

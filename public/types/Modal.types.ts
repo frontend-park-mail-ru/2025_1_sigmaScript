@@ -20,4 +20,6 @@ export type UniversalModalConfig = {
   buttons?: ButtonConfig[];
   onConfirm?: () => void;
   onCancel?: () => void;
+  addClasses?: string[];
+  abc?: string;
 };

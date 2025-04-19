@@ -7,6 +7,7 @@ type TextareaConfig = {
   name?: string;
   placeholder?: string;
   addClasses?: string[];
+  maxlength?: number;
 };
 
 type InternalTextareaConfig = {
@@ -14,6 +15,7 @@ type InternalTextareaConfig = {
   text: string;
   name: string;
   placeholder: string;
+  maxlength: number;
 };
 
 class Textarea {
@@ -43,7 +45,8 @@ class Textarea {
       id: config.id || createID(),
       name: config.name || 'noname_textarea',
       text: config.text || '',
-      placeholder: config.placeholder || ''
+      placeholder: config.placeholder || '',
+      maxlength: config.maxlength || 500
     };
     this.#addClasses = config.addClasses || [];
   }

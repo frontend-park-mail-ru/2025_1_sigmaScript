@@ -167,35 +167,36 @@ class MoviePage {
       }).render();
     }
 
-    if (movieButtons) {
-      new Button(movieButtons, {
-        id: 'button--trailer-' + createID(),
-        type: 'button',
-        text: 'Трейлер',
-        addClasses: ['movie__button'],
-        srcIcon: '/static/svg/play.svg',
-        actions: {
-          click: () => {
-            // TODO
-            console.log(`Play trailer for movie ${movie.id}`);
-          }
-        }
-      }).render();
+    // TODO
+    // if (movieButtons) {
+    //   new Button(movieButtons, {
+    //     id: 'button--trailer-' + createID(),
+    //     type: 'button',
+    //     text: 'Трейлер',
+    //     addClasses: ['movie__button'],
+    //     srcIcon: '/static/svg/play.svg',
+    //     actions: {
+    //       click: () => {
+    //         // TODO
+    //         console.log(`Play trailer for movie ${movie.id}`);
+    //       }
+    //     }
+    //   }).render();
 
-      new Button(movieButtons, {
-        id: 'button--favourite-' + createID(),
-        type: 'button',
-        text: 'Любимое',
-        addClasses: ['movie__button'],
-        srcIcon: '/static/svg/favourite.svg',
-        actions: {
-          click: () => {
-            // TODO
-            console.log(`Toggle favourite for movie ${movie.id}`);
-          }
-        }
-      }).render();
-    }
+    //   new Button(movieButtons, {
+    //     id: 'button--favourite-' + createID(),
+    //     type: 'button',
+    //     text: 'Любимое',
+    //     addClasses: ['movie__button'],
+    //     srcIcon: '/static/svg/favourite.svg',
+    //     actions: {
+    //       click: () => {
+    //         // TODO
+    //         console.log(`Toggle favourite for movie ${movie.id}`);
+    //       }
+    //     }
+    //   }).render();
+    // }
 
     if (ratingElement) {
       new Button(ratingElement, {

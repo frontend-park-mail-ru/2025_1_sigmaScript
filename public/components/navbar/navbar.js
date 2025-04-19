@@ -123,7 +123,8 @@ class Navbar {
           cancelText: 'Нет',
           onConfirm: () => {
             logout();
-          }
+          },
+          addClasses: ['login_modal']
         });
 
         modal.render();

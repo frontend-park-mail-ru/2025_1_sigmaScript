@@ -56,10 +56,9 @@ class UserPageStore {
           this.state.userData = userData;
 
           updateUserPage(userData);
-        } catch (error) {
+        } catch {
           // TODO: пофиксить ошибку
           // console.log(error.errorDetails.error || 'Unknown error');
-          console.log(error || 'Unknown error');
           noSession();
         }
         break;
@@ -75,10 +74,9 @@ class UserPageStore {
           await request({ url: url, method: 'POST', body, credentials: true });
 
           getUser();
-        } catch (error) {
+        } catch {
           // TODO: пофиксить ошибку
           // console.log(error.errorDetails.error);
-          console.log(error);
         }
         break;
       case UserPageTypes.LOGOUT_USER:
@@ -86,10 +84,9 @@ class UserPageStore {
         try {
           const url = AUTH_URL + 'logout';
           await request({ url: url, method: 'POST', credentials: true });
-        } catch (error) {
+        } catch {
           // TODO: пофиксить ошибку
           // console.log(error.errorDetails.error);
-          console.log(error);
         }
         break;
       case UserPageTypes.UPDATE_USER_AVATAR:
@@ -107,10 +104,9 @@ class UserPageStore {
           });
 
           getUser();
-        } catch (error) {
+        } catch {
           // TODO: пофиксить ошибку
           // console.log(error.errorDetails.error);
-          console.log(error);
         }
         break;
       default:

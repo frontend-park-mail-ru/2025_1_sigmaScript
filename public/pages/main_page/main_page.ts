@@ -63,7 +63,6 @@ class MainPage {
       const compilations = await response.json();
       return { data: compilations, error: null };
     } catch (error: unknown) {
-      console.error('Failed to post new movie review data:', error);
       let errorMessage = null;
       if (error instanceof ErrorWithDetails) {
         errorMessage = error.errorDetails.error || error.message;

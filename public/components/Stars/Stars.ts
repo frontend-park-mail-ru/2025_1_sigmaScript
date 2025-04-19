@@ -33,7 +33,7 @@ export class Stars {
     this.#config = {
       id: config.id || createID(),
       starsRange: config.starsRange || [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-      initialRating: config.initialRating || 0
+      initialRating: config.initialRating || 5
     };
     this.#currentRating = this.#config.initialRating!;
   }
@@ -153,7 +153,7 @@ export class Stars {
       }
     });
 
-    this.#rating.textContent = rating > 0 ? rating.toString() : '–';
+    this.#rating.textContent = rating > 0 ? rating.toString() : '0';
   }
 
   /**

@@ -56,8 +56,7 @@ export const serializeTimeZToHumanTimeAndYearsOld = (timeString: string): string
     const yearsString = `${years} ${pluralizeYears(years)}`;
 
     return `${formattedDateWithoutYear} ${date.getFullYear()}, ${yearsString}`;
-  } catch (error) {
-    console.error('Ошибка при обработке строки времени:', error);
+  } catch {
     return 'Ошибка при обработке времени';
   }
 };
@@ -98,7 +97,6 @@ export const serializeTimeZToHumanTime = (timeString: string): string => {
 
     return `${formattedDate} в ${formattedTime}`;
   } catch (error) {
-    console.error('Ошибка при обработке строки времени:', error);
     return 'Ошибка при обработке времени';
   }
 };

@@ -143,6 +143,7 @@ export class UserPage {
               message: 'Измените логин и/или пароль',
               confirmText: 'Сохранить',
               cancelText: 'Отмена',
+              addClasses: ['user-page_modal'],
               inputs: [
                 {
                   id: 'loginInput',
@@ -178,9 +179,9 @@ export class UserPage {
                 updateUser({ username, oldPassword, newPassword, repeatedNewPassword });
               }
             });
-
             modal.render();
             modal.open();
+            // modal.self()?.classList.add('user-page_modal');
           }
         }
       };
@@ -257,6 +258,7 @@ export class UserPage {
               message: 'Измените логин и/или пароль',
               confirmText: 'Сохранить',
               cancelText: 'Отмена',
+              addClasses: ['user-page_modal'],
               inputs: [
                 {
                   id: 'loginInput',

@@ -10,6 +10,7 @@ class UniversalModal {
   #config: UniversalModalConfig;
   #inputs: Record<string, Input>;
   #actions: { onConfirm: () => void; onCancel: () => void } = { onConfirm: () => {}, onCancel: () => {} };
+  #addClasses: string[];
   #nofunc = () => {};
 
   constructor(parent: HTMLElement, config: UniversalModalConfig) {
@@ -24,6 +25,8 @@ class UniversalModal {
       buttons: config.buttons || []
     };
 
+    this.#addClasses = config.addClasses || [];
+
     this.#inputs = {};
 
     this.#actions.onConfirm = config.onConfirm || this.#nofunc;
@@ -32,6 +35,13 @@ class UniversalModal {
 
   self(): HTMLElement | null {
     return document.getElementById(this.#config.id!);
+  }
+
+  #applyClasses(): void {
+    const self = this.self();
+    if (self && this.#addClasses.length > 0) {
+      self.classList.add(...this.#addClasses);
+    }
   }
 
   render(): void {
@@ -52,7 +62,8 @@ class UniversalModal {
                 this.#actions.onConfirm();
                 this.destroy();
               }
-            }
+            },
+            addClasses: ['modal_button']
           });
           confirmBtn.render();
         }
@@ -71,7 +82,8 @@ class UniversalModal {
                 this.#actions.onCancel();
                 this.destroy();
               }
-            }
+            },
+            addClasses: ['modal_button']
           });
           cancelBtn.render();
         }
@@ -100,6 +112,7 @@ class UniversalModal {
     }
 
     this.#applyActions();
+    this.#applyClasses();
   }
 
   getInputByName(name: string): Input {

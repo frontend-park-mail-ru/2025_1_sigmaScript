@@ -145,7 +145,6 @@ class Router {
         return { method: '/', id: undefined }; // Empty or root path
       }
     } catch (error) {
-      console.error('Invalid URL:', error);
       return { method: '/', id: undefined };
     }
   }

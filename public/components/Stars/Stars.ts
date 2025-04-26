@@ -1,10 +1,17 @@
 import { createID } from 'utils/createID';
 import template from './Stars.hbs';
+import DOMPurify from 'dompurify';
+
+type StarsElement = {
+  sign: string | number;
+  svg: string;
+};
 
 type StarsConfig = {
   id?: string;
-  starsRange?: number[];
+  starsRange?: StarsElement[];
   initialRating?: number;
+  withInfo?: boolean;
 };
 
 export class Stars {
@@ -29,13 +36,43 @@ export class Stars {
    * new Stars(parent, config).render();
    */
   constructor(parent: HTMLElement, config: StarsConfig = {}) {
+    const defaultStarSVG: string = `<svg viewBox="0 0 24 24">
+      <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+    </svg>`;
+    console.log(config.initialRating);
+    console.log(config.initialRating || 5);
     this.#parent = parent;
     this.#config = {
       id: config.id || createID(),
-      starsRange: config.starsRange || [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-      initialRating: config.initialRating || 5
+      starsRange:
+        this.#sanitizeSVG(config.starsRange) ||
+        this.#sanitizeSVG([
+          { sign: 1, svg: defaultStarSVG },
+          { sign: 2, svg: defaultStarSVG },
+          { sign: 3, svg: defaultStarSVG },
+          { sign: 4, svg: defaultStarSVG },
+          { sign: 5, svg: defaultStarSVG },
+          { sign: 6, svg: defaultStarSVG },
+          { sign: 7, svg: defaultStarSVG },
+          { sign: 8, svg: defaultStarSVG },
+          { sign: 9, svg: defaultStarSVG },
+          { sign: 10, svg: defaultStarSVG }
+        ]),
+      initialRating: config.initialRating || config.initialRating === 0 ? config.initialRating : 5,
+      withInfo: config.withInfo === false ? false : true
     };
     this.#currentRating = this.#config.initialRating!;
+  }
+
+  #sanitizeSVG(elements: StarsElement[] | undefined): StarsElement[] | undefined {
+    if (!elements) {
+      return undefined;
+    }
+    let sanitizedElems: StarsElement[] = [];
+    for (const element of elements) {
+      sanitizedElems.push({ sign: element.sign, svg: DOMPurify.sanitize(element.svg) });
+    }
+    return sanitizedElems;
   }
 
   /**
@@ -138,22 +175,35 @@ export class Stars {
   #updateDisplay(rating: number): void {
     if (!this.#stars || !this.#rating) return;
 
-    const activeColor = this.#getRatingColor(rating);
+    if (this.#config.withInfo) {
+      const activeColor = this.#getRatingColor(rating);
 
-    this.#stars.forEach((star: SVGElement) => {
-      const starValue = parseInt(star.dataset.value || '0', 10);
-      if (isNaN(starValue)) return;
-      const isColored = starValue <= rating;
-      if (isColored) {
-        star.style.fill = activeColor;
-        star.classList.add('stars__star_highlighted');
-      } else {
-        star.style.fill = '#ccc';
-        star.classList.remove('stars__star_highlighted');
-      }
-    });
+      this.#stars.forEach((star: SVGElement) => {
+        const starValue = parseInt(star.dataset.value || '0', 10);
+        if (isNaN(starValue)) return;
+        const isColored = starValue <= rating;
+        if (isColored) {
+          star.style.fill = activeColor;
+          star.classList.add('stars__star_highlighted');
+        } else {
+          star.style.fill = '#ccc';
+          star.classList.remove('stars__star_highlighted');
+        }
+      });
 
-    this.#rating.textContent = rating > 0 ? rating.toString() : '0';
+      this.#rating.textContent = rating > 0 ? rating.toString() : '0';
+    } else {
+      this.#stars.forEach((star: SVGElement) => {
+        const starValue = parseInt(star.dataset.value || '0', 10);
+        if (isNaN(starValue)) return;
+        const isColored = starValue === rating;
+        if (isColored) {
+          star.classList.add('stars__star_highlighted', 'stars__NPS_highlighted');
+        } else {
+          star.classList.remove('stars__star_highlighted', 'stars__NPS_highlighted');
+        }
+      });
+    }
   }
 
   /**
@@ -207,3 +257,13 @@ export class Stars {
 }
 
 export default Stars;
+
+export function getNPS(): Stars {
+  const SVG = [];
+  for (let i = 1; i <= 10; i++) {
+    const sign = i;
+    const svg = `<div class="stars__NPS-element">${i}</div>`;
+    SVG.push({ sign: sign, svg: svg });
+  }
+  return new Stars(root, { starsRange: SVG, initialRating: 0, withInfo: false });
+}

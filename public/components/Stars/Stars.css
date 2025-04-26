@@ -7,16 +7,17 @@
   justify-content: center;
   align-items: center;
   cursor: pointer;
+  gap: 3px;
 }
 
 .stars__star {
   width: 35px;
   height: 35px;
-  transition: fill 0.15s ease-in-out, transform 0.1s ease-in-out;
+  transition: fill 0.1s ease-in-out, transform 0.1s ease-in-out;
 }
 
 .stars__star_highlighted {
-  transform: scale(1.2);
+  transform: scale(1.1);
 }
 
 .stars__rating-container {
@@ -28,4 +29,26 @@
 
 .stars__rating {
   font-weight: 600;
+}
+
+.stars__NPS-element {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: 35px;
+  height: 40px;
+  background-color: inherit;
+  border: solid;
+  border-width: 1px;
+  border-radius: 8px;
+  color: var(--text-field-border-color);
+  font-size: 20px;
+}
+
+.stars__NPS-element:hover {
+  color: #FFFFFE
+}
+
+.stars__NPS_highlighted .stars__NPS-element {
+  color: #FFFFFE;
 }

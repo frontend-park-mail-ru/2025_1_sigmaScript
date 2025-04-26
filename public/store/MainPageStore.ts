@@ -9,6 +9,7 @@ import MainPage from 'pages/main_page/main_page';
 import { createID } from 'utils/createID';
 import { initialStore } from './InitialStore';
 import { MainPageConfig } from 'types/main_page.types';
+import { renderCsat } from 'flux/Actions';
 
 class MainPageStore {
   private state: AuthState;
@@ -35,6 +36,12 @@ class MainPageStore {
   }
 
   private renderMain() {
+    setTimeout(
+      () => {
+        renderCsat();
+      },
+      1000 * 60 * 10
+    );
     const rootElement = document.getElementById('root');
     if (!rootElement) {
       return;

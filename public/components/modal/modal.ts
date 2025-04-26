@@ -4,6 +4,7 @@ import Input from 'components/universal_input/input';
 import Button from 'components/universal_button/button.js';
 import { UniversalModalConfig, InputConfig } from 'types/Modal.types';
 import { ButtonConfig } from 'types/UserPage.types';
+import Stars, { getNPS } from 'components/Stars/Stars';
 
 class UniversalModal {
   #parent: HTMLElement;
@@ -11,6 +12,7 @@ class UniversalModal {
   #inputs: Record<string, Input>;
   #actions: { onConfirm: () => void; onCancel: () => void } = { onConfirm: () => {}, onCancel: () => {} };
   #addClasses: string[];
+  #stars: Stars | null;
   #nofunc = () => {};
 
   constructor(parent: HTMLElement, config: UniversalModalConfig) {
@@ -22,9 +24,11 @@ class UniversalModal {
       confirmText: config.confirmText !== undefined ? config.confirmText : 'Да',
       cancelText: config.cancelText !== undefined ? config.cancelText : 'Нет',
       inputs: config.inputs || [],
-      buttons: config.buttons || []
+      buttons: config.buttons || [],
+      stars: config.stars || false
     };
 
+    this.#stars = null;
     this.#addClasses = config.addClasses || [];
 
     this.#inputs = {};
@@ -88,6 +92,15 @@ class UniversalModal {
           cancelBtn.render();
         }
       }
+
+      if (this.#config.stars) {
+        const starsContainer = document.querySelector<HTMLElement>('.stars');
+        if (starsContainer) {
+          this.#stars = new Stars(starsContainer, {});
+          this.#stars.render();
+          // getNPS(starsContainer).render();
+        }
+      }
     }
 
     if (this.#config.inputs && this.#config.inputs.length > 0) {
@@ -113,6 +126,14 @@ class UniversalModal {
 
     this.#applyActions();
     this.#applyClasses();
+  }
+
+  getRating(): number | undefined {
+    if (this.#config.stars) {
+      return this.#stars?.currentRating;
+    }
+
+    return undefined;
   }
 
   getInputByName(name: string): Input {

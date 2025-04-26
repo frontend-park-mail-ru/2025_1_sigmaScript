@@ -22,4 +22,5 @@ export type UniversalModalConfig = {
   onCancel?: () => void;
   addClasses?: string[];
   abc?: string;
+  stars: boolean;
 };

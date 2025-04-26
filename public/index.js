@@ -7,6 +7,7 @@ import 'store/PersonPageStore';
 import 'store/MoviePageStore';
 import 'store/UserPageStore';
 import 'store/NavbarStore';
+import 'store/CsatStore';
 
 import { router } from 'public/modules/router';
 

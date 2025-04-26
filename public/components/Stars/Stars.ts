@@ -258,12 +258,12 @@ export class Stars {
 
 export default Stars;
 
-export function getNPS(): Stars {
+export function getNPS(parent: HTMLElement): Stars {
   const SVG = [];
   for (let i = 1; i <= 10; i++) {
     const sign = i;
     const svg = `<div class="stars__NPS-element">${i}</div>`;
     SVG.push({ sign: sign, svg: svg });
   }
-  return new Stars(root, { starsRange: SVG, initialRating: 0, withInfo: false });
+  return new Stars(parent, { starsRange: SVG, initialRating: 0, withInfo: false });
 }

@@ -6,7 +6,8 @@ export const Urls = {
   auth: '/auth',
   movie: '/movie',
   person: '/name',
-  profile: '/profile'
+  profile: '/profile',
+  csat: '/csat'
 };
 
 type lastScrollState = {
@@ -44,6 +45,9 @@ export const handler = (args: handlerInput) => {
       break;
     case Urls.profile:
       RenderActions.renderProfilePage(args.data);
+      break;
+    case Urls.csat:
+      RenderActions.renderCsatPage();
       break;
     default:
       window.location.pathname = '/';

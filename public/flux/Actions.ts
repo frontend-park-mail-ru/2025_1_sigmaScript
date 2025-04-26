@@ -97,6 +97,11 @@ export const RenderActions = {
       type: RenderActionTypes.RENDER_PROFILE_PAGE,
       payload: userData
     });
+  },
+  renderCsatPage() {
+    dispatcher.dispatch({
+      type: RenderActionTypes.RENDER_CSAT_PAGE
+    });
   }
 };
 
@@ -136,5 +141,11 @@ export function logoutUser() {
 export function noSession() {
   dispatcher.dispatch({
     type: UserPageTypes.NO_SESSION
+  });
+}
+
+export function renderCsat() {
+  dispatcher.dispatch({
+    type: RenderActionTypes.RENDER_CSAT
   });
 }

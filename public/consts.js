@@ -1,4 +1,5 @@
 export const BACKEND_PORT = 8080;
+export const FRONTEND_PORT = 3000;
 // export const HOST = '217.16.20.177';
 export const HOST = 'localhost';
 export const AUTH_URL = `http://${HOST}:${BACKEND_PORT}/auth/`;
@@ -28,6 +29,7 @@ export const ERRORS = {
   ErrNotFound: 'not_found'
 };
 export const BASE_URL = `http://${HOST}:${BACKEND_PORT}/`;
+export const FRONT_URL = `http://${HOST}:${FRONTEND_PORT}/`;
 
 export const ERROR_HANDLERS = {
   [ERRORS.ErrAlreadyExistsShort]: (context) => context.showError(context.loginInput, 'Вы уже зарегистрированы'),

@@ -11,7 +11,8 @@ import {
   movieDataError,
   loadMovieData,
   movieReviewsDataLoaded,
-  loadMovieReviewsData
+  loadMovieReviewsData,
+  renderCsat
 } from 'flux/Actions';
 
 import { MOVIE_URL, MOVIE_REVIEWS_PATH } from 'public/consts';
@@ -150,8 +151,9 @@ class MoviePageStore {
           // movieDataError(errorMessage);
           alert(errorMessage);
         }
-        break;
 
+        renderCsat();
+        break;
       default:
         break;
     }

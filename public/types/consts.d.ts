@@ -11,6 +11,7 @@ declare module 'public/consts' {
   export const FRONT_URL: string;
   export const PERSON_URL: string;
   export const MOVIE_URL: string;
+  export const STATS_URL: string;
   export const MOVIE_REVIEWS_PATH: string;
 
   export interface Destroyable {

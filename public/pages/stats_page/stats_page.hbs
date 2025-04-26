@@ -1,0 +1,28 @@
+<div class="stats-page__content flex-dir-col">
+  <div class="stats-page__info flex-dir-row">
+    <div class="stats-page__avg-rating">Средний рейтинг: {{ this.statistic.averageRating }}</div>
+    <div class="stats-page__reviews-count">Количество оценок: {{ this.statistic.reviewsCount }}</div>
+  </div>
+  <div class="stats-page__reviews flex-dir-col">
+    {{#each this.reviews}}
+        <div class="review-card flex-dir-col flex-start">
+          <div class="review-card__header flex-dir-row">
+            <div class="header__rating flex-dir-row movie-page__header">
+              <img class="review-card__star" src="/static/svg/star.svg" alt="star">
+              <div class="review-card__rating">{{ score }}</div>
+            </div>
+            <div class="review-card__info flex-dir-row flex-center">
+              <div class="review-card__user flex-dir-row">
+                <div class="review-card__name"><b> {{ user.login }} </b></div>
+                <img class="review-card__avatar" src="{{#if user.avatar}} {{ user.avatar }} {{else}} /static/svg/Avatar large.svg {{/if}}" alt="avatar">
+              </div>
+              <div class="review-card__date">{{ createdAt }}</div>
+            </div>
+          </div>
+          <div class="review-card__text">{{ csatText }}</div>
+        </div>
+      {{else}}
+        <p>Отзывов пока нет. Будьте первым!</p>
+      {{/each}}
+    </div>
+</div>

@@ -1,7 +1,14 @@
 import { dispatcher } from 'flux/Dispatcher';
-import { LoginActionTypes, RenderActionTypes, UserPageTypes, MovieActionTypes } from 'flux/ActionTypes';
+import {
+  LoginActionTypes,
+  RenderActionTypes,
+  UserPageTypes,
+  MovieActionTypes,
+  StatsActionTypes
+} from 'flux/ActionTypes';
 import { UpdateUserData, UserData } from 'types/UserPage.types';
 import { MovieData, NewReviewDataJSON, Reviews } from 'types/movie_page.types';
+import { CSATStatisticDataJSON } from 'types/stats_page.types';
 
 export function loginSubmit(username: string, password: string) {
   dispatcher.dispatch({
@@ -86,6 +93,11 @@ export const RenderActions = {
       payload: id
     });
   },
+  renderStatsPage() {
+    dispatcher.dispatch({
+      type: RenderActionTypes.RENDER_STATS_PAGE
+    });
+  },
   renderPersonPage(id: number | string) {
     dispatcher.dispatch({
       type: RenderActionTypes.RENDER_PERSON_PAGE,
@@ -143,9 +155,28 @@ export function noSession() {
     type: UserPageTypes.NO_SESSION
   });
 }
-
 export function renderCsat() {
   dispatcher.dispatch({
     type: RenderActionTypes.RENDER_CSAT
+  });
+}
+
+export function statsDataLoaded(data: CSATStatisticDataJSON) {
+  dispatcher.dispatch({
+    type: StatsActionTypes.STATS_DATA_LOADED,
+    payload: data
+  });
+}
+
+export function statsDataError(error: string) {
+  dispatcher.dispatch({
+    type: StatsActionTypes.STATS_DATA_ERROR,
+    payload: error
+  });
+}
+
+export function loadStatsData() {
+  dispatcher.dispatch({
+    type: StatsActionTypes.LOAD_STATS_DATA
   });
 }

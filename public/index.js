@@ -8,6 +8,7 @@ import 'store/MoviePageStore';
 import 'store/UserPageStore';
 import 'store/NavbarStore';
 import 'store/CsatStore';
+import 'store/StatsPageStore';
 
 import { router } from 'public/modules/router';
 

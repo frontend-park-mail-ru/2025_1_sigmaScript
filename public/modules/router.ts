@@ -7,6 +7,7 @@ export const Urls = {
   movie: '/movie',
   person: '/name',
   profile: '/profile',
+  stats: '/csat/statistic',
   csat: '/csat'
 };
 
@@ -42,6 +43,9 @@ export const handler = (args: handlerInput) => {
       } else {
         router.go(Urls.root);
       }
+      break;
+    case Urls.stats:
+      RenderActions.renderStatsPage();
       break;
     case Urls.profile:
       RenderActions.renderProfilePage(args.data);

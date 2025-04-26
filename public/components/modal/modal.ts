@@ -153,6 +153,7 @@ class UniversalModal {
     const closeBtn = modalElem.querySelector('.modal_close');
     if (closeBtn) {
       closeBtn.addEventListener('click', () => {
+        this.#actions.onCancel();
         this.destroy();
       });
     }

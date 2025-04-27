@@ -17,7 +17,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-} 
+}
 
 .modal_content {
   background: var(--background-color);
@@ -26,15 +26,11 @@
   min-height: 30rem;
   max-width: 60rem;
   max-height: 40rem;
-  /* padding: 2.5rem; */
   border-radius: 25px;
-  /* min-width: 25rem;
-  max-width: 40rem;
-  min-height: 35rem;
-  width: 90%; */
+
   box-shadow: 0 0.1rem 0.6rem rgba(0, 0, 0, 0.3);
   position: relative;
-  justify-content:space-around;
+  justify-content: space-around;
   align-items: center;
 }
 
@@ -58,18 +54,15 @@
   font-size: 2rem;
   font-weight: bold;
   color: var(--primary-text-color);
-  /* margin-bottom: 1.25rem; */
 }
 
 .modal_content__message {
   color: var(--primary-text-color);
   font-size: 2rem;
   text-align: center;
-  /* margin-bottom: 2rem; */
 }
 
 .modal_content__inputs {
-  /* margin-bottom: 2rem; */
   display: flex;
   flex-direction: column;
   gap: 2rem;
@@ -78,7 +71,7 @@
 .modal_content-actions {
   display: flex;
   justify-content: center;
-  /* gap: 1.5rem; */
+
   width: 70%;
 }
 
@@ -98,22 +91,18 @@
   background-color: var(--primary-color);
 }
 
-/* .modal_button {
-  min-width: 85%;
-} */
-
 .modal_confirm_btn_container {
   width: 50%;
   display: flex;
   justify-content: center;
-  align-items: center;  
+  align-items: center;
 }
 
 .modal_cancel_btn_container {
-  width: 50%; 
+  width: 50%;
   display: flex;
   justify-content: center;
-  align-items: center;  
+  align-items: center;
 }
 
 .modal .u_button {

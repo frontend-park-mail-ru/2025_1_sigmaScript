@@ -18,12 +18,11 @@
 .u_button:hover {
     border: solid;
     border-width: 1px;
-    border-color: #72757E;
-    /* border-color: var(--primary-text-color); */
+    border-color: var(--border-color-hover);
 }
 
 .u_button:disabled {
-    background: #72757E;
+    background: var(--border-color-hover);
     cursor: default;
 }
 

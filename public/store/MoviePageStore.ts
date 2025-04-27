@@ -147,9 +147,10 @@ class MoviePageStore {
 
           loadMovieReviewsData(this.state.movieId);
         } catch {
-          const errorMessage = 'Не удалось отправить данные нового отзыва фильма';
+          // const errorMessage = 'Не удалось отправить данные нового отзыва фильма';
           // movieDataError(errorMessage);
-          alert(errorMessage);
+          // TODO error handle
+          // alert(errorMessage);
         }
 
         renderCsat();

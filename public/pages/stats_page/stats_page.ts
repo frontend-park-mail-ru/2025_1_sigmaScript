@@ -91,7 +91,6 @@ class StatsPage {
 
     if (this.#state.data) {
       const data = this.#state.data;
-      console.log(data);
       container.innerHTML = template(data);
     } else {
       container.innerHTML = '<div class="info">Нет данных для отображения.</div>';

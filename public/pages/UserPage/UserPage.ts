@@ -10,7 +10,8 @@ import { FOOTER_CONFIG } from '../../consts.js';
 import { Footer } from 'components/Footer/Footer';
 import UniversalModal from 'components/modal/modal';
 import { updateUser, updateUserAvatar } from 'flux/Actions';
-import { FooterData } from 'types/Footer.types.js';
+import { FooterData } from 'types/Footer.types';
+import { UniversalModalConfig } from 'types/Modal.types';
 
 export const TABS_DATA = {
   tabsData: [
@@ -178,7 +179,7 @@ export class UserPage {
                 const repeatedNewPassword = modal.getInputByName('repeatedNewPassword').getValue();
                 updateUser({ username, oldPassword, newPassword, repeatedNewPassword });
               }
-            });
+            } as UniversalModalConfig);
             modal.render();
             modal.open();
             // modal.self()?.classList.add('user-page_modal');
@@ -207,18 +208,19 @@ export class UserPage {
               ],
               onConfirm: () => {
                 let selectedFile = null;
-                const modalAvatarImageInput = document.getElementsByName('modalAvatarImage ')[0] as HTMLInputElement;
+                const modalAvatarImageInput = document.getElementsByName('modalAvatarImage')[0] as HTMLInputElement;
                 if (modalAvatarImageInput && modalAvatarImageInput.files) {
                   selectedFile = modalAvatarImageInput.files[0];
                 }
 
                 if (!selectedFile) {
-                  alert('Выберите изображение вашего нового аватара');
+                  // TODO error handle
+                  // alert('Выберите изображение вашего нового аватара');
                 } else {
                   updateUserAvatar(selectedFile);
                 }
               }
-            });
+            } as UniversalModalConfig);
 
             modal.render();
             modal.open();
@@ -293,7 +295,7 @@ export class UserPage {
                 const repeatedNewPassword = modal.getInputByName('repeatedNewPassword').getValue();
                 updateUser({ username, oldPassword, newPassword, repeatedNewPassword });
               }
-            });
+            } as UniversalModalConfig);
 
             modal.render();
             modal.open();
@@ -322,18 +324,19 @@ export class UserPage {
               ],
               onConfirm: () => {
                 let selectedFile = null;
-                const modalAvatarImageInput = document.getElementsByName('modalAvatarImage ')[0] as HTMLInputElement;
+                const modalAvatarImageInput = document.getElementsByName('modalAvatarImage')[0] as HTMLInputElement;
                 if (modalAvatarImageInput && modalAvatarImageInput.files) {
                   selectedFile = modalAvatarImageInput.files[0];
                 }
 
                 if (!selectedFile) {
-                  alert('Выберите изображение вашего нового аватара');
+                  // TODO error handle
+                  // alert('Выберите изображение вашего нового аватара');
                 } else {
                   updateUserAvatar(selectedFile);
                 }
               }
-            });
+            } as UniversalModalConfig);
 
             modal.render();
             modal.open();

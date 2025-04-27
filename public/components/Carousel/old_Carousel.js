@@ -1,7 +1,6 @@
 import './Carousel.scss';
 import template from './Carousel.hbs';
 import { createID } from 'utils/createID.ts';
-// import { CardConfig } from 'components/Card/Card';
 
 /**
  * Карусель изображений

@@ -161,13 +161,13 @@ class MoviePage {
     if (posterElem) {
       new MovieCard(posterElem, {
         id: `movieCard--${movie.id}`,
-        previewUrl: movie.poster || '/static/img/default_preview.png',
+        previewUrl: movie.poster || '/static/img/default_preview.webp',
         width: '250',
         height: '375'
       }).render();
     }
 
-    // TODO
+    // TODO till 3-d RK
     // if (movieButtons) {
     //   new Button(movieButtons, {
     //     id: 'button--trailer-' + createID(),
@@ -191,7 +191,7 @@ class MoviePage {
     //     srcIcon: '/static/svg/favourite.svg',
     //     actions: {
     //       click: () => {
-    //         // TODO
+    //         // TODO error handle
     //         console.log(`Toggle favourite for movie ${movie.id}`);
     //       }
     //     }
@@ -247,7 +247,7 @@ class MoviePage {
         id: `personCard--${person.id}`,
         title: person.fullName,
         url: `${Urls.person}/${person.id}`,
-        previewUrl: person.photo || '/static/img/default_person.png',
+        previewUrl: person.photo || '/static/img/default_person.webp',
         width: '130',
         height: '180'
       }).render();

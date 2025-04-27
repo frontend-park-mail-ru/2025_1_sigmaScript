@@ -4,7 +4,7 @@ import Input from 'components/universal_input/input';
 import Button from 'components/universal_button/button.js';
 import { UniversalModalConfig, InputConfig } from 'types/Modal.types';
 import { ButtonConfig } from 'types/UserPage.types';
-import Stars, { getNPS } from 'components/Stars/Stars';
+import Stars from 'components/Stars/Stars';
 
 class UniversalModal {
   #parent: HTMLElement;

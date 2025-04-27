@@ -15,10 +15,10 @@
   padding: 10px 5px;
 }
 
+/* If children are inline or inline-block */
 .scroll__content {
   overflow-x: auto;
   white-space: nowrap;
-  /* If children are inline or inline-block */
 }
 
 .scroll__content>* {

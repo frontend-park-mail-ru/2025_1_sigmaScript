@@ -39,9 +39,7 @@ class CsatStore {
 
         const csatModal = new CsatModal(document.body, {
           frontUrl: FRONT_URL,
-          onSubmit: () => {
-            console.log('Получены данные из CSAT:');
-          }
+          onSubmit: () => {}
         });
 
         csatModal.render();
@@ -70,7 +68,6 @@ class CsatStore {
         this.sendRating();
       },
       onCancel: () => {
-        console.log('on cancel in modal csat');
         window.parent.postMessage({ type: 'CSAT_CLOSE' }, window.location.origin);
       },
       stars: true
@@ -92,10 +89,10 @@ class CsatStore {
       const body = {
         score: rating
       };
-      console.log(body, this.state?.getRating());
       await request({ url, method: 'POST', body, credentials: true });
-    } catch (error: unknown) {
-      console.log(error);
+    } catch {
+      // TODO error handle
+      // console.log(error);
     }
 
     window.parent.postMessage({ type: 'CSAT_CLOSE', data: { rating } }, window.location.origin);

@@ -79,13 +79,6 @@ class CsatModal {
    */
   closeModal() {
     if (this.#modalOverlay) {
-      // TODO: сделать с таймаутом
-      // setTimeout(() => {
-      //   this.#modalOverlay.classList.remove('csat-overlay--visible');
-      //   console.log('function with timeout');
-      //   this.destroy();
-      //   this.#config.onClose();
-      // }, 300);
       this.#modalOverlay.classList.remove('csat-overlay--visible');
       this.destroy();
       this.#config.onClose();
@@ -112,8 +105,6 @@ class CsatModal {
 
     const contentWidth = this.#iframe.offsetWidth;
     const contentHeight = this.#iframe.offsetHeight;
-
-    console.log('iframe размеры:', contentWidth, contentHeight);
 
     this.#modalContent.style.width = `${contentWidth}px`;
     this.#modalContent.style.height = `${contentHeight}px`;

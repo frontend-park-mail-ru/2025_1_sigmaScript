@@ -58,7 +58,7 @@ export const FOOTER_CONFIG = {
   copyright: '© 2025 sigmaScript'
 };
 
-export const AVATAR_PLACEHOLDER = 'static/img/avatar_placeholder.png';
+export const AVATAR_PLACEHOLDER = 'static/img/avatar_placeholder.webp';
 
 export function Authable(url) {
   return AUTHABLE.includes(url);

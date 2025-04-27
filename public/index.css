@@ -24,6 +24,7 @@
     --error-color: #FF5050;
     --text-field-border-color: rgba(148, 161, 178, 0.5);
     --transparent-element: rgba(22, 22, 26, 0);
+    --border-color-hover: #72757E;
 
 
     --navbar-height: 13.5rem;
@@ -58,7 +59,6 @@ body {
 
 #root {
     background-color: var(--background-color);
-    /* min-height: 1024px; */
 }
 
 html {

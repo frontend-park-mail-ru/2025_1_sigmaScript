@@ -80,6 +80,7 @@ class CsatModal {
   closeModal() {
     if (this.#modalOverlay) {
       this.#modalOverlay.classList.remove('csat-overlay--visible');
+      this.#removeActions();
       this.destroy();
       this.#config.onClose();
     }
@@ -160,6 +161,14 @@ class CsatModal {
     window.addEventListener('message', this.messageHandler);
 
     document.body.style.overflow = 'hidden';
+  }
+
+  #removeActions() {
+    this.#iframe.removeEventListener('load', this.handleIframeLoad);
+    this.#iframe.removeEventListener('error', this.handleIframeError);
+    this.#modalOverlay.removeEventListener('click', this.handleOverlayClick);
+
+    window.removeEventListener('message', this.messageHandler);
   }
 }
 

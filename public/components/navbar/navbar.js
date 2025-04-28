@@ -60,6 +60,12 @@ class Navbar {
   }
 
   destroy() {
+    UserPageStore.unsubscribe(this.bindedHandleStoreChange);
+    this.logo.destroy();
+    this.user.destroy();
+    this.LoginButton?.destroy();
+    this.LogoutButton?.destroy();
+
     this.self()?.remove();
   }
 
@@ -71,7 +77,6 @@ class Navbar {
     if (!this.#parent) {
       return;
     }
-    // this.destroy();
 
     const navbar = document.createElement('navbar');
     navbar.classList.add('navbar');
@@ -84,14 +89,14 @@ class Navbar {
 
     this.#elements().appendChild(navbarLogo);
 
-    const logo = new Icon(navbarLogo, {
+    this.logo = new Icon(navbarLogo, {
       id: 'navbarLogo',
       srcIcon: logoSvg
     });
 
-    logo.setActions({ click: () => router.go('/') });
+    this.logo.setActions({ click: () => router.go('/') });
 
-    logo.render();
+    this.logo.render();
 
     const navbarUser = document.createElement('div');
     navbarUser.classList.add('navbar__user', 'flex-box-row');

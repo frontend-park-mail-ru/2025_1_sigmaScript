@@ -76,6 +76,11 @@ export class MovieCard {
    * Удаляет отрисованные элементы.
    */
   destroy(): void {
+    if (!this.self()) {
+      return;
+    }
+
+    this.#removeActions();
     this.self()?.remove();
   }
 
@@ -90,6 +95,13 @@ export class MovieCard {
     this.#parent.insertAdjacentHTML('beforeend', cardHTML);
 
     this.self()?.addEventListener('click', (event) => {
+      event.preventDefault();
+      router.go(this.#config.url!);
+    });
+  }
+
+  #removeActions(): void {
+    this.self()?.removeEventListener('click', (event) => {
       event.preventDefault();
       router.go(this.#config.url!);
     });

@@ -9,7 +9,7 @@ import template from './Login.hbs';
 import { getUser, loginSubmit, registerSubmit } from 'flux/Actions';
 import AuthStore from 'store/LoginStore';
 import type { AuthState } from 'types/Auth.types';
-import { router } from 'modules/router';
+import { router, Urls } from 'modules/router';
 import UserPageStore from 'store/UserPageStore';
 import { Authable } from 'public/consts';
 
@@ -46,7 +46,7 @@ export class Login {
     this.#id = 'login--' + createID();
     this.#mode = mode;
 
-    if (prevPageURLPath === '/auth') {
+    if (prevPageURLPath === Urls.auth || prevPageURLPath === Urls.stats) {
       this.prevPageURL = '/';
     } else {
       this.prevPageURL = prevPageURLPath;
@@ -87,9 +87,15 @@ export class Login {
    * Удаляет отрисованные элементы.
    */
   destroy(): void {
+    if (!this.self) {
+      return;
+    }
+
     AuthStore.unsubscribe(this.bindedHandleStoreChange);
-    // this.self()?.remove();
-    document.querySelector('.main_auth')?.remove();
+
+    this.removeEvents();
+    // remove whole login form container
+    this.#parent.querySelector('.main_auth')?.remove();
   }
 
   /**
@@ -353,5 +359,17 @@ export class Login {
     this.loginInput.getInput().addEventListener('input', () => debouncedValidate());
     this.passwordInput.getInput().addEventListener('input', () => debouncedValidate());
     this.repeatInput.getInput().addEventListener('input', () => debouncedValidate());
+  }
+
+  removeEvents(): void {
+    this.signInButton.removeEventListener('click', () => this.signInMode());
+    this.signUpButton.removeEventListener('click', () => this.signUpMode());
+    this.backButton.removeEventListener('click', () => this.goBack(false));
+    this.submitButton.self()!.removeEventListener('click', (e: Event) => this.submitForm(e));
+
+    const debouncedValidate = debounce(this.validate.bind(this), 300);
+    this.loginInput.getInput().removeEventListener('input', () => debouncedValidate());
+    this.passwordInput.getInput().removeEventListener('input', () => debouncedValidate());
+    this.repeatInput.getInput().removeEventListener('input', () => debouncedValidate());
   }
 }

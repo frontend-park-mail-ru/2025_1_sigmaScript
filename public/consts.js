@@ -65,3 +65,5 @@ export function Authable(url) {
 }
 
 export const AUTHABLE = ['/profile'];
+
+export const ALLOWED_MIME_TYPES = ['image/png', 'image/jpeg', 'image/jpg', 'image/svg+xml', 'image/webp'];

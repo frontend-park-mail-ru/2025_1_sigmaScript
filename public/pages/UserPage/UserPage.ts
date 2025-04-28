@@ -6,7 +6,7 @@ import { AVATAR_PLACEHOLDER } from 'public/consts';
 import { UserData, UserPageData, ButtonConfig, UserPageState } from 'types/UserPage.types';
 import UserPageStore from 'store/UserPageStore';
 import Navbar from 'components/navbar/navbar';
-import { FOOTER_CONFIG } from '../../consts.js';
+import { ALLOWED_MIME_TYPES, FOOTER_CONFIG } from '../../consts.js';
 import { Footer } from 'components/Footer/Footer';
 import UniversalModal from 'components/modal/modal';
 import { updateUser, updateUserAvatar } from 'flux/Actions';
@@ -26,6 +26,7 @@ export class UserPage {
   #data: UserPageData;
   #id: string;
   #navbar: Navbar | null;
+  #footer: Footer | null;
   private bindedHandleStoreChange: (state: UserPageState) => void;
 
   /**
@@ -43,6 +44,7 @@ export class UserPage {
       avatar: userData?.avatar || AVATAR_PLACEHOLDER
     };
     this.#navbar = null;
+    this.#footer = null;
 
     this.bindedHandleStoreChange = this.handleStoreChange.bind(this);
     UserPageStore.subscribe(this.bindedHandleStoreChange);
@@ -101,8 +103,11 @@ export class UserPage {
    */
   destroy(): void {
     UserPageStore.unsubscribe(this.bindedHandleStoreChange);
-    this.self()?.remove();
+
     this.#navbar?.destroy();
+    this.#footer?.destroy();
+
+    this.self()?.remove();
   }
 
   /**
@@ -213,7 +218,7 @@ export class UserPage {
                   selectedFile = modalAvatarImageInput.files[0];
                 }
 
-                if (!selectedFile) {
+                if (!selectedFile || !ALLOWED_MIME_TYPES.includes(selectedFile.type)) {
                   // TODO error handle
                   // alert('Выберите изображение вашего нового аватара');
                 } else {
@@ -237,8 +242,8 @@ export class UserPage {
       new Tabs(tabsContainer, this.data.tabsData).render();
     }
 
-    const footer = new Footer(mainElem, FOOTER_CONFIG as FooterData);
-    footer.render();
+    this.#footer = new Footer(mainElem, FOOTER_CONFIG as FooterData);
+    this.#footer.render();
   }
 
   update() {
@@ -329,7 +334,7 @@ export class UserPage {
                   selectedFile = modalAvatarImageInput.files[0];
                 }
 
-                if (!selectedFile) {
+                if (!selectedFile || !ALLOWED_MIME_TYPES.includes(selectedFile.type)) {
                   // TODO error handle
                   // alert('Выберите изображение вашего нового аватара');
                 } else {

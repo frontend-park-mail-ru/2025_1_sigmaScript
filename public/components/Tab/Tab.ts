@@ -54,6 +54,25 @@ export class Tabs {
    * Удаляет отрисованный компонент из DOM.
    */
   destroy(): void {
+    if (!this.self()) {
+      return;
+    }
+
+    const tabElements = this.self()?.querySelectorAll('.tabs__item');
+    tabElements?.forEach((tab: Element) => {
+      tab.removeEventListener('click', () => {
+        const tabId = tab.getAttribute('data-tab');
+        const tabContents = document.querySelectorAll('.tab-content');
+        tabContents.forEach((content: Element) => {
+          (content as HTMLElement).style.display = 'none';
+        });
+        const activeContent = document.getElementById(`tab-${tabId}`);
+        if (activeContent) {
+          activeContent.style.display = 'block';
+        }
+      });
+    });
+
     this.self()?.remove();
   }
 

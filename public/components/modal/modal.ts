@@ -163,6 +163,29 @@ class UniversalModal {
     });
   }
 
+  #removeActions(): void {
+    const modalElem = this.self();
+    if (!modalElem) return;
+
+    modalElem.querySelector('.modal_overlay')?.removeEventListener('click', (e: Event) => {
+      if (e.target === modalElem.querySelector('.modal_overlay')) {
+        this.destroy();
+      }
+    });
+
+    const closeBtn = modalElem.querySelector('.modal_close');
+    if (closeBtn) {
+      closeBtn.removeEventListener('click', () => {
+        this.#actions.onCancel();
+        this.destroy();
+      });
+    }
+
+    modalElem.querySelector('.modal_content')?.removeEventListener('click', (e: Event) => {
+      e.stopPropagation();
+    });
+  }
+
   open(): void {
     const modalElem = this.self();
     if (modalElem) {
@@ -171,6 +194,10 @@ class UniversalModal {
   }
 
   destroy(): void {
+    if (!this.self()) {
+      return;
+    }
+    this.#removeActions();
     this.self()?.remove();
   }
 }

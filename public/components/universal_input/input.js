@@ -58,7 +58,7 @@ class Input {
     }
 
     if (this.#actions.keypress) {
-      this.getInput().addEventListeneraddEventListener('keypress', this.#actions.keypress);
+      this.getInput().addEventListener('keypress', this.#actions.keypress);
     }
   }
 
@@ -117,9 +117,15 @@ class Input {
   }
 
   destroy() {
-    if (this.self()) {
-      this.self().remove();
+    if (!this.self()) {
+      return;
     }
+
+    if (this.#actions.keypress) {
+      this.getInput().removeEventListener('keypress', this.#actions.keypress);
+    }
+
+    this.self().remove();
   }
 
   render() {

@@ -61,9 +61,15 @@ class Button {
   }
 
   destroy() {
-    if (this.self()) {
-      this.self().remove();
+    if (!this.self()) {
+      return;
     }
+
+    for (let action in this.#actions) {
+      this.self().removeEventListener(action, this.#actions[action]);
+    }
+
+    this.self().remove();
   }
 
   setActions(newActions) {

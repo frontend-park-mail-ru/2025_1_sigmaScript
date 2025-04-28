@@ -152,7 +152,7 @@ class Router {
       } else {
         return { method: '/', id: undefined }; // Empty or root path
       }
-    } catch (error) {
+    } catch {
       return { method: '/', id: undefined };
     }
   }

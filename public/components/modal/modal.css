@@ -14,7 +14,6 @@
   width: 100%;
   height: 100dvh;
   background: rgba(0, 0, 0, 0.5);
-  padding: 1.25rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -22,19 +21,21 @@
 
 .modal_content {
   background: var(--background-color);
-  padding: 2.5rem;
-  border-radius: 0.5rem;
-  min-width: 25rem;
-  max-width: 40rem;
-  min-height: 35rem;
-  width: 90%;
+  width: 100%;
+  height: 100%;
+  min-height: 30rem;
+  max-width: 60rem;
+  max-height: 40rem;
+  border-radius: 25px;
+
   box-shadow: 0 0.1rem 0.6rem rgba(0, 0, 0, 0.3);
   position: relative;
+  justify-content: space-around;
+  align-items: center;
 }
 
 .modal_content__header {
   position: relative;
-  padding: 0.6rem 0.6rem 0.6rem 2.5rem;
 }
 
 .modal_close {
@@ -44,24 +45,24 @@
   font-size: 2rem;
   cursor: pointer;
   color: var(--primary-text-color);
+  z-index: 10;
 }
 
 .modal_content__title {
+  padding: 4rem 2rem 0 2rem;
   text-align: center;
-  font-size: 1.5rem;
+  font-size: 2rem;
+  font-weight: bold;
   color: var(--primary-text-color);
-  margin-bottom: 1.25rem;
 }
 
 .modal_content__message {
   color: var(--primary-text-color);
-  font-size: 1.25rem;
+  font-size: 2rem;
   text-align: center;
-  margin-bottom: 2rem;
 }
 
 .modal_content__inputs {
-  margin-bottom: 2rem;
   display: flex;
   flex-direction: column;
   gap: 2rem;
@@ -70,11 +71,11 @@
 .modal_content-actions {
   display: flex;
   justify-content: center;
-  gap: 0.6rem;
+
+  width: 70%;
 }
 
 .modal_content__btn {
-  padding: 0.75rem 1.25rem;
   border: none;
   border-radius: 1.5rem;
   cursor: pointer;
@@ -88,4 +89,34 @@
 
 .modal_content-cancel {
   background-color: var(--primary-color);
+}
+
+.modal_confirm_btn_container {
+  width: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal_cancel_btn_container {
+  width: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal .u_button {
+  width: 90%;
+}
+
+.modal .u_button__text {
+  font-weight: bold;
+}
+
+.modal_close {
+  position: absolute;
+  top: 6%;
+  left: 6%;
+  cursor: pointer;
+  font-size: 3rem;
 }

@@ -202,3 +202,11 @@
 .review-card__star{
   width: 22.5px;
 }
+
+.review-card__text{
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  white-space: pre-line;
+  width: 100%;
+  overflow: visible; 
+}

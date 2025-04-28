@@ -3,7 +3,6 @@
     padding: 0.5rem 1.25rem 1.25rem;
     margin-top: 0rem;
     font-family: 'Helvetica';
-    /* чтобы не сжимался */
     flex-shrink: 0;
 }
 

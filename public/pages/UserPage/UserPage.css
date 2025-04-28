@@ -116,3 +116,28 @@
   display: block;
   text-align: center;
 }
+
+.user-page__action-button {
+  display: flex;
+  flex-direction: column;
+
+  gap: 10px;
+}
+
+.user-page_modal .modal_content {
+  min-width: 30%;
+  min-height: 70%
+}
+
+.modal_content__inputs {
+  width: 80%;
+}
+
+
+/* .user-page_modal .u_input {
+  min-width: 100%;
+}
+
+.user-page_modal .u_input__field {
+  min-width: 90%;
+} */

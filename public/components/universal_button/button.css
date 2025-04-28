@@ -8,7 +8,9 @@
 
     height: var(--navbar-elements-height);
     border-radius: 25px;
-    border: none;
+    border: solid;
+    border-width: 1px;
+    border-color: var(--transparent-element);
 
     cursor: pointer;
 }
@@ -16,18 +18,17 @@
 .u_button:hover {
     border: solid;
     border-width: 1px;
-    border-color: var(--primary-text-color);
+    border-color: var(--border-color-hover);
 }
 
 .u_button:disabled {
-    background: #72757E;
+    background: var(--border-color-hover);
     cursor: default;
 }
 
-.u_button:focus {
+.u_button:active {
     border-color: var(--primary-color);
-    border-width: 3px;
-
+    border-width: 2px;
     outline: none;
 }
 

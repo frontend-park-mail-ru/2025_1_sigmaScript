@@ -6,11 +6,12 @@ import { AVATAR_PLACEHOLDER } from 'public/consts';
 import { UserData, UserPageData, ButtonConfig, UserPageState } from 'types/UserPage.types';
 import UserPageStore from 'store/UserPageStore';
 import Navbar from 'components/navbar/navbar';
-import { FOOTER_CONFIG } from '../../consts.js';
+import { ALLOWED_MIME_TYPES, FOOTER_CONFIG } from '../../consts.js';
 import { Footer } from 'components/Footer/Footer';
 import UniversalModal from 'components/modal/modal';
-import { updateUser } from 'flux/Actions';
-import { FooterData } from 'types/Footer.types.js';
+import { updateUser, updateUserAvatar } from 'flux/Actions';
+import { FooterData } from 'types/Footer.types';
+import { UniversalModalConfig } from 'types/Modal.types';
 
 export const TABS_DATA = {
   tabsData: [
@@ -25,6 +26,7 @@ export class UserPage {
   #data: UserPageData;
   #id: string;
   #navbar: Navbar | null;
+  #footer: Footer | null;
   private bindedHandleStoreChange: (state: UserPageState) => void;
 
   /**
@@ -42,6 +44,7 @@ export class UserPage {
       avatar: userData?.avatar || AVATAR_PLACEHOLDER
     };
     this.#navbar = null;
+    this.#footer = null;
 
     this.bindedHandleStoreChange = this.handleStoreChange.bind(this);
     UserPageStore.subscribe(this.bindedHandleStoreChange);
@@ -100,8 +103,11 @@ export class UserPage {
    */
   destroy(): void {
     UserPageStore.unsubscribe(this.bindedHandleStoreChange);
-    this.self()?.remove();
+
     this.#navbar?.destroy();
+    this.#footer?.destroy();
+
+    this.self()?.remove();
   }
 
   /**
@@ -111,7 +117,7 @@ export class UserPage {
     if (!this.parentDefined()) {
       return;
     }
-
+    this.#parent.innerHTML = '';
     const mainElem = document.createElement('main');
     mainElem.id = this.#id;
     this.#parent.appendChild(mainElem);
@@ -143,6 +149,7 @@ export class UserPage {
               message: 'Измените логин и/или пароль',
               confirmText: 'Сохранить',
               cancelText: 'Отмена',
+              addClasses: ['user-page_modal'],
               inputs: [
                 {
                   id: 'loginInput',
@@ -177,7 +184,48 @@ export class UserPage {
                 const repeatedNewPassword = modal.getInputByName('repeatedNewPassword').getValue();
                 updateUser({ username, oldPassword, newPassword, repeatedNewPassword });
               }
-            });
+            } as UniversalModalConfig);
+            modal.render();
+            modal.open();
+            // modal.self()?.classList.add('user-page_modal');
+          }
+        }
+      };
+
+      const changeUserAvatarButtonConfig: ButtonConfig = {
+        id: 'changeAvatarBtn',
+        color: 'primary',
+        text: 'Изменить аватар',
+        textColor: 'primary',
+        actions: {
+          click: async () => {
+            const modal = new UniversalModal(document.body, {
+              title: 'Редактирование данных',
+              message: 'Измените логин и/или пароль',
+              confirmText: 'Сохранить',
+              cancelText: 'Отмена',
+              inputs: [
+                {
+                  id: 'modalAvatarImageInput',
+                  name: 'modalAvatarImage',
+                  type: 'file'
+                }
+              ],
+              onConfirm: () => {
+                let selectedFile = null;
+                const modalAvatarImageInput = document.getElementsByName('modalAvatarImage')[0] as HTMLInputElement;
+                if (modalAvatarImageInput && modalAvatarImageInput.files) {
+                  selectedFile = modalAvatarImageInput.files[0];
+                }
+
+                if (!selectedFile || !ALLOWED_MIME_TYPES.includes(selectedFile.type)) {
+                  // TODO error handle
+                  // alert('Выберите изображение вашего нового аватара');
+                } else {
+                  updateUserAvatar(selectedFile);
+                }
+              }
+            } as UniversalModalConfig);
 
             modal.render();
             modal.open();
@@ -186,6 +234,7 @@ export class UserPage {
       };
 
       new Button(buttonContainer, buttonConfig).render();
+      new Button(buttonContainer, changeUserAvatarButtonConfig).render();
     }
 
     const tabsContainer = this.self()?.querySelector<HTMLElement>(`#${this.#id} .tabs-container`);
@@ -193,8 +242,8 @@ export class UserPage {
       new Tabs(tabsContainer, this.data.tabsData).render();
     }
 
-    const footer = new Footer(mainElem, FOOTER_CONFIG as FooterData);
-    footer.render();
+    this.#footer = new Footer(mainElem, FOOTER_CONFIG as FooterData);
+    this.#footer.render();
   }
 
   update() {
@@ -204,7 +253,7 @@ export class UserPage {
     }
     const buttonContainer = this.self()?.querySelector(`.user-page__action-button`);
     if (buttonContainer) {
-      const buttonConfig: ButtonConfig = {
+      const changeUserDataButtonConfig: ButtonConfig = {
         id: 'changeDataBtn',
         color: 'primary',
         text: 'Изменить данные',
@@ -216,6 +265,7 @@ export class UserPage {
               message: 'Измените логин и/или пароль',
               confirmText: 'Сохранить',
               cancelText: 'Отмена',
+              addClasses: ['user-page_modal'],
               inputs: [
                 {
                   id: 'loginInput',
@@ -250,7 +300,7 @@ export class UserPage {
                 const repeatedNewPassword = modal.getInputByName('repeatedNewPassword').getValue();
                 updateUser({ username, oldPassword, newPassword, repeatedNewPassword });
               }
-            });
+            } as UniversalModalConfig);
 
             modal.render();
             modal.open();
@@ -258,7 +308,49 @@ export class UserPage {
         }
       };
 
-      new Button(buttonContainer, buttonConfig).render();
+      const changeUserAvatarButtonConfig: ButtonConfig = {
+        id: 'changeAvatarBtn',
+        color: 'primary',
+        text: 'Изменить аватар',
+        textColor: 'primary',
+        actions: {
+          click: async () => {
+            const modal = new UniversalModal(document.body, {
+              title: 'Редактирование данных',
+              message: 'Измените логин и/или пароль',
+              confirmText: 'Сохранить',
+              cancelText: 'Отмена',
+              inputs: [
+                {
+                  id: 'modalAvatarImageInput',
+                  name: 'modalAvatarImage',
+                  type: 'file'
+                }
+              ],
+              onConfirm: () => {
+                let selectedFile = null;
+                const modalAvatarImageInput = document.getElementsByName('modalAvatarImage')[0] as HTMLInputElement;
+                if (modalAvatarImageInput && modalAvatarImageInput.files) {
+                  selectedFile = modalAvatarImageInput.files[0];
+                }
+
+                if (!selectedFile || !ALLOWED_MIME_TYPES.includes(selectedFile.type)) {
+                  // TODO error handle
+                  alert('Разрешены только изображения с разрешением SVG, PNG, JPG, JPEG или WEBP');
+                } else {
+                  updateUserAvatar(selectedFile);
+                }
+              }
+            } as UniversalModalConfig);
+
+            modal.render();
+            modal.open();
+          }
+        }
+      };
+
+      new Button(buttonContainer, changeUserDataButtonConfig).render();
+      new Button(buttonContainer, changeUserAvatarButtonConfig).render();
     }
 
     const tabsContainer = this.self()?.querySelector<HTMLElement>(`#${this.#id} .tabs-container`);

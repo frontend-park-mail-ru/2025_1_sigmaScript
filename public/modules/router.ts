@@ -6,7 +6,9 @@ export const Urls = {
   auth: '/auth',
   movie: '/movie',
   person: '/name',
-  profile: '/profile'
+  profile: '/profile',
+  stats: '/csat/statistic',
+  csat: '/csat'
 };
 
 type lastScrollState = {
@@ -42,8 +44,14 @@ export const handler = (args: handlerInput) => {
         router.go(Urls.root);
       }
       break;
+    case Urls.stats:
+      RenderActions.renderStatsPage();
+      break;
     case Urls.profile:
       RenderActions.renderProfilePage(args.data);
+      break;
+    case Urls.csat:
+      RenderActions.renderCsatPage();
       break;
     default:
       window.location.pathname = '/';
@@ -144,8 +152,7 @@ class Router {
       } else {
         return { method: '/', id: undefined }; // Empty or root path
       }
-    } catch (error) {
-      console.error('Invalid URL:', error);
+    } catch {
       return { method: '/', id: undefined };
     }
   }

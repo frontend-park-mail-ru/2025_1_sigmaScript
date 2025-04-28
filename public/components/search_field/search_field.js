@@ -69,6 +69,17 @@ class SearchField {
     }
   }
 
+  #removeActions() {
+    if (this.#actions.leftBtn) {
+      const btnLeft = this.self().querySelector('#' + this.#config.leftBtnId);
+      btnLeft.removeEventListener('click', this.#actions.leftBtn);
+    }
+    if (this.#actions.rightBtn) {
+      const btnRight = this.self().querySelector('#' + this.#config.rightBtnId);
+      btnRight.removeEventListener('click', this.#actions.rightBtn);
+    }
+  }
+
   form() {
     if (!this.self()) {
       throw new Error(`Объект с id="${this.#config.searchFormId}" не найден на странице`);
@@ -78,6 +89,7 @@ class SearchField {
 
   destroy() {
     if (this.self()) {
+      this.#removeActions();
       this.self().remove();
     }
   }

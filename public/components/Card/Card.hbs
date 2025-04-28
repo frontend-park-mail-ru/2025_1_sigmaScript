@@ -1,4 +1,4 @@
-  <a href="{{this.url}}" id="{{this.id}}">
+  {{#if url}}<a href="{{this.url}}" id="{{this.id}}">{{else}}<span id="{{this.id}}"></span>{{/if}}
     <div class="card" style="width: {{ this.width }}px; height: {{ this.height }}px;">
       <img src="{{this.previewUrl}}" alt="{{this.title}} card__preview" class="card__preview">
     </div>

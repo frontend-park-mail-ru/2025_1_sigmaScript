@@ -56,10 +56,9 @@ class UserPageStore {
           this.state.userData = userData;
 
           updateUserPage(userData);
-        } catch (error) {
+        } catch {
           // TODO: пофиксить ошибку
           // console.log(error.errorDetails.error || 'Unknown error');
-          console.log(error || 'Unknown error');
           noSession();
         }
         break;
@@ -75,10 +74,9 @@ class UserPageStore {
           await request({ url: url, method: 'POST', body, credentials: true });
 
           getUser();
-        } catch (error) {
+        } catch {
           // TODO: пофиксить ошибку
           // console.log(error.errorDetails.error);
-          console.log(error);
         }
         break;
       case UserPageTypes.LOGOUT_USER:
@@ -86,10 +84,29 @@ class UserPageStore {
         try {
           const url = AUTH_URL + 'logout';
           await request({ url: url, method: 'POST', credentials: true });
-        } catch (error) {
+        } catch {
           // TODO: пофиксить ошибку
           // console.log(error.errorDetails.error);
-          console.log(error);
+        }
+        break;
+      case UserPageTypes.UPDATE_USER_AVATAR:
+        try {
+          const selectedFile = action.payload as Blob;
+          const formData = new FormData();
+          formData.append('image', selectedFile);
+
+          const url = BASE_URL + 'users/avatar';
+
+          await fetch(url, {
+            method: 'POST',
+            body: formData,
+            credentials: 'include'
+          });
+
+          getUser();
+        } catch {
+          // TODO: пофиксить ошибку
+          // console.log(error.errorDetails.error);
         }
         break;
       default:

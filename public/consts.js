@@ -1,9 +1,11 @@
 export const BACKEND_PORT = 8080;
+export const FRONTEND_PORT = 3000;
 // export const HOST = '217.16.20.177';
 export const HOST = 'localhost';
 export const AUTH_URL = `http://${HOST}:${BACKEND_PORT}/auth/`;
 export const PERSON_URL = `http://${HOST}:${BACKEND_PORT}/name/`;
 export const MOVIE_URL = `http://${HOST}:${BACKEND_PORT}/movie`;
+export const STATS_URL = `http://${HOST}:${BACKEND_PORT}/csat/statistic`;
 export const MOVIE_REVIEWS_PATH = `reviews`;
 export const ERRORS = {
   ErrParseJSONShort: 'parse_json_error',
@@ -28,6 +30,7 @@ export const ERRORS = {
   ErrNotFound: 'not_found'
 };
 export const BASE_URL = `http://${HOST}:${BACKEND_PORT}/`;
+export const FRONT_URL = `http://${HOST}:${FRONTEND_PORT}/`;
 
 export const ERROR_HANDLERS = {
   [ERRORS.ErrAlreadyExistsShort]: (context) => context.showError(context.loginInput, 'Вы уже зарегистрированы'),
@@ -55,10 +58,12 @@ export const FOOTER_CONFIG = {
   copyright: '© 2025 sigmaScript'
 };
 
-export const AVATAR_PLACEHOLDER = 'static/img/avatar_placeholder.png';
+export const AVATAR_PLACEHOLDER = 'static/img/avatar_placeholder.webp';
 
 export function Authable(url) {
   return AUTHABLE.includes(url);
 }
 
 export const AUTHABLE = ['/profile'];
+
+export const ALLOWED_MIME_TYPES = ['image/png', 'image/jpeg', 'image/jpg', 'image/svg+xml', 'image/webp'];

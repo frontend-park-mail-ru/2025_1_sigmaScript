@@ -8,8 +8,10 @@ declare module 'public/consts' {
   export const HOST: string;
   export const AUTH_URL: string;
   export const BASE_URL: string;
+  export const FRONT_URL: string;
   export const PERSON_URL: string;
   export const MOVIE_URL: string;
+  export const STATS_URL: string;
   export const MOVIE_REVIEWS_PATH: string;
 
   export interface Destroyable {

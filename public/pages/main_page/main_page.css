@@ -12,6 +12,16 @@
   width: 100%;
   height: auto;
   gap: 50px;
+  padding-bottom: 100px;
+}
+
+.promo {
+  position: relative;
+  width: 100%;
+  height: auto;
+  gap: 50px;
+
+  padding-bottom: 50px;
 }
 
 .compilation {
@@ -28,7 +38,6 @@
   font-size: 32px;
 }
 
-/* Flexbox контейнеры */
 .flex-column {
   display: flex;
   flex-direction: column;
@@ -84,7 +93,6 @@
   object-fit: cover;
 }
 
-/* Название фильма */
 .poster_title {
   margin: 10px 0;
   font-size: 18px;
@@ -92,13 +100,11 @@
   color: var(--primary-text-color);
 }
 
-/* Ссылка на подробности */
 .details-link {
   display: inline-block;
   padding: 10px 20px;
   background-color: #007bff;
-  /* Синий фон кнопки */
-  color: white;
+  color: var(--primary-text-color);
   border-radius: 5px;
   margin-bottom: 10px;
   cursor: pointer;
@@ -106,7 +112,6 @@
 
 .details-link:hover {
   background-color: #0056b3;
-  /* Более темный синий при наведении */
 }
 
 .compilation__scroll {

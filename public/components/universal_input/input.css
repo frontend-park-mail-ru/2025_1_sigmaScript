@@ -20,7 +20,7 @@
 }
 
 .u_input__field:hover {
-    border: 1px solid #72757E;
+    border: 1px solid var(--border-color-hover);
     outline: none;
 }
 

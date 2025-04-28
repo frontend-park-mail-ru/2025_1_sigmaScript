@@ -1,0 +1,33 @@
+.csat-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 1000;
+  pointer-events: none;
+}
+
+.csat-overlay--visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.csat-content {
+  position: relative;
+  background-color: white;
+  border-radius: 25px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.csat-iframe {
+  border: none;
+  display: block;
+}

@@ -12,7 +12,7 @@ import Navbar from 'components/navbar/navbar';
 
 import { Footer } from 'components/Footer/Footer';
 import { FOOTER_CONFIG } from '../../consts.js';
-import { Urls } from '../../modules/router';
+import { router, Urls } from '../../modules/router';
 import { FooterData } from 'types/Footer.types.js';
 import { postMovieReview } from 'flux/Actions.ts';
 import UserPageStore from 'store/UserPageStore.ts';
@@ -161,41 +161,42 @@ class MoviePage {
     if (posterElem) {
       new MovieCard(posterElem, {
         id: `movieCard--${movie.id}`,
-        previewUrl: movie.poster || '/static/img/default_preview.png',
+        previewUrl: movie.poster || '/static/img/default_preview.webp',
         width: '250',
         height: '375'
       }).render();
     }
 
-    if (movieButtons) {
-      new Button(movieButtons, {
-        id: 'button--trailer-' + createID(),
-        type: 'button',
-        text: 'Трейлер',
-        addClasses: ['movie__button'],
-        srcIcon: '/static/svg/play.svg',
-        actions: {
-          click: () => {
-            // TODO
-            console.log(`Play trailer for movie ${movie.id}`);
-          }
-        }
-      }).render();
+    // TODO till 3-d RK
+    // if (movieButtons) {
+    //   new Button(movieButtons, {
+    //     id: 'button--trailer-' + createID(),
+    //     type: 'button',
+    //     text: 'Трейлер',
+    //     addClasses: ['movie__button'],
+    //     srcIcon: '/static/svg/play.svg',
+    //     actions: {
+    //       click: () => {
+    //         // TODO
+    //         console.log(`Play trailer for movie ${movie.id}`);
+    //       }
+    //     }
+    //   }).render();
 
-      new Button(movieButtons, {
-        id: 'button--favourite-' + createID(),
-        type: 'button',
-        text: 'Любимое',
-        addClasses: ['movie__button'],
-        srcIcon: '/static/svg/favourite.svg',
-        actions: {
-          click: () => {
-            // TODO
-            console.log(`Toggle favourite for movie ${movie.id}`);
-          }
-        }
-      }).render();
-    }
+    //   new Button(movieButtons, {
+    //     id: 'button--favourite-' + createID(),
+    //     type: 'button',
+    //     text: 'Любимое',
+    //     addClasses: ['movie__button'],
+    //     srcIcon: '/static/svg/favourite.svg',
+    //     actions: {
+    //       click: () => {
+    //         // TODO error handle
+    //         console.log(`Toggle favourite for movie ${movie.id}`);
+    //       }
+    //     }
+    //   }).render();
+    // }
 
     if (ratingElement) {
       new Button(ratingElement, {
@@ -246,7 +247,7 @@ class MoviePage {
         id: `personCard--${person.id}`,
         title: person.fullName,
         url: `${Urls.person}/${person.id}`,
-        previewUrl: person.photo || '/static/img/default_person.png',
+        previewUrl: person.photo || '/static/img/default_person.webp',
         width: '130',
         height: '180'
       }).render();
@@ -282,8 +283,7 @@ class MoviePage {
       const text = textarea.getValue();
 
       if (!rating || !UserPageStore.getState().userData?.username || text === undefined) {
-        // TODO error
-        console.log(`No user or data inside form: Rating: ${rating}, Text: ${text}`);
+        router.go('/auth');
         return;
       }
 

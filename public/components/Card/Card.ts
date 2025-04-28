@@ -2,13 +2,14 @@ import { createID } from 'utils/createID';
 import template from './Card.hbs';
 import { router } from 'modules/router';
 
-type CardConfig = {
+export type CardConfig = {
   id?: string;
   previewUrl?: string;
   url?: string;
   title?: string;
   width?: string;
   height?: string;
+  text?: string;
 };
 
 export class MovieCard {
@@ -75,6 +76,11 @@ export class MovieCard {
    * Удаляет отрисованные элементы.
    */
   destroy(): void {
+    if (!this.self()) {
+      return;
+    }
+
+    this.#removeActions();
     this.self()?.remove();
   }
 
@@ -89,6 +95,13 @@ export class MovieCard {
     this.#parent.insertAdjacentHTML('beforeend', cardHTML);
 
     this.self()?.addEventListener('click', (event) => {
+      event.preventDefault();
+      router.go(this.#config.url!);
+    });
+  }
+
+  #removeActions(): void {
+    this.self()?.removeEventListener('click', (event) => {
       event.preventDefault();
       router.go(this.#config.url!);
     });

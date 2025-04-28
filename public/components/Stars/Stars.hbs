@@ -1,12 +1,12 @@
 <div class="stars" id="{{ id }}" data-rating="{{ initialRating }}">
   <div class="stars__container js-stars-container">
     {{#each starsRange}}
-      <svg class="stars__star js-star" data-value="{{this}}" viewBox="0 0 24 24">
-        <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
-      </svg>
+    <span class="stars__star js-star" data-value="{{this.sign}}">
+      {{{this.svg}}}
+    </span>
     {{/each}}
     <div class="stars__rating-container">
-      <span class="stars__rating js-stars-rating">--</span><b> / {{ starsRange.length }}</b>
+      <span class="stars__rating js-stars-rating"></span><b>{{#if this.withInfo}}  / {{ starsRange.length }}</b>{{/if}}
     </div>
   </div>
 </div>

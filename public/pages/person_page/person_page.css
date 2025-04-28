@@ -6,7 +6,6 @@
   overflow: hidden;
 
   margin: auto auto;
-  /* Center the page */
   padding: 50px 50px 0px 50px;
 
   color: var(--primary-text-color);
@@ -14,7 +13,6 @@
 
 .person__photo-container {
   flex-shrink: 0;
-  /* Prevent photo from shrinking */
   height: 460px;
   width: 300px;
 }
@@ -28,7 +26,6 @@
 
 .person__info-container {
   flex-grow: 1;
-  /* Allow info section to take remaining space */
   display: flex;
   flex-direction: column;
   gap: 18px;

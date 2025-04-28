@@ -3,12 +3,16 @@ import template from './modal.hbs';
 import Input from 'components/universal_input/input';
 import Button from 'components/universal_button/button.js';
 import { UniversalModalConfig, InputConfig } from 'types/Modal.types';
+import { ButtonConfig } from 'types/UserPage.types';
+import Stars from 'components/Stars/Stars';
 
 class UniversalModal {
   #parent: HTMLElement;
   #config: UniversalModalConfig;
   #inputs: Record<string, Input>;
   #actions: { onConfirm: () => void; onCancel: () => void } = { onConfirm: () => {}, onCancel: () => {} };
+  #addClasses: string[];
+  #stars: Stars | null;
   #nofunc = () => {};
 
   constructor(parent: HTMLElement, config: UniversalModalConfig) {
@@ -19,8 +23,13 @@ class UniversalModal {
       message: config.message || '',
       confirmText: config.confirmText !== undefined ? config.confirmText : 'Да',
       cancelText: config.cancelText !== undefined ? config.cancelText : 'Нет',
-      inputs: config.inputs || []
+      inputs: config.inputs || [],
+      buttons: config.buttons || [],
+      stars: config.stars || false
     };
+
+    this.#stars = null;
+    this.#addClasses = config.addClasses || [];
 
     this.#inputs = {};
 
@@ -30,6 +39,13 @@ class UniversalModal {
 
   self(): HTMLElement | null {
     return document.getElementById(this.#config.id!);
+  }
+
+  #applyClasses(): void {
+    const self = this.self();
+    if (self && this.#addClasses.length > 0) {
+      self.classList.add(...this.#addClasses);
+    }
   }
 
   render(): void {
@@ -50,7 +66,8 @@ class UniversalModal {
                 this.#actions.onConfirm();
                 this.destroy();
               }
-            }
+            },
+            addClasses: ['modal_button']
           });
           confirmBtn.render();
         }
@@ -69,9 +86,19 @@ class UniversalModal {
                 this.#actions.onCancel();
                 this.destroy();
               }
-            }
+            },
+            addClasses: ['modal_button']
           });
           cancelBtn.render();
+        }
+      }
+
+      if (this.#config.stars) {
+        const starsContainer = document.querySelector<HTMLElement>('.stars');
+        if (starsContainer) {
+          this.#stars = new Stars(starsContainer, {});
+          this.#stars.render();
+          // getNPS(starsContainer).render();
         }
       }
     }
@@ -87,7 +114,26 @@ class UniversalModal {
       }
     }
 
+    if (this.#config.buttons && this.#config.buttons.length > 0) {
+      const bttnsContainer = this.self()?.querySelector('.modal_content__buttons');
+      if (bttnsContainer) {
+        this.#config.buttons.forEach((bttnConfig: ButtonConfig) => {
+          const buttn = new Button(bttnsContainer, bttnConfig);
+          buttn.render();
+        });
+      }
+    }
+
     this.#applyActions();
+    this.#applyClasses();
+  }
+
+  getRating(): number | undefined {
+    if (this.#config.stars) {
+      return this.#stars?.currentRating;
+    }
+
+    return undefined;
   }
 
   getInputByName(name: string): Input {
@@ -107,11 +153,35 @@ class UniversalModal {
     const closeBtn = modalElem.querySelector('.modal_close');
     if (closeBtn) {
       closeBtn.addEventListener('click', () => {
+        this.#actions.onCancel();
         this.destroy();
       });
     }
 
     modalElem.querySelector('.modal_content')?.addEventListener('click', (e: Event) => {
+      e.stopPropagation();
+    });
+  }
+
+  #removeActions(): void {
+    const modalElem = this.self();
+    if (!modalElem) return;
+
+    modalElem.querySelector('.modal_overlay')?.removeEventListener('click', (e: Event) => {
+      if (e.target === modalElem.querySelector('.modal_overlay')) {
+        this.destroy();
+      }
+    });
+
+    const closeBtn = modalElem.querySelector('.modal_close');
+    if (closeBtn) {
+      closeBtn.removeEventListener('click', () => {
+        this.#actions.onCancel();
+        this.destroy();
+      });
+    }
+
+    modalElem.querySelector('.modal_content')?.removeEventListener('click', (e: Event) => {
       e.stopPropagation();
     });
   }
@@ -124,6 +194,10 @@ class UniversalModal {
   }
 
   destroy(): void {
+    if (!this.self()) {
+      return;
+    }
+    this.#removeActions();
     this.self()?.remove();
   }
 }

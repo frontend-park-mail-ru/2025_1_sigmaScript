@@ -1,3 +1,4 @@
+import { createID } from 'utils/createID';
 import template from './button.hbs';
 
 /**
@@ -33,7 +34,7 @@ class Button {
   constructor(parent, config) {
     this.#parent = parent;
 
-    this.#config.id = config.id || 'btn';
+    this.#config.id = config.id + createID() || 'btn' + createID();
     this.#config.color = config.color || 'primary';
     this.#config.disabled = config.disabled || false;
     this.#config.form = config.form;
@@ -60,9 +61,15 @@ class Button {
   }
 
   destroy() {
-    if (this.self()) {
-      this.self().remove();
+    if (!this.self()) {
+      return;
     }
+
+    for (let action in this.#actions) {
+      this.self().removeEventListener(action, this.#actions[action]);
+    }
+
+    this.self().remove();
   }
 
   setActions(newActions) {

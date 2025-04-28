@@ -336,7 +336,7 @@ export class UserPage {
 
                 if (!selectedFile || !ALLOWED_MIME_TYPES.includes(selectedFile.type)) {
                   // TODO error handle
-                  // alert('Выберите изображение вашего нового аватара');
+                  alert('Разрешены только изображения с разрешением SVG, PNG, JPG, JPEG или WEBP');
                 } else {
                   updateUserAvatar(selectedFile);
                 }

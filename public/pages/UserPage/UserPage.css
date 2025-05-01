@@ -1,8 +1,9 @@
 .user-page {
-  max-width: 90rem;
+  max-width: 120rem;
   width: 100%;
-  margin: 2rem auto;
-  padding: 2rem;
+  margin: 0rem auto;
+  /* margin: 0rem; */
+  padding: 0rem;
   background-color: transparent;
   border-radius: 0.5rem;
   box-sizing: border-box;
@@ -12,14 +13,16 @@
 }
 
 .user-page__upper {
+  width: 100%;
   display: flex;
   gap: 2rem;
-  margin-bottom: 2rem;
+  /* margin-bottom: 2rem; */
+  align-items: center;
 }
 
 .user-page__avatar {
-  width: 20rem;
-  height: 20rem;
+  width: 25rem;
+  height: 25rem;
   border-radius: 50%;
   overflow: hidden;
   background-color: #3a3a3a;
@@ -75,18 +78,27 @@
   justify-content: space-between;
   align-items: center;
   width: 100%; */
-  display: flex;
+  /* display: flex;
   padding-left: 6rem;
+  padding-right: 6rem;
   gap: 15rem;
   justify-content: flex-start;
   flex-wrap: wrap;
-  align-items: center;
+  align-items: center; */
+
+  display: grid;
+  grid-template-columns: repeat(2, 20rem);
+  row-gap: 2rem;
+  column-gap: 15rem;
+  padding-left: 6rem;
+  padding-right: 6rem;
 }
 
 .user-page__detail {
   font-size: 1.6rem;
   color: var(--primary-text-color);
   margin: 0;
+  max-width: 20rem;
 }
 
 .user-page__info-bottom {
@@ -124,15 +136,14 @@
   gap: 10px;
 }
 
-.user-page_modal .modal_content {
+/* .user-page_modal .modal_content {
   min-width: 30%;
-  min-height: 70%
+  min-height: 70%;
 }
 
 .modal_content__inputs {
   width: 80%;
-}
-
+} */
 
 /* .user-page_modal .u_input {
   min-width: 100%;
@@ -141,3 +152,15 @@
 .user-page_modal .u_input__field {
   min-width: 90%;
 } */
+
+.user-page__content {
+  font-size: 5rem;
+}
+
+.favorites-section__title {
+  margin: 0;
+}
+
+.user-page__content .reviews__reviews {
+  font-size: 1.4rem;
+}

@@ -1,6 +1,13 @@
+import { MovieCollection } from 'types/main_page.types';
+import { PersonCollection } from './Person.types';
+import { Reviews } from './movie_page.types';
+
 export type UserPageState = {
   parent: HTMLElement | null;
   userData: UserData | null;
+  movieCollection: MovieCollection | null;
+  actorCollection: PersonCollection | null;
+  reviews: Reviews | null;
 };
 
 export type Listener = (state: UserPageState) => void;
@@ -11,6 +18,7 @@ export interface UserData {
   createdAt: string;
   rating?: number;
   moviesCount?: number;
+  actorsCount?: number;
 }
 
 export type TabData = {

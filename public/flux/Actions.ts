@@ -4,11 +4,15 @@ import {
   RenderActionTypes,
   UserPageTypes,
   MovieActionTypes,
-  StatsActionTypes
+  StatsActionTypes,
+  PopupActionTypes
 } from 'flux/ActionTypes';
 import { UpdateUserData, UserData } from 'types/UserPage.types';
-import { MovieData, NewReviewDataJSON, Reviews } from 'types/movie_page.types';
+import { MovieData, NewReviewDataJSON, Review, Reviews } from 'types/movie_page.types';
 import { CSATStatisticDataJSON } from 'types/stats_page.types';
+import { PopupType } from 'types/Popup.types';
+import { MovieDataJSON } from 'types/main_page.types';
+import { PersonCardInfo } from 'types/Person.types';
 
 export function loginSubmit(username: string, password: string) {
   dispatcher.dispatch({
@@ -66,6 +70,27 @@ export function postMovieReview(reviewData: NewReviewDataJSON) {
   });
 }
 
+export function addMovieToFavorite(movieData: MovieDataJSON) {
+  dispatcher.dispatch({
+    type: UserPageTypes.ADD_MOVIE_TO_FAVORITE,
+    payload: movieData
+  });
+}
+
+export function addActorToFavorite(actor: PersonCardInfo) {
+  dispatcher.dispatch({
+    type: UserPageTypes.ADD_ACTOR_TO_FAVORITE,
+    payload: actor
+  });
+}
+
+export function addReview(review: Review) {
+  dispatcher.dispatch({
+    type: UserPageTypes.ADD_REVIEW,
+    payload: review
+  });
+}
+
 export const RenderActions = {
   renderMainPage() {
     dispatcher.dispatch({
@@ -113,6 +138,20 @@ export const RenderActions = {
   renderCsatPage() {
     dispatcher.dispatch({
       type: RenderActionTypes.RENDER_CSAT_PAGE
+    });
+  }
+};
+
+export const PopupActions = {
+  showPopup(payload: PopupType) {
+    dispatcher.dispatch({
+      type: PopupActionTypes.SHOW_POPUP,
+      payload
+    });
+  },
+  hidePopup() {
+    dispatcher.dispatch({
+      type: PopupActionTypes.HIDE_POPUP
     });
   }
 };

@@ -1,47 +1,28 @@
 .tabs {
-    background-color: var(--secondary-text-color);
-    display: flex;
-    gap: 3rem;
-    margin: 2rem auto;
-
-    width: fit-content;
-    border-radius: 2.5rem;
+  background-color: transparent;
+  display: flex;
+  gap: 3rem;
+  margin: 2rem 0; /* убрали auto, чтобы не было центрирования */
+  width: 100%; /* контейнер займет всю доступную ширину */
+  justify-content: flex-start; /* явно указываем выравнивание по левому краю */
 }
 
 .tabs__item {
-    padding: 5.75rem;
-    cursor: pointer;
-    color: var(--primary-text-color);
-    background-color: transparent;
-    position: relative;
-    transition: color 0.2s;
-    font-weight: 500;
-    font-size: 2rem;
-    text-align: center;
-}
-
-.tabs__item:first-child {
-    border-radius: 2.5rem;
-}
-
-.tabs__item:last-child {
-    border-radius: 2.5rem;
+  /* padding: 5.75rem; */
+  cursor: pointer;
+  color: var(--primary-text-color);
+  background-color: transparent;
+  position: relative;
+  transition: color 0.2s;
+  font-weight: 500;
+  font-size: 2rem;
+  text-align: center;
 }
 
 .tabs__item.active {
-    color: var(--primary-color);
-}
-
-.tabs__item.active::after {
-    content: "";
-    position: absolute;
-    bottom: -2px;
-    left: 0;
-    right: 0;
-    height: 2px;
-    background: #000;
+  color: var(--primary-color);
 }
 
 .tabs__item:hover {
-    background-color: var(--primary-color);
+  color: var(--primary-color);
 }

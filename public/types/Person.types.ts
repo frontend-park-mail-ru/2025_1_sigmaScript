@@ -15,6 +15,14 @@ export type PersonInfo = {
   favorite: boolean | null;
 };
 
+export type PersonCardInfo = {
+  personID: number | string | null;
+  nameRu: string | null;
+  photoUrl: string | null;
+};
+
+export type PersonCollection = PersonCardInfo[];
+
 export type PersonState = {
   person: PersonInfo | null;
   error: string | null;

@@ -15,11 +15,12 @@ export class Tabs {
   constructor(parent: HTMLElement, tabsData: TabData[] = []) {
     this.#parent = parent;
     this.#id = 'tabs--' + createID();
+    // Если универсальный колбэк не передан, то он останется undefined
     this.#data = { id: this.#id, tabsData };
   }
 
   /**
-   * Возвращает родительский элемент.
+   * Геттер для родительского элемента.
    * @returns HTMLElement
    */
   get parent(): HTMLElement {
@@ -27,7 +28,7 @@ export class Tabs {
   }
 
   /**
-   * Возвращает данные для шаблона.
+   * Геттер для данных.
    * @returns TabsData
    */
   get data(): TabsData {
@@ -35,7 +36,7 @@ export class Tabs {
   }
 
   /**
-   * Проверяет родителя
+   * Проверяет, определён ли родительский элемент.
    * @returns boolean
    */
   parentDefined(): boolean {
@@ -54,67 +55,73 @@ export class Tabs {
    * Удаляет отрисованный компонент из DOM.
    */
   destroy(): void {
+    // Если компонент существует, удаляем его
     if (!this.self()) {
       return;
     }
-
+    // Найдем все табы внутри компонента
     const tabElements = this.self()?.querySelectorAll('.tabs__item');
+    // Удаляем обработчики события (заметим, что removeEventListener здесь не сработает для анонимной функции,
+    // поэтому может быть достаточно полного удаления DOM-элемента)
     tabElements?.forEach((tab: Element) => {
       tab.removeEventListener('click', () => {
-        const tabId = tab.getAttribute('data-tab');
-        const tabContents = document.querySelectorAll('.tab-content');
-        tabContents.forEach((content: Element) => {
-          (content as HTMLElement).style.display = 'none';
-        });
-        const activeContent = document.getElementById(`tab-${tabId}`);
-        if (activeContent) {
-          activeContent.style.display = 'block';
-        }
+        // удаление обработчика в данном случае не приведет к ожидаемому результату
       });
     });
-
     this.self()?.remove();
   }
 
   /**
-   * Рисует компонент на экране.
+   * Рисует компонент табов на экране.
    */
   render(): void {
     this.destroy();
     if (!this.parentDefined()) {
       return;
     }
-
+    // Вставляем сгенерированную разметку в родительский элемент
     this.#parent.innerHTML += template(this.#data);
-    // TODO: реализовать в будущем
+    // Инициализируем обработчики событий для табов
     this.#initTabs();
   }
 
   /**
-   * Инициализирует обработчики событий для переключения табов.
-   * При клике скрываются все секции с контентом и показывается та,
-   * чей id совпадает с data-атрибутом выбранного таба.
+   * Инициализирует обработчики клика для переключения табов и управление активным классом.
+   * При клике вызывается переданный из вне колбэк для реализации логики.
    */
   #initTabs(): void {
     const component = this.self();
-    if (!component) return;
+    if (!component) {
+      return;
+    }
 
     const tabElements = component.querySelectorAll('.tabs__item');
+
     tabElements.forEach((tab: Element) => {
       tab.addEventListener('click', () => {
+        console.log('on click action');
         const tabId = tab.getAttribute('data-tab');
-        const tabContents = document.querySelectorAll('.tab-content');
-        tabContents.forEach((content: Element) => {
-          (content as HTMLElement).style.display = 'none';
-        });
-        const activeContent = document.getElementById(`tab-${tabId}`);
-        if (activeContent) {
-          activeContent.style.display = 'block';
+        // Снимаем активное состояние со всех табов
+        tabElements.forEach((el) => el.classList.remove('active'));
+        // Добавляем активное состояние для выбранного таба
+        tab.classList.add('active');
+
+        // Если у конкретного таба определён свой колбэк onClick, вызываем его
+        const tabData = this.#data.tabsData.find((item) => item.id === tabId);
+        console.log(tabData, tabData?.onClick);
+        if (tabData && typeof tabData.onClick === 'function') {
+          tabData.onClick(tabId!);
+        }
+        // Если задан универсальный колбэк для переключения табов, вызываем его
+        if (typeof this.#data.onTabChange === 'function') {
+          this.#data.onTabChange(tabId!);
         }
       });
     });
-    if (tabElements.length > 0) {
-      (tabElements[0] as HTMLElement).click();
-    }
+
+    // // Активируем первую вкладку по умолчанию
+    // if (tabElements.length > 0) {
+    //   (tabElements[0] as HTMLElement).click();
+    // }
   }
 }

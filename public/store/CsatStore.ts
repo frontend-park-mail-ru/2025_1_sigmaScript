@@ -70,7 +70,8 @@ class CsatStore {
       onCancel: () => {
         window.parent.postMessage({ type: 'CSAT_CLOSE' }, window.location.origin);
       },
-      stars: true
+      stars: true,
+      csat: true
     });
 
     this.state = modal;

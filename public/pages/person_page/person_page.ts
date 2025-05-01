@@ -6,6 +6,8 @@ import personTemplate from './person_page.hbs';
 import noPersonTemplate from './no_person_page.hbs';
 
 import Navbar from 'components/navbar/navbar.js';
+import Button from 'components/universal_button/button.js';
+import { addActorToFavorite, PopupActions } from 'flux/Actions.ts';
 
 // temp data
 const actorInfo: PersonInfo = {
@@ -107,6 +109,28 @@ export class PersonPage {
     nav.render();
 
     this.parent.insertAdjacentHTML('beforeend', personTemplate(this.personData));
+
+    new Button(this.parent.querySelector('.favorite-button__container'), {
+      id: 'button--favourite-' + createID(),
+      type: 'button',
+      text: 'Любимое',
+      addClasses: ['movie__button'],
+      srcIcon: '/static/svg/favourite.svg',
+      actions: {
+        click: () => {
+          addActorToFavorite({
+            personID: this.personData?.personID as number,
+            nameRu: this.personData?.nameRu as string,
+            photoUrl: this.personData?.photoUrl as string
+          });
+          PopupActions.showPopup({
+            message: 'Актёр добавлен в избранное!',
+            duration: 2500,
+            isError: false
+          });
+        }
+      }
+    }).render();
 
     this.addEvents();
   }

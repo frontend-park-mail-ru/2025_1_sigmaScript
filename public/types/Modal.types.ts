@@ -23,4 +23,5 @@ export type UniversalModalConfig = {
   addClasses?: string[];
   abc?: string;
   stars: boolean;
+  csat?: boolean;
 };

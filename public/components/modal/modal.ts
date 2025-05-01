@@ -25,7 +25,8 @@ class UniversalModal {
       cancelText: config.cancelText !== undefined ? config.cancelText : 'Нет',
       inputs: config.inputs || [],
       buttons: config.buttons || [],
-      stars: config.stars || false
+      stars: config.stars || false,
+      csat: config.csat || false
     };
 
     this.#stars = null;
@@ -45,6 +46,10 @@ class UniversalModal {
     const self = this.self();
     if (self && this.#addClasses.length > 0) {
       self.classList.add(...this.#addClasses);
+    }
+
+    if (this.#config.csat) {
+      self?.querySelector('.modal_content')?.classList.add('csat-modal-content');
     }
   }
 

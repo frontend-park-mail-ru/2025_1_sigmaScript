@@ -10,6 +10,9 @@ import { serialize, deserialize } from 'utils/Serialize';
 import { getUser, noSession, updateUserPage } from 'flux/Actions';
 import { router } from 'modules/router';
 import { BASE_URL } from 'public/consts';
+import { MovieDataJSON } from 'types/main_page.types';
+import { PersonCardInfo } from 'types/Person.types';
+import { Review } from 'types/movie_page.types';
 
 class UserPageStore {
   private state: UserPageState;
@@ -18,7 +21,10 @@ class UserPageStore {
   constructor() {
     this.state = {
       parent: null,
-      userData: null
+      userData: null,
+      movieCollection: [],
+      actorCollection: [],
+      reviews: []
     };
     this.listeners = [];
 
@@ -34,8 +40,10 @@ class UserPageStore {
   private async handleActions(action: Action): Promise<void> {
     switch (action.type) {
       case RenderActionTypes.RENDER_PROFILE_PAGE:
-        this.state.userData = action.payload as UserData;
-        this.renderUserPage(this.state.userData);
+        if (action.payload) {
+          this.state.userData = action.payload as UserData;
+        }
+        this.renderUserPage(this.state.userData as UserData);
         break;
       case UserPageTypes.UPDATE_USER_PAGE:
         this.state.userData = action.payload as UserData;
@@ -109,6 +117,22 @@ class UserPageStore {
           // console.log(error.errorDetails.error);
         }
         break;
+      case UserPageTypes.ADD_MOVIE_TO_FAVORITE: {
+        const movieData = action.payload as MovieDataJSON;
+        this.state.movieCollection?.push(movieData);
+        break;
+      }
+      case UserPageTypes.ADD_ACTOR_TO_FAVORITE: {
+        const actor = action.payload as PersonCardInfo;
+        this.state.actorCollection?.push(actor);
+        break;
+      }
+      case UserPageTypes.ADD_REVIEW: {
+        const review = action.payload as Review;
+        console.log(review);
+        this.state.reviews?.push(review);
+        break;
+      }
       default:
         break;
     }
@@ -143,6 +167,27 @@ class UserPageStore {
 
   getState(): UserPageState {
     return this.state;
+  }
+
+  getMoviesCount(): number {
+    return this.state.movieCollection?.length || 0;
+  }
+
+  getActorCount(): number {
+    return this.state.actorCollection?.length || 0;
+  }
+
+  getAverageRating(): number {
+    if (!this.state.reviews || this.state.reviews.length === 0) {
+      return 0;
+    }
+
+    const totalRating = this.state.reviews.reduce((sum, review) => {
+      // Предполагаем, что у объекта Review есть поле rating
+      return sum + (review.score || 0);
+    }, 0);
+
+    return Math.round((totalRating / this.state.reviews.length) * 10) / 10;
   }
 }
 

@@ -9,6 +9,8 @@ import 'store/UserPageStore';
 import 'store/NavbarStore';
 import 'store/CsatStore';
 import 'store/StatsPageStore';
+import 'store/PopupStore';
+import 'components/Popup/popup';
 
 import { router } from 'public/modules/router';
 

@@ -95,7 +95,6 @@ export class MovieCard {
     this.#parent.insertAdjacentHTML('beforeend', cardHTML);
 
     this.self()?.addEventListener('click', (event) => {
-      debugger;
       event.preventDefault();
       router.go(this.#config.url!);
     });

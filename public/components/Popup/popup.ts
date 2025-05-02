@@ -6,33 +6,22 @@ import type { PopupState } from 'types/Popup.types';
 
 export class Popup {
   #parent: HTMLElement;
-  #boundRender: (state: PopupState) => void;
-  #unsubscribe: () => void;
+  #bindedHandleStoreChange: (state: PopupState) => void;
 
   /**
-   * @param parent — контейнер для вставки попапа (по умолчанию document.body)
+   * @param parent — контейнер для вставки попапа
    */
   constructor(parent?: HTMLElement) {
     this.#parent = parent ?? document.body;
-    this.#boundRender = this.#render.bind(this);
-    PopupStore.subscribe(this.#boundRender);
-    this.#unsubscribe = () => PopupStore.unsubscribe(this.#boundRender);
-
-    // один раз сразу отрисовать на случай, если store уже содержит popup
-    this.#render(PopupStore.getState());
+    this.#bindedHandleStoreChange = this.handleStoreChange.bind(this);
+    PopupStore.subscribe(this.#bindedHandleStoreChange);
   }
 
-  /**
-   * Работает при любом изменении состояния PopupStore.
-   * Если появился новый popup — рендерим его.
-   * Если popup удалён из store — запускаем анимацию скрытия.
-   */
-  #render(state: PopupState): void {
+  handleStoreChange(state: PopupState): void {
     const existing = this.#parent.querySelector<HTMLElement>('.popup');
 
-    // 1) Если store.current === null, а DOM-попап есть — плавно скрыть и удалить
+    // если нужно скрыть
     if (!state.current && existing) {
-      // запускаем CSS-анимацию скрытия
       existing.classList.remove('popup--visible');
       existing.classList.add('popup--hide');
       existing.addEventListener(
@@ -45,47 +34,52 @@ export class Popup {
       return;
     }
 
-    // 2) Если store.current есть — удаляем старый сразу (если он ещё не удалён)
+    // если есть активный попап, при этом нужно отрисовать ещё один
     if (state.current && existing) {
       existing.remove();
     }
 
-    // 3) Если нет данных для показа — выходим
-    const popupData = state.current;
+    if (!state.current) {
+      return;
+    }
+
+    this.render(state.current);
+  }
+
+  /**
+   * Отвечает за отрисовку попапа.
+   *
+   * @param popupData — данные для отображения попапа (сообщение и флаг ошибки)
+   */
+  render(popupData: PopupState['current']): void {
     if (!popupData) {
       return;
     }
 
-    // 4) Компилируем и вставляем новый попап
-    const html = template({ message: popupData.message, isError: popupData.isError });
     const wrapper = document.createElement('div');
-    wrapper.innerHTML = html.trim();
-    const el = wrapper.firstElementChild as HTMLElement;
+    wrapper.innerHTML = template({ message: popupData.message, isError: popupData.isError }).trim();
+    const popup = wrapper.firstElementChild as HTMLElement;
 
-    // клик по кресту → dispatch hide
-    const btn = el.querySelector<HTMLElement>('.popup__close');
-    if (btn) {
-      btn.addEventListener('click', () => {
+    const close = popup.querySelector<HTMLElement>('.popup__close');
+    if (close) {
+      close.addEventListener('click', () => {
         PopupActions.hidePopup();
       });
     }
 
-    this.#parent.appendChild(el);
-    // запуск CSS-анимации появления
+    this.#parent.appendChild(popup);
+
     requestAnimationFrame(() => {
-      el.classList.add('popup--visible');
+      popup.classList.add('popup--visible');
     });
   }
 
   /**
-   * Отписываемся от Store и сразу удаляем любой «висящий» popup
+   * Удаляет попап из DOM
    */
   destroy(): void {
-    this.#unsubscribe();
-    const existing = this.#parent.querySelector<HTMLElement>('.popup');
-    if (existing) {
-      existing.remove();
-    }
+    PopupStore.unsubscribe(this.#bindedHandleStoreChange);
+    this.#parent.querySelector<HTMLElement>('.popup')?.remove();
   }
 }
 

@@ -13,6 +13,7 @@ import { PERSON_URL } from 'public/consts';
 import { serializeTimeZToHumanTimeAndYearsOld } from '../modules/time_serialiser';
 import { cmToMeters } from '../modules/smToMetersSerialiser';
 import { ErrorPayload } from 'types/Auth.types';
+import UserPageStore from './UserPageStore';
 
 class PersonPageStore {
   private listeners: Array<PersonListener>;
@@ -34,7 +35,8 @@ class PersonPageStore {
         totalFilms: null,
         biography: null,
         favorite: null,
-        dateOfDeath: null
+        dateOfDeath: null,
+        movieCollection: []
       }
     };
 
@@ -95,9 +97,16 @@ class PersonPageStore {
           genres: personJSON.genres,
           totalFilms: personJSON.total_films,
 
-          favorite: personJSON.favorite
+          favorite: personJSON.favorite,
+
+          movieCollection: personJSON.movie_collection
         }
       };
+
+      // временное решение, пока нет бдшки
+      if (personState.person && !personState.person.movieCollection) {
+        personState.person.movieCollection = UserPageStore.getState().movieCollection;
+      }
 
       tempPersonPage.destroy();
       initialStore.destroyStored();

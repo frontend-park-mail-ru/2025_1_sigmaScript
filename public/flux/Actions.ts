@@ -5,7 +5,9 @@ import {
   UserPageTypes,
   MovieActionTypes,
   StatsActionTypes,
-  PopupActionTypes
+  PopupActionTypes,
+  SearchActionTypes,
+  TabsActionTypes
 } from 'flux/ActionTypes';
 import { UpdateUserData, UserData } from 'types/UserPage.types';
 import { MovieData, NewReviewDataJSON, Review, Reviews } from 'types/movie_page.types';
@@ -13,6 +15,7 @@ import { CSATStatisticDataJSON } from 'types/stats_page.types';
 import { PopupType } from 'types/Popup.types';
 import { MovieDataJSON } from 'types/main_page.types';
 import { PersonCardInfo } from 'types/Person.types';
+import { SearchPageState } from 'types/SearchPage.types';
 
 export function loginSubmit(username: string, password: string) {
   dispatcher.dispatch({
@@ -139,6 +142,11 @@ export const RenderActions = {
     dispatcher.dispatch({
       type: RenderActionTypes.RENDER_CSAT_PAGE
     });
+  },
+  renderSearchPage() {
+    dispatcher.dispatch({
+      type: RenderActionTypes.RENDER_SEARCH_PAGE
+    });
   }
 };
 
@@ -217,5 +225,26 @@ export function statsDataError(error: string) {
 export function loadStatsData() {
   dispatcher.dispatch({
     type: StatsActionTypes.LOAD_STATS_DATA
+  });
+}
+
+export function search(text: string) {
+  dispatcher.dispatch({
+    type: SearchActionTypes.SEARCH,
+    payload: text
+  });
+}
+
+export function searchCompleted(searchState: SearchPageState) {
+  dispatcher.dispatch({
+    type: SearchActionTypes.SEARCH_COMPLETED,
+    payload: searchState
+  });
+}
+
+export function favoriteToggle() {
+  dispatcher.dispatch({
+    type: TabsActionTypes.FAVORITE_TOGGLE,
+    payload: 'favorites'
   });
 }

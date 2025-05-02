@@ -1,6 +1,6 @@
 import { dispatcher } from 'flux/Dispatcher';
 import { Action } from 'types/Dispatcher.types';
-import { RenderActionTypes, UserPageTypes } from 'flux/ActionTypes';
+import { RenderActionTypes, TabsActionTypes, UserPageTypes } from 'flux/ActionTypes';
 import { UserPageState, Listener, UserData, UpdateUserData } from 'types/UserPage.types';
 import { initialStore } from './InitialStore';
 import { UserPage } from 'pages/UserPage/UserPage';
@@ -24,7 +24,8 @@ class UserPageStore {
       userData: null,
       movieCollection: [],
       actorCollection: [],
-      reviews: []
+      reviews: [],
+      needTabID: null
     };
     this.listeners = [];
 
@@ -129,8 +130,13 @@ class UserPageStore {
       }
       case UserPageTypes.ADD_REVIEW: {
         const review = action.payload as Review;
-        console.log(review);
         this.state.reviews?.push(review);
+        break;
+      }
+      case TabsActionTypes.FAVORITE_TOGGLE: {
+        this.state.needTabID = action.payload as string;
+        this.emitChange();
+        this.state.needTabID = null;
         break;
       }
       default:
@@ -183,7 +189,6 @@ class UserPageStore {
     }
 
     const totalRating = this.state.reviews.reduce((sum, review) => {
-      // Предполагаем, что у объекта Review есть поле rating
       return sum + (review.score || 0);
     }, 0);
 

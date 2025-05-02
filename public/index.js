@@ -11,6 +11,7 @@ import 'store/CsatStore';
 import 'store/StatsPageStore';
 import 'store/PopupStore';
 import 'components/Popup/popup';
+import 'store/SearchPageStore';
 
 import { router } from 'public/modules/router';
 

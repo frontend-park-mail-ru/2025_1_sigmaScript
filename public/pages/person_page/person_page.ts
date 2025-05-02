@@ -1,13 +1,19 @@
 import { createID } from 'utils/createID';
 import { PersonInfo, PersonState } from 'types/Person.types.ts';
 import PersonPageStore from 'store/PersonPageStore.ts';
-import { router } from '../../modules/router.ts';
+import { router, Urls } from '../../modules/router.ts';
 import personTemplate from './person_page.hbs';
 import noPersonTemplate from './no_person_page.hbs';
 
 import Navbar from 'components/navbar/navbar.js';
 import Button from 'components/universal_button/button.js';
 import { addActorToFavorite, PopupActions } from 'flux/Actions.ts';
+import { Footer } from 'components/Footer/Footer.ts';
+import { FOOTER_CONFIG } from 'public/consts';
+import { FooterData } from 'types/Footer.types';
+import Scroll from 'components/Scroll/Scroll.ts';
+import MovieCard from 'components/Card/Card.ts';
+import { MovieCollection } from 'types/main_page.types.ts';
 
 // temp data
 const actorInfo: PersonInfo = {
@@ -23,13 +29,15 @@ const actorInfo: PersonInfo = {
   genres: null,
   totalFilms: null,
   biography: null,
-  dateOfDeath: null
+  dateOfDeath: null,
+  movieCollection: []
 };
 
 export class PersonPage {
   private parent: HTMLElement;
   private id: string;
   private personData: PersonInfo | null;
+  private navbar: Navbar | null;
 
   private bindedHandleStoreChange: (state: PersonState) => void;
   prevPage: () => void;
@@ -55,6 +63,8 @@ export class PersonPage {
     this.prevPage = () => {
       router.go(this.prevPageURL);
     };
+
+    this.navbar = null;
 
     this.bindedHandleStoreChange = this.handleStoreChange.bind(this);
     PersonPageStore.subscribe(this.bindedHandleStoreChange);
@@ -88,6 +98,7 @@ export class PersonPage {
    */
   destroy(): void {
     PersonPageStore.unsubscribe(this.bindedHandleStoreChange);
+    this.navbar?.destroy();
     this.self()?.remove();
   }
 
@@ -100,15 +111,23 @@ export class PersonPage {
     }
     this.parent.innerHTML = '';
 
+    const mainElem = document.createElement('main');
+    mainElem.id = createID();
+    this.parent.appendChild(mainElem);
+
     const mainElemHeader = document.createElement('div');
     mainElemHeader.classList += 'header sticky_to_top';
     mainElemHeader.id = createID();
-    this.parent.appendChild(mainElemHeader);
+    mainElem.appendChild(mainElemHeader);
 
-    const nav = new Navbar(mainElemHeader);
-    nav.render();
+    this.navbar = new Navbar(mainElemHeader);
+    this.navbar.render();
 
-    this.parent.insertAdjacentHTML('beforeend', personTemplate(this.personData));
+    const mainElemContent = document.createElement('div');
+    mainElemContent.classList += 'content';
+    mainElem.appendChild(mainElemContent);
+
+    mainElemContent.innerHTML = personTemplate(this.personData);
 
     new Button(this.parent.querySelector('.favorite-button__container'), {
       id: 'button--favourite-' + createID(),
@@ -131,6 +150,37 @@ export class PersonPage {
         }
       }
     }).render();
+
+    const contentDiv = document.querySelector('.person-page__films') as HTMLElement;
+    if (!contentDiv) return;
+    contentDiv.innerHTML = '';
+
+    const moviesSection = document.createElement('div');
+    moviesSection.classList.add('favorites-section', 'favorites-section--movies');
+    contentDiv.appendChild(moviesSection);
+
+    const moviesTitle = document.createElement('h4');
+    moviesTitle.textContent = 'Фильмы с участием актёра';
+    moviesTitle.classList.add('favorites-section__title');
+    moviesSection.appendChild(moviesTitle);
+
+    const moviesScroll = new Scroll(moviesSection);
+    moviesScroll.render();
+    const moviesContainer = moviesScroll.getContentContainer();
+    if (moviesContainer) {
+      for (const movie of this.personData?.movieCollection as MovieCollection) {
+        new MovieCard(moviesContainer, {
+          id: `movieCard--${movie.id}`,
+          title: movie.title,
+          url: `${Urls.movie}/${movie.id}`,
+          previewUrl: movie.preview_url || '/static/img/default_preview.webp',
+          width: '130',
+          height: '180'
+        }).render();
+      }
+    }
+
+    new Footer(mainElem, FOOTER_CONFIG as FooterData).render();
 
     this.addEvents();
   }

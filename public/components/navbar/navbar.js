@@ -5,10 +5,37 @@ import { router } from 'public/modules/router.ts';
 import UniversalModal from 'components/modal/modal';
 import UserPageStore from 'store/UserPageStore';
 import NavbarStore from 'store/NavbarStore';
-import { logoutUser } from 'flux/Actions';
+import { favoriteToggle, logoutUser } from 'flux/Actions';
+import { Tabs } from 'components/Tab/Tab';
 
 const logoSvg = '/static/svg/logo_text_border_lining.svg';
 const userSvg = '/static/svg/Avatar large.svg';
+const searchSvg = '/static/svg/search.svg';
+
+export const TABS_DATA = {
+  tabsData: [
+    {
+      id: 'favorites',
+      label: 'Избранное',
+      onClick: () => {
+        router.go('/profile');
+        favoriteToggle();
+      }
+    },
+    {
+      id: 'reviews',
+      label: 'Жанры',
+      onClick: () => {}
+    },
+    {
+      id: 'search',
+      label: 'Поиск',
+      onClick: () => {
+        router.go('/search');
+      }
+    }
+  ]
+};
 
 /**
  * Навигационная панель
@@ -37,7 +64,7 @@ class Navbar {
     NavbarStore.subscribe(this.bindedHandleStoreChange);
   }
 
-  handleStoreChange() {
+  handleStoreChange(state) {
     let userData = UserPageStore.getState().userData;
     if (!userData?.username) {
       this.user.destroy();
@@ -50,8 +77,12 @@ class Navbar {
         text: userData.username
       });
       this.user.render();
+      this.tabs.render();
       this.LogoutButton.render();
       this.LogoutButton.self().classList.add('navbar__button');
+    }
+    if (state.needTabID) {
+      this.tabs.activateTabByIdDirect(state.needTabID);
     }
   }
 
@@ -60,7 +91,7 @@ class Navbar {
   }
 
   destroy() {
-    UserPageStore.unsubscribe(this.bindedHandleStoreChange);
+    NavbarStore.unsubscribe(this.bindedHandleStoreChange);
     this.logo.destroy();
     this.user.destroy();
     this.LoginButton?.destroy();
@@ -73,7 +104,7 @@ class Navbar {
     return document.querySelector('.navbar_elements');
   }
 
-  async render() {
+  render() {
     if (!this.#parent) {
       return;
     }
@@ -83,11 +114,27 @@ class Navbar {
     this.#parent.appendChild(navbar);
     navbar.innerHTML = template();
 
+    const leftContainer = document.createElement('div');
+    leftContainer.classList.add('navbar__left');
+    this.#elements().appendChild(leftContainer);
+
     const navbarLogo = document.createElement('div');
     navbarLogo.classList.add('navbar__logo');
     navbarLogo.style.height = '40px';
+    leftContainer.appendChild(navbarLogo);
 
-    this.#elements().appendChild(navbarLogo);
+    const navbarTabs = document.createElement('div');
+    navbarTabs.classList.add('navbar__tabs');
+    leftContainer.appendChild(navbarTabs);
+    this.tabs = new Tabs(navbarTabs, TABS_DATA.tabsData);
+
+    this.searchIcon = new Icon(leftContainer, {
+      id: 'searchIcon',
+      srcIcon: searchSvg,
+      size: 'small'
+    });
+    this.searchIcon.setActions({ click: () => router.go('/search') });
+    this.searchIcon.render();
 
     this.logo = new Icon(navbarLogo, {
       id: 'navbarLogo',
@@ -164,6 +211,7 @@ class Navbar {
       this.LoginButton.self().classList.add('navbar__button');
     } else {
       this.user.render();
+      this.tabs.render();
       this.LogoutButton.render();
       this.LogoutButton.self().classList.add('navbar__button');
     }

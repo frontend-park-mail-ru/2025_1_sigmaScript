@@ -1,9 +1,10 @@
+/* === Базовые стили (как в оригинале) === */
 .user-page {
   max-width: 120rem;
   width: 100%;
   margin: 0rem auto;
-  /* margin: 0rem; */
-  padding: 0rem;
+  /* Убрал padding: 0rem;, вернул как может быть в оригинале или уберу совсем, если его не было */
+  /* padding: 0rem; */ /* Оставьте или удалите в зависимости от вашего исходного CSS */
   background-color: transparent;
   border-radius: 0.5rem;
   box-sizing: border-box;
@@ -12,12 +13,22 @@
   gap: 2rem;
 }
 
+/* Добавим отступы для контента внутри user-page на больших экранах,
+   если у .user-page был убран padding */
+/* .user-page > .gradient,
+.user-page > .user-page__content {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+} */
+/* ^^^ Раскомментируйте и настройте эти отступы, если они нужны ^^^ */
+
 .user-page__upper {
   width: 100%;
   display: flex;
   gap: 2rem;
-  /* margin-bottom: 2rem; */
+  /* margin-bottom: 2rem; */ /* Как в оригинале */
   align-items: center;
+  /* padding-top: 2rem; */ /* Убрал добавленный отступ */
 }
 
 .user-page__avatar {
@@ -25,7 +36,7 @@
   height: 25rem;
   border-radius: 50%;
   overflow: hidden;
-  background-color: #3a3a3a;
+  background-color: #3a3a3a; /* Как в оригинале */
   flex-shrink: 0;
   display: flex;
   align-items: center;
@@ -42,8 +53,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 3rem;
-  color: #999999;
+  font-size: 3rem; /* Как в оригинале */
+  color: #999999; /* Как в оригинале */
 }
 
 .user-page__info {
@@ -51,62 +62,50 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  gap: 5rem;
-  padding-bottom: 3rem;
+  gap: 5rem; /* Как в оригинале */
+  padding-bottom: 3rem; /* Как в оригинале */
 }
 
 .user-page__info-top {
   display: flex;
   align-items: center;
-  padding-left: 6rem;
-  padding-right: 6rem;
+  padding-left: 6rem; /* Как в оригинале */
+  padding-right: 6rem; /* Как в оригинале */
   justify-content: space-between;
 }
 
 .user-page__name {
-  font-size: 2.8rem;
-  font-weight: 600;
+  font-size: 2.8rem; /* Как в оригинале */
+  font-weight: 600; /* Как в оригинале */
   margin: 0;
-  color: var(--primary-text-color);
+  color: var(--primary-text-color); /* Как в оригинале */
+  /* Добавим возможность переноса для длинных имен на всякий случай */
+  word-break: break-word;
 }
 
 .user-page__info-middle {
-  /* TODO: решить, оставляем ли отзывы. если да, то раскомментируем */
-  /* display: flex;
-  gap: 4rem;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%; */
-  /* display: flex;
-  padding-left: 6rem;
-  padding-right: 6rem;
-  gap: 15rem;
-  justify-content: flex-start;
-  flex-wrap: wrap;
-  align-items: center; */
-
-  display: grid;
-  grid-template-columns: repeat(2, 20rem);
-  row-gap: 2rem;
-  column-gap: 15rem;
-  padding-left: 6rem;
-  padding-right: 6rem;
+  display: grid; /* Как в оригинале */
+  grid-template-columns: repeat(2, 20rem); /* Как в оригинале */
+  row-gap: 2rem; /* Как в оригинале */
+  column-gap: 15rem; /* Как в оригинале */
+  padding-left: 6rem; /* Как в оригинале */
+  padding-right: 6rem; /* Как в оригинале */
 }
 
 .user-page__detail {
-  font-size: 1.6rem;
-  color: var(--primary-text-color);
+  font-size: 1.6rem; /* Как в оригинале */
+  color: var(--primary-text-color); /* Как в оригинале */
   margin: 0;
-  max-width: 20rem;
+  max-width: 20rem; /* Как в оригинале */
+  word-wrap: break-word; /* Добавим перенос слов */
 }
 
 .user-page__info-bottom {
   display: flex;
-  padding-left: 6rem;
-  gap: 15rem;
-  justify-content: flex-start;
-  flex-wrap: wrap;
+  padding-left: 6rem; /* Как в оригинале */
+  gap: 15rem; /* Как в оригинале */
+  justify-content: flex-start; /* Как в оригинале */
+  flex-wrap: wrap; /* Как в оригинале */
 }
 
 .user-page__stats-item {
@@ -114,17 +113,17 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: 1.6rem;
+  font-size: 1.6rem; /* Как в оригинале */
   margin: 0;
 }
 
 .user-page__stats-number {
   display: block;
-  color: var(--primary-text-color);
+  color: var(--primary-text-color); /* Как в оригинале */
 }
 
 .user-page__stats-label {
-  color: var(--primary-text-color);
+  color: var(--primary-text-color); /* Как в оригинале */
   display: block;
   text-align: center;
 }
@@ -132,35 +131,206 @@
 .user-page__action-button {
   display: flex;
   flex-direction: column;
-
-  gap: 10px;
+  gap: 10px; /* Как в оригинале */
+  flex-shrink: 0; /* Предотвращаем сжатие контейнера кнопок */
 }
-
-/* .user-page_modal .modal_content {
-  min-width: 30%;
-  min-height: 70%;
-}
-
-.modal_content__inputs {
-  width: 80%;
-} */
-
-/* .user-page_modal .u_input {
-  min-width: 100%;
-}
-
-.user-page_modal .u_input__field {
-  min-width: 90%;
-} */
 
 .user-page__content {
-  font-size: 5rem;
+  font-size: 5rem; /* Как в оригинале - ОСТОРОЖНО, ОЧЕНЬ БОЛЬШОЙ РАЗМЕР */
+  /* Убедитесь, что этот размер действительно нужен или он переопределяется ниже */
+}
+
+.favorites-section {
+  /* Стили для секции избранного, если они есть */
+  margin-bottom: 2rem; /* Добавим отступ между секциями для ясности */
 }
 
 .favorites-section__title {
-  margin: 0;
+  font-size: 3rem; /* Как в оригинале */
+  margin: 0 0 1rem 0; /* Добавим отступ снизу для ясности*/
+  color: var(--primary-text-color); /* Пример цвета, если не задан */
 }
 
+/* Стили для .reviews__reviews (внутри .user-page__content) */
 .user-page__content .reviews__reviews {
-  font-size: 1.4rem;
+  font-size: 1.4rem; /* Как в оригинале */
+  /* Дополнительные стили для контейнера отзывов, если они были */
+  display: flex; /* Добавим flex для управления отзывами */
+  flex-direction: column;
+  gap: 1.5rem; /* Отступ между карточками отзывов (можно настроить) */
+}
+
+/* !!! СТИЛИ ДЛЯ .review-card НЕ ДОБАВЛЯЮТСЯ ЗДЕСЬ !!! */
+/* Предполагается, что они определены в другом месте */
+
+/* === Адаптивность (Только для структуры UserPage) === */
+
+/* Планшеты и большие телефоны (например, < 992px) */
+@media (max-width: 991.98px) {
+  .user-page {
+    /* Можно добавить немного padding по бокам для всего блока на мобильных */
+    /* padding-left: 1rem; */
+    /* padding-right: 1rem; */
+  }
+
+  .user-page__upper {
+    flex-direction: column; /* Аватар над информацией */
+    align-items: center; /* Центрируем по горизонтали */
+    gap: 2rem;
+    padding-top: 1rem; /* Небольшой отступ сверху */
+  }
+
+  .user-page__avatar {
+    width: 20rem; /* Уменьшаем аватар */
+    height: 20rem;
+    margin: 0 auto; /* Центрируем аватар */
+  }
+
+  .user-page__info {
+    width: 100%; /* Информация занимает всю ширину */
+    gap: 3rem; /* Уменьшаем вертикальный отступ */
+    padding-bottom: 2rem;
+    align-items: center; /* Центрируем содержимое инфо блока */
+  }
+
+  .user-page__info-top {
+    flex-direction: column; /* Имя над кнопками */
+    padding-left: 1rem; /* Уменьшаем боковые отступы */
+    padding-right: 1rem;
+    gap: 1.5rem; /* Отступ между именем и кнопками */
+    text-align: center; /* Центрируем имя */
+  }
+
+  .user-page__action-button {
+    flex-direction: row; /* Кнопки в ряд */
+    flex-wrap: wrap; /* Разрешаем перенос кнопок */
+    justify-content: center; /* Центрируем кнопки */
+    gap: 1rem;
+  }
+  /* Если у кнопок есть общий класс, можно добавить стили для их ширины */
+  .user-page__action-button > * {
+    /* Применяем ко всем прямым потомкам */
+    /* flex-grow: 1; */ /* Опционально: позволить кнопкам растягиваться */
+    min-width: 15rem; /* Минимальная ширина для читаемости */
+  }
+
+  .user-page__info-middle {
+    grid-template-columns: repeat(2, 1fr); /* Две колонки равной ширины */
+    column-gap: 2rem; /* Уменьшаем отступ между колонками */
+    row-gap: 2rem;
+    padding-left: 1rem; /* Уменьшаем боковые отступы */
+    padding-right: 1rem;
+    width: 100%; /* Занимает всю ширину */
+    max-width: 50rem; /* Ограничим максимальную ширину для читаемости */
+    margin-left: auto; /* Центрируем блок статистики */
+    margin-right: auto;
+    justify-items: center; /* Центрируем контент в ячейках грида */
+  }
+
+  .user-page__detail {
+    text-align: center; /* Центрируем текст деталей */
+    max-width: none; /* Снимаем ограничение ширины, если нужно */
+  }
+
+  .user-page__info-bottom {
+    padding-left: 1rem;
+    padding-right: 1rem;
+    gap: 3rem;
+    justify-content: center;
+  }
+
+  .favorites-section__title {
+    font-size: 2.5rem; /* Немного уменьшим заголовок секции */
+    text-align: center; /* Центрируем */
+  }
+
+  .tabs-container {
+    /* Можно добавить стили для табов на планшетах, если нужно */
+    /* Например, центрирование */
+    /* display: flex; */
+    /* justify-content: center; */
+  }
+}
+
+/* Маленькие планшеты и телефоны (например, < 768px) */
+@media (max-width: 767.98px) {
+  /* Уменьшим общие отступы еще, если нужно */
+  .user-page {
+    /* padding-left: 0.5rem; */
+    /* padding-right: 0.5rem; */
+  }
+
+  .user-page__avatar {
+    width: 15rem; /* Еще уменьшаем аватар */
+    height: 15rem;
+  }
+
+  .user-page__name {
+    font-size: 2.4rem; /* Уменьшаем имя пользователя */
+  }
+
+  .user-page__info-middle {
+    grid-template-columns: 1fr; /* Одна колонка */
+    gap: 1.5rem; /* Уменьшаем отступ между элементами */
+    padding-left: 0; /* Убираем боковые отступы у грида */
+    padding-right: 0;
+    max-width: 30rem; /* Еще ограничиваем ширину для центровки */
+  }
+
+  .user-page__action-button {
+    flex-direction: column; /* Кнопки опять в столбец */
+    width: 100%; /* Растягиваем контейнер кнопок */
+    max-width: 30rem; /* Ограничиваем ширину кнопок */
+    align-items: stretch; /* Кнопки растягиваются на всю ширину контейнера */
+    margin-left: auto; /* Центрируем блок кнопок */
+    margin-right: auto;
+  }
+  .user-page__action-button > * {
+    width: 100%; /* Кнопка занимает всю ширину */
+    min-width: auto; /* Сбрасываем мин. ширину */
+  }
+
+  .favorites-section__title {
+    font-size: 2.2rem;
+  }
+
+  /* Возможно, потребуется адаптация для компонента Tabs */
+  .tabs-container .tabs {
+    /* Пример: сделать табы прокручиваемыми, если не помещаются */
+    /* overflow-x: auto; */
+    /* white-space: nowrap; */
+  }
+}
+
+/* Очень маленькие экраны (например, < 480px) */
+@media (max-width: 479.98px) {
+  .user-page__avatar {
+    width: 12rem; /* Минимальный разумный размер аватара */
+    height: 12rem;
+  }
+
+  .user-page__name {
+    font-size: 2rem;
+  }
+
+  .user-page__detail {
+    font-size: 1.4rem; /* Уменьшаем текст деталей */
+  }
+
+  .user-page__info-middle {
+    max-width: none; /* Позволяем занимать всю ширину контейнера */
+    padding-left: 1rem; /* Небольшие отступы по краям, если нужно */
+    padding-right: 1rem;
+  }
+
+  .user-page__action-button {
+    max-width: none; /* Растягиваем на всю ширину */
+    padding-left: 1rem; /* Небольшие отступы по краям, если нужно */
+    padding-right: 1rem;
+  }
+
+  .favorites-section__title {
+    font-size: 2rem;
+    text-align: left; /* Вернем выравнивание влево для заголовков секций */
+  }
 }

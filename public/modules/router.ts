@@ -8,7 +8,8 @@ export const Urls = {
   person: '/name',
   profile: '/profile',
   stats: '/csat/statistic',
-  csat: '/csat'
+  csat: '/csat',
+  search: '/search'
 };
 
 type lastScrollState = {
@@ -53,6 +54,9 @@ export const handler = (args: handlerInput) => {
     case Urls.csat:
       RenderActions.renderCsatPage();
       break;
+    case Urls.search:
+      RenderActions.renderSearchPage();
+      break;
     default:
       window.location.pathname = '/';
       router.go('/');
@@ -80,7 +84,6 @@ class Router {
     handler({ url: url, id: this.getURLMethodAndID(url.pathname).id });
 
     window.onpopstate = (e) => {
-      console.log(e);
       if (e.state && e.state.id) {
         handler({ url: new URL(window.location.href), id: e.state.id });
       } else {

@@ -102,7 +102,6 @@ export const serializeTimeZToHumanTime = (timeString: string): string => {
 };
 
 export const formatDateTime = (date: Date): string => {
-  // Форматируем дату: "15 октября 2023 г."
   const optionsDate: Intl.DateTimeFormatOptions = {
     day: 'numeric',
     month: 'long',
@@ -110,7 +109,6 @@ export const formatDateTime = (date: Date): string => {
   };
   const formattedDate = date.toLocaleDateString('ru-RU', optionsDate);
 
-  // Форматируем время: "22:01:16"
   const optionsTime: Intl.DateTimeFormatOptions = {
     hour: '2-digit',
     minute: '2-digit',

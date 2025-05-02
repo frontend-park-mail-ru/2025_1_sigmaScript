@@ -27,14 +27,12 @@
   transform: translateY(-1rem);
 }
 
-/* конкретно для ошибки — красный фон */
 .popup--error {
-  background-color: #e74c3c;
+  background-color: var(--error-color);
 }
 
-/* для успеха — зелёный фон */
 .popup--success {
-  background-color: #27ae60;
+  background-color: var(--success-color);
 }
 
 .popup__text {

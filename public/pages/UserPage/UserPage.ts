@@ -30,7 +30,6 @@ export const TABS_DATA = {
         if (!contentDiv) return;
         contentDiv.innerHTML = '';
 
-        // --- Секция «Фильмы» ---
         const moviesSection = document.createElement('div');
         moviesSection.classList.add('favorites-section', 'favorites-section--movies');
         contentDiv.appendChild(moviesSection);
@@ -40,7 +39,6 @@ export const TABS_DATA = {
         moviesTitle.classList.add('favorites-section__title');
         moviesSection.appendChild(moviesTitle);
 
-        // создаём скролл внутри moviesSection
         const moviesScroll = new Scroll(moviesSection);
         moviesScroll.render();
         const moviesContainer = moviesScroll.getContentContainer();
@@ -57,7 +55,6 @@ export const TABS_DATA = {
           }
         }
 
-        // --- Секция «Актёры» ---
         const actorsSection = document.createElement('div');
         actorsSection.classList.add('favorites-section', 'favorites-section--actors');
         contentDiv.appendChild(actorsSection);
@@ -67,7 +64,6 @@ export const TABS_DATA = {
         actorsTitle.classList.add('favorites-section__title');
         actorsSection.appendChild(actorsTitle);
 
-        // создаём скролл внутри actorsSection
         const actorsScroll = new Scroll(actorsSection);
         actorsScroll.render();
         const actorsContainer = actorsScroll.getContentContainer();
@@ -111,6 +107,7 @@ export class UserPage {
   #data: UserPageData;
   #id: string;
   #navbar: Navbar | null;
+  #tabs: Tabs | null;
   #footer: Footer | null;
   private bindedHandleStoreChange: (state: UserPageState) => void;
 
@@ -129,6 +126,7 @@ export class UserPage {
       avatar: userData?.avatar || AVATAR_PLACEHOLDER
     };
     this.#navbar = null;
+    this.#tabs = null;
     this.#footer = null;
 
     this.bindedHandleStoreChange = this.handleStoreChange.bind(this);
@@ -140,6 +138,13 @@ export class UserPage {
    * @param {AuthState} state - текущее состояние авторизации из Store
    */
   handleStoreChange(state: UserPageState) {
+    if (state.needTabID) {
+      this.#tabs?.activateTabById(state.needTabID);
+      const element = document.querySelector('.favorites-section--movies');
+      element?.scrollIntoView({ behavior: 'smooth' });
+      return;
+    }
+
     this.#data.username = state.userData?.username || this.#data.username;
     this.#data.createdAt = state.userData?.createdAt || this.#data.createdAt;
     this.#data.avatar = state.userData?.avatar || AVATAR_PLACEHOLDER;
@@ -198,7 +203,7 @@ export class UserPage {
   /**
    * Рисует компонент на экран.
    */
-  async render(): Promise<void> {
+  render(): void {
     if (!this.parentDefined()) {
       return;
     }
@@ -235,60 +240,6 @@ export class UserPage {
     }
     const buttonContainer = this.self()?.querySelector(`.user-page__action-button`);
     if (buttonContainer) {
-      // const changeUserDataButtonConfig: ButtonConfig = {
-      //   id: 'changeDataBtn',
-      //   color: 'primary',
-      //   text: 'Изменить данные',
-      //   textColor: 'primary',
-      //   actions: {
-      //     click: async () => {
-      //       const modal = new UniversalModal(document.body, {
-      //         title: 'Редактирование данных',
-      //         message: 'Измените логин и/или пароль',
-      //         confirmText: 'Сохранить',
-      //         cancelText: 'Отмена',
-      //         inputs: [
-      //           {
-      //             id: 'loginInput',
-      //             name: 'login',
-      //             placeholder: 'Введите новый логин',
-      //             type: 'text',
-      //             text: UserPageStore.getState().userData?.username
-      //           },
-      //           {
-      //             id: 'oldPasswordInput',
-      //             name: 'oldPassword',
-      //             placeholder: 'Введите старый пароль',
-      //             type: 'password'
-      //           },
-      //           {
-      //             id: 'newPasswordInput',
-      //             name: 'newPassword',
-      //             placeholder: 'Введите новый пароль',
-      //             type: 'password'
-      //           },
-      //           {
-      //             id: 'repeatedNewPasswordInput',
-      //             name: 'repeatedNewPassword',
-      //             placeholder: 'Повторите новый пароль',
-      //             type: 'password'
-      //           }
-      //         ],
-      //         onConfirm: () => {
-      //           const username = modal.getInputByName('login').getValue();
-      //           const oldPassword = modal.getInputByName('oldPassword').getValue();
-      //           const newPassword = modal.getInputByName('newPassword').getValue();
-      //           const repeatedNewPassword = modal.getInputByName('repeatedNewPassword').getValue();
-      //           updateUser({ username, oldPassword, newPassword, repeatedNewPassword });
-      //         }
-      //       } as UniversalModalConfig);
-
-      //       modal.render();
-      //       modal.open();
-      //     }
-      //   }
-      // };
-
       const changeUserLoginButtonConfig: ButtonConfig = {
         id: 'changeLoginBtn',
         color: 'primary',
@@ -298,7 +249,6 @@ export class UserPage {
           click: async () => {
             const modal = new UniversalModal(document.body, {
               title: 'Измените логин',
-              // message: 'Измените логин',
               confirmText: 'Сохранить',
               cancelText: 'Отмена',
               inputs: [
@@ -334,7 +284,6 @@ export class UserPage {
           click: async () => {
             const modal = new UniversalModal(document.body, {
               title: 'Измените пароль',
-              // message: 'Измените пароль',
               confirmText: 'Сохранить',
               cancelText: 'Отмена',
               inputs: [
@@ -380,8 +329,7 @@ export class UserPage {
         actions: {
           click: async () => {
             const modal = new UniversalModal(document.body, {
-              title: 'Редактирование данных',
-              message: 'Измените логин и/или пароль',
+              title: 'Измените аватар',
               confirmText: 'Сохранить',
               cancelText: 'Отмена',
               inputs: [
@@ -420,7 +368,8 @@ export class UserPage {
 
     const tabsContainer = this.self()?.querySelector<HTMLElement>(`#${this.#id} .tabs-container`);
     if (tabsContainer && this.#data.tabsData) {
-      new Tabs(tabsContainer, this.data.tabsData).render();
+      this.#tabs = new Tabs(tabsContainer, this.data.tabsData);
+      this.#tabs.render();
     }
   }
 

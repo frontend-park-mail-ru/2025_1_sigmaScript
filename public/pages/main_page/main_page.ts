@@ -43,8 +43,8 @@ class MainPage {
     if (!this.self()) {
       return;
     }
-    this.self()?.remove();
     this.#navbar?.destroy();
+    this.self()?.remove();
   }
 
   async GetCompilations() {

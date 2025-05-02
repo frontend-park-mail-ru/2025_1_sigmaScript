@@ -1,5 +1,5 @@
 <div class='user-page'>
-  <div class="gradient">
+  <div class='gradient'>
     <div class='user-page__upper'>
       <div class='user-page__avatar'>
         {{#if avatar}}
@@ -24,7 +24,7 @@
           </span>
           <span class='user-page__detail'>
             Актёров в избранном:<br />
-            {{#if actorsCount}}{{actorsCount}}{{else}}-{{/if}}
+            {{#if actorsCount}}{{actorsCount}}{{else}}0{{/if}}
           </span>
           <span class='user-page__detail'>
             Рейтинг отзывов<br />на фильмы:<br />
@@ -32,26 +32,13 @@
           </span>
           <span class='user-page__detail'>
             Фильмов в избранном:<br />
-            {{#if moviesCount}}{{moviesCount}}{{else}}-{{/if}}
+            {{#if moviesCount}}{{moviesCount}}{{else}}0{{/if}}
           </span>
         </div>
-
-        {{! TODO: окончательно понять, что отрисовываем и храним, а что нет }}
-        {{!-- <div class='user-page__info-bottom'>
-        <div class='user-page__stats-item'>
-          <span class='user-page__stats-number'>{{#if moviesCount}}{{moviesCount}}{{else}}-{{/if}}</span>
-          <span class='user-page__stats-label'>просмотрено<br />фильмов</span>
-        </div>
-        <div class='user-page__stats-item'>
-          <span class='user-page__stats-number'>{{#if seriesCount}}{{seriesCount}}{{else}}-{{/if}}</span>
-          <span class='user-page__stats-label'>Фильмов<br />в избранном</span>
-        </div>
-      </div> --}}
-
       </div>
     </div>
 
     <div class='tabs-container'></div>
   </div>
-  <div class="user-page__content"></div>
+  <div class='user-page__content'></div>
 </div>

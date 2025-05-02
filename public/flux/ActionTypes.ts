@@ -19,7 +19,9 @@ export const RenderActionTypes = {
   RENDER_PROFILE_PAGE: 'RENDER_PROFILE_PAGE',
 
   RENDER_CSAT_PAGE: 'RENDER_CSAT_PAGE',
-  RENDER_CSAT: 'RENDER_CSAT'
+  RENDER_CSAT: 'RENDER_CSAT',
+
+  RENDER_SEARCH_PAGE: 'RENDER_SEARCH_PAGE'
 };
 
 export const PopupActionTypes = {
@@ -59,4 +61,13 @@ export const StatsActionTypes = {
   LOAD_STATS_DATA: 'LOAD_STATS_DATA',
   STATS_DATA_LOADED: 'MOVIE_STATS_LOADED',
   STATS_DATA_ERROR: 'MOVIE_STATS_ERROR'
+};
+
+export const SearchActionTypes = {
+  SEARCH: 'SEARCH',
+  SEARCH_COMPLETED: 'SEARCH_COMPLETED'
+};
+
+export const TabsActionTypes = {
+  FAVORITE_TOGGLE: 'FAVORITE_TOGGLE'
 };

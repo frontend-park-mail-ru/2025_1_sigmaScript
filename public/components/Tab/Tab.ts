@@ -15,12 +15,11 @@ export class Tabs {
   constructor(parent: HTMLElement, tabsData: TabData[] = []) {
     this.#parent = parent;
     this.#id = 'tabs--' + createID();
-    // Если универсальный колбэк не передан, то он останется undefined
     this.#data = { id: this.#id, tabsData };
   }
 
   /**
-   * Геттер для родительского элемента.
+   * Возвращает родителя.
    * @returns HTMLElement
    */
   get parent(): HTMLElement {
@@ -28,7 +27,7 @@ export class Tabs {
   }
 
   /**
-   * Геттер для данных.
+   * Возвращает данные.
    * @returns TabsData
    */
   get data(): TabsData {
@@ -36,7 +35,7 @@ export class Tabs {
   }
 
   /**
-   * Проверяет, определён ли родительский элемент.
+   * Проверяет, есть ли родитель.
    * @returns boolean
    */
   parentDefined(): boolean {
@@ -44,7 +43,7 @@ export class Tabs {
   }
 
   /**
-   * Возвращает DOM-элемент компонента.
+   * Возвращает себя из DOM.
    * @returns HTMLElement | null
    */
   self(): HTMLElement | null {
@@ -55,33 +54,20 @@ export class Tabs {
    * Удаляет отрисованный компонент из DOM.
    */
   destroy(): void {
-    // Если компонент существует, удаляем его
-    if (!this.self()) {
-      return;
-    }
-    // Найдем все табы внутри компонента
-    const tabElements = this.self()?.querySelectorAll('.tabs__item');
-    // Удаляем обработчики события (заметим, что removeEventListener здесь не сработает для анонимной функции,
-    // поэтому может быть достаточно полного удаления DOM-элемента)
-    tabElements?.forEach((tab: Element) => {
-      tab.removeEventListener('click', () => {
-        // удаление обработчика в данном случае не приведет к ожидаемому результату
-      });
-    });
     this.self()?.remove();
   }
 
   /**
-   * Рисует компонент табов на экране.
+   * Рисует табы на экране.
    */
   render(): void {
     this.destroy();
     if (!this.parentDefined()) {
       return;
     }
-    // Вставляем сгенерированную разметку в родительский элемент
+
     this.#parent.innerHTML += template(this.#data);
-    // Инициализируем обработчики событий для табов
+
     this.#initTabs();
   }
 
@@ -99,20 +85,16 @@ export class Tabs {
 
     tabElements.forEach((tab: Element) => {
       tab.addEventListener('click', () => {
-        console.log('on click action');
         const tabId = tab.getAttribute('data-tab');
-        // Снимаем активное состояние со всех табов
-        tabElements.forEach((el) => el.classList.remove('active'));
-        // Добавляем активное состояние для выбранного таба
+
+        tabElements.forEach((t) => t.classList.remove('active'));
         tab.classList.add('active');
 
-        // Если у конкретного таба определён свой колбэк onClick, вызываем его
         const tabData = this.#data.tabsData.find((item) => item.id === tabId);
-        console.log(tabData, tabData?.onClick);
         if (tabData && typeof tabData.onClick === 'function') {
           tabData.onClick(tabId!);
         }
-        // Если задан универсальный колбэк для переключения табов, вызываем его
+
         if (typeof this.#data.onTabChange === 'function') {
           this.#data.onTabChange(tabId!);
         }
@@ -123,5 +105,33 @@ export class Tabs {
     // if (tabElements.length > 0) {
     //   (tabElements[0] as HTMLElement).click();
     // }
+  }
+
+  /**
+   * Активирует вкладку с указанным ID
+   * @param tabId Идентификатор вкладки, которую нужно активировать
+   * @returns true если вкладка была найдена и активирована, false в противном случае
+   */
+  activateTabById(tabId: string): void {
+    if (!this.self()) {
+      return;
+    }
+    const tabElement = this.self()?.querySelector(`.tabs__item[data-tab="${tabId}"]`) as HTMLElement;
+    tabElement?.click();
+  }
+  /**
+   * Активирует вкладку с указанным ID без вызова обработчика клика.
+   * @param tabId Идентификатор вкладки, которую нужно активировать.
+   * @returns true, если вкладка была найдена и активирована, false — в противном случае.
+   */
+  activateTabByIdDirect(tabId: string): void {
+    const component = this.self();
+    if (!component) {
+      return;
+    }
+    const tabElements = component.querySelectorAll('.tabs__item');
+    tabElements.forEach((el) => el.classList.remove('active'));
+    const targetTab = component.querySelector(`.tabs__item[data-tab="${tabId}"]`) as HTMLElement;
+    targetTab?.classList.add('active');
   }
 }

@@ -1,3 +1,5 @@
+import { MovieCollection } from './main_page.types';
+
 export type PersonInfo = {
   personID: number | string | null;
   nameRu: string | null;
@@ -13,6 +15,8 @@ export type PersonInfo = {
   totalFilms: string | null;
 
   favorite: boolean | null;
+
+  movieCollection: MovieCollection | null;
 };
 
 export type PersonCardInfo = {
@@ -46,4 +50,6 @@ export interface PersonPayload {
   total_films: string | null;
 
   favorite: boolean | null;
+
+  movie_collection: MovieCollection | null;
 }

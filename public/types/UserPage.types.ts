@@ -8,6 +8,7 @@ export type UserPageState = {
   movieCollection: MovieCollection | null;
   actorCollection: PersonCollection | null;
   reviews: Reviews | null;
+  needTabID: string | null;
 };
 
 export type Listener = (state: UserPageState) => void;

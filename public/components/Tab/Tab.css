@@ -2,13 +2,14 @@
   background-color: transparent;
   display: flex;
   gap: 3rem;
-  margin: 2rem 0; /* убрали auto, чтобы не было центрирования */
-  width: 100%; /* контейнер займет всю доступную ширину */
-  justify-content: flex-start; /* явно указываем выравнивание по левому краю */
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  justify-content: flex-start;
+  align-items: center;
 }
 
 .tabs__item {
-  /* padding: 5.75rem; */
   cursor: pointer;
   color: var(--primary-text-color);
   background-color: transparent;

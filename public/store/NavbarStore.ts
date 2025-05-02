@@ -1,6 +1,6 @@
 import { dispatcher } from 'flux/Dispatcher';
 import { Action } from 'types/Dispatcher.types';
-import { UserPageTypes } from 'flux/ActionTypes';
+import { TabsActionTypes, UserPageTypes } from 'flux/ActionTypes';
 import { NavbarState } from 'types/Navbar.types';
 import { Listener } from 'types/Navbar.types';
 
@@ -10,7 +10,8 @@ class NavbarStore {
 
   constructor() {
     this.state = {
-      parent: null
+      parent: null,
+      needTabID: null
     };
     this.listeners = [];
 
@@ -22,6 +23,12 @@ class NavbarStore {
       case UserPageTypes.UPDATE_USER_PAGE:
         this.emitChange();
         break;
+      case TabsActionTypes.FAVORITE_TOGGLE: {
+        this.state.needTabID = action.payload as string;
+        this.emitChange();
+        this.state.needTabID = null;
+        break;
+      }
       default:
         break;
     }

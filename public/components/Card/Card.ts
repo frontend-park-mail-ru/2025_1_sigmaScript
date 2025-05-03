@@ -10,6 +10,9 @@ export type CardConfig = {
   width?: string;
   height?: string;
   text?: string;
+  hover?: boolean;
+  topText?: string;
+  bottomText?: string;
 };
 
 export class MovieCard {
@@ -39,6 +42,9 @@ export class MovieCard {
     this.#config.title = config.title || '';
     this.#config.width = config.width || '200';
     this.#config.height = config.height || '300';
+    this.#config.hover = config.hover ? config.hover : true;
+    this.#config.topText = config.topText || '';
+    this.#config.bottomText = config.bottomText || '';
   }
 
   /**

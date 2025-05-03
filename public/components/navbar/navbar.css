@@ -1,18 +1,19 @@
 .navbar {
     display: block;
-
+    position: fixed;
     width: 100%;
     height: var(--navbar-height);
     min-width: 180px;
     min-height: 20px;
     background-color: var(--transparent-element);
 
-    z-index: 5;
+    z-index: 10;
     position: sticky;
     top: 0;
 }
 
 .navbar_elements {
+    transition: background-color 0.3s ease-in, background-color 0.2s ease-out;
     position: fixed;
     left: 0;
     top: 0;
@@ -21,7 +22,7 @@
     padding-top: 22.5px;
     padding-bottom: 22.5px;
 
-    background: var(--background-color);
+    background-color: var(--background-color);
     height: var(--navbar-content-height);
     width: 100%;
     display: flex;
@@ -30,6 +31,7 @@
 }
 
 .navbar_gradient {
+    transition: opacity 0.1s ease-in, opacity 0.3s ease-out;
     position: fixed;
     left: 0;
     top: 0;
@@ -39,7 +41,7 @@
     min-width: 300px;
     min-height: 20px;
 
-    background: linear-gradient(180deg, #16161A 67%, rgba(22, 22, 26, 0.75) 75%, rgba(22, 22, 26, 0.453846) 84%, rgba(22, 22, 26, 0.2) 92%, rgba(22, 22, 26, 0) 100%);
+    background: linear-gradient(180deg, var(--background-color) 67%, rgba(08, 08, 08, 0.75) 75%, rgba(08, 08, 08, 0.453846) 84%, rgba(08, 08, 08, 0.2) 92%, rgba(08, 08, 08, 0) 100%);
 }
 
 
@@ -71,7 +73,7 @@
 
 .navbar__button.u_button {
     background-color: inherit;
-    margin-left: 10px;
+    border: none;
 }
 
 .navbar__button.u_button:hover {

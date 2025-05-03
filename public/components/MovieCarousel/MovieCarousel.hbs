@@ -1,0 +1,26 @@
+<div class="movie-carousel" id="{{this.id}}">
+  {{#if hasMovies}}
+    <a href="" class="movie-carousel__link">
+      <img src="{{this.initialPreviewUrl}}" class="movie-carousel__image">
+    </a>
+    <button class="movie-carousel__arrow movie-carousel__arrow--prev">
+      <svg width="28" height="50" viewBox="0 0 28 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M24.5377 0L0 24.9762L3.43922 28.4769L27.9769 3.50072L24.5377 0Z" fill="#FFFFFE"/>
+        <path d="M24.5607 50L0.00960732 25.0101L3.44894 21.5095L28 46.4993L24.5607 50Z" fill="#FFFFFE"/>
+      </svg>
+    </button>
+    <button class="movie-carousel__arrow movie-carousel__arrow--next">
+      <svg width="28" height="50" viewBox="0 0 28 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M3.46233 0L28 24.9762L24.5608 28.4769L0.0230812 3.50072L3.46233 0Z" fill="#FFFFFE"/>
+        <path d="M3.43925 50L27.9904 25.0101L24.5511 21.5095L0 46.4993L3.43925 50Z" fill="#FFFFFE"/>
+      </svg>
+    </button>
+    <div class="movie-carousel__info">
+      <div class="movie-carousel__text"></div>
+      <div class="movie-carousel__duration"></div>
+      <button class="movie-carousel__about">О фильме</button>
+    </div>
+  {{else}}
+    <p class="movie-carousel__placeholder">Нет фильмов для отображения.</p>
+  {{/if}}
+</div>

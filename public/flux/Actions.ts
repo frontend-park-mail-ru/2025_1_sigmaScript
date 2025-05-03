@@ -4,11 +4,13 @@ import {
   RenderActionTypes,
   UserPageTypes,
   MovieActionTypes,
-  StatsActionTypes
+  StatsActionTypes,
+  MainActionTypes
 } from 'flux/ActionTypes';
 import { UpdateUserData, UserData } from 'types/UserPage.types';
 import { MovieData, NewReviewDataJSON, Reviews } from 'types/movie_page.types';
 import { CSATStatisticDataJSON } from 'types/stats_page.types';
+import { Collections } from 'types/main_page.types';
 
 export function loginSubmit(username: string, password: string) {
   dispatcher.dispatch({
@@ -178,5 +180,26 @@ export function statsDataError(error: string) {
 export function loadStatsData() {
   dispatcher.dispatch({
     type: StatsActionTypes.LOAD_STATS_DATA
+  });
+}
+
+// MainPage Actions
+export function loadMainData() {
+  dispatcher.dispatch({
+    type: MainActionTypes.LOAD_MAIN_DATA
+  });
+}
+
+export function mainDataLoaded(mainData: Collections) {
+  dispatcher.dispatch({
+    type: MainActionTypes.MAIN_DATA_LOADED,
+    payload: mainData
+  });
+}
+
+export function mainDataError(error: string) {
+  dispatcher.dispatch({
+    type: MainActionTypes.MAIN_DATA_ERROR,
+    payload: error
   });
 }

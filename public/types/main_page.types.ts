@@ -8,8 +8,12 @@ export type MainPageConfig = {
 export type MovieDataJSON = {
   id: number;
   title: string;
-  preview_url: string;
+  rating: number;
+  previewUrl: string;
   duration?: string;
+  releaseDate?: string;
 };
 
 export type MovieCollection = MovieDataJSON[];
+
+export type Collections = Record<string, MovieCollection>;

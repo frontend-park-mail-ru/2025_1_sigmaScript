@@ -18,8 +18,8 @@
     --secondary-color: rgba(31, 31, 31, 0.9);
     --primary-text-color: #FFFFFE;
     --secondary-text-color: #979AA3;
-    --background-color: #16161A;
-    --background-color-light: #1E1E25;
+    --background-color: #000000;
+    --background-color-light: #080808;
     --success-color: #50FF50;
     --error-color: #FF5050;
     --text-field-border-color: rgba(148, 161, 178, 0.5);

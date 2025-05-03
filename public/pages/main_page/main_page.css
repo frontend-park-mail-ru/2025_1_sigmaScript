@@ -117,3 +117,66 @@
 .compilation__scroll {
   max-width: 95%;
 }
+
+.calendar .card__preview{
+  filter: brightness(40%);
+  /* filter: brightness(40%); */
+}
+
+.calendar .card__bottom-elems-container {
+  font-size: 3rem;
+  font-weight: bold;
+} 
+
+
+.calendar .card__top-text {
+  font-size: 1.6rem;
+  font-weight: bold;
+  background-color: var(--primary-color);
+  border-radius: 5px;
+  padding: 3px 15px;
+  width: min-content;
+}
+
+.loading-state {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.compilation .card__top-text {
+  font-size: 1.6rem;
+  font-weight: bold;
+  background-color: var(--primary-color);
+  border-radius: 5px;
+  padding: 2px 5px;
+  width: min-content;
+}
+
+.navbar--overlay {
+  position: fixed;
+}
+
+.navbar--overlay .navbar_elements {
+  background-color: transparent;
+}
+
+.navbar--scrolled .navbar_elements {
+  background-color: var(--background-color);
+}
+
+.navbar--overlay:hover .navbar_elements {
+  background-color: var(--background-color);
+}
+
+.navbar--overlay .navbar_gradient {
+  opacity: 0;
+}
+
+.navbar--scrolled .navbar_gradient {
+  opacity: 1;
+}
+
+.navbar--overlay:hover .navbar_gradient {
+  opacity: 1;
+}

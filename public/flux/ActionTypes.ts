@@ -28,6 +28,12 @@ export const GetDataActionTypes = {
   UNKNOWN_ERROR: 'UNKNOWN_ERROR'
 };
 
+export const MainActionTypes = {
+  LOAD_MAIN_DATA: 'LOAD_MAIN_DATA',
+  MAIN_DATA_LOADED: 'MAIN_DATA_LOADED',
+  MAIN_DATA_ERROR: 'MAIN_DATA_ERROR'
+};
+
 export const MovieActionTypes = {
   LOAD_MOVIE_DATA: 'LOAD_MOVIE_DATA',
   MOVIE_DATA_LOADED: 'MOVIE_DATA_LOADED',

@@ -110,7 +110,7 @@ class MainPage {
     Object.values(movies).forEach((movie) => {
       const movieUrl = `${Urls.movie}/${movie.id}`;
       const cardConfig: CardConfig = {
-        id: String(movie.id),
+        id: createID(),
         previewUrl: movie.previewUrl,
         title: movie.title,
         url: movieUrl,

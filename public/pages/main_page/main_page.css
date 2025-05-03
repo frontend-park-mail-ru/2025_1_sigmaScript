@@ -54,73 +54,12 @@
   gap: 20px;
 }
 
-/* Секция compilation */
-.compilation__cards {
-  background-color: transparent;
-  width: auto;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(255, 255, 255, 0.15);
-  /* Светлая тень */
-  margin-bottom: 40px;
-}
-
-/* Карточка фильма */
-.movie_card {
-  width: 200px;
-  height: 300px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  border: 1px solid #555;
-  /* Темная рамка */
-  border-radius: 5px;
-  overflow: hidden;
-  transition: transform 0.3s ease-in-out;
-}
-
-.movie_card:hover {
-  transform: scale(1.05);
-  box-shadow: 0 4px 8px rgba(255, 255, 255, 0.35);
-  /* Светлая тень при наведении */
-}
-
-/* Изображение постера */
-.poster {
-  width: 100%;
-  height: auto;
-  object-fit: cover;
-}
-
-.poster_title {
-  margin: 10px 0;
-  font-size: 18px;
-  font-weight: bold;
-  color: var(--primary-text-color);
-}
-
-.details-link {
-  display: inline-block;
-  padding: 10px 20px;
-  background-color: #007bff;
-  color: var(--primary-text-color);
-  border-radius: 5px;
-  margin-bottom: 10px;
-  cursor: pointer;
-}
-
-.details-link:hover {
-  background-color: #0056b3;
-}
-
 .compilation__scroll {
   max-width: 95%;
 }
 
 .calendar .card__preview{
   filter: brightness(40%);
-  /* filter: brightness(40%); */
 }
 
 .calendar .card__bottom-elems-container {

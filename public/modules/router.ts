@@ -8,7 +8,8 @@ export const Urls = {
   person: '/name',
   profile: '/profile',
   stats: '/csat/statistic',
-  csat: '/csat'
+  csat: '/csat',
+  genres: '/genres'
 };
 
 type lastScrollState = {
@@ -46,6 +47,14 @@ export const handler = (args: handlerInput) => {
       break;
     case Urls.stats:
       RenderActions.renderStatsPage();
+      break;
+    case `${Urls.genres}/${args.id}`:
+      if (args.id) {
+        RenderActions.renderGenrePage(args.id);
+      }
+      break;
+    case Urls.genres:
+      RenderActions.renderGenresPage();
       break;
     case Urls.profile:
       RenderActions.renderProfilePage(args.data);

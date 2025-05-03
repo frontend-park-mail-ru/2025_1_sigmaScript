@@ -5,12 +5,16 @@ import {
   UserPageTypes,
   MovieActionTypes,
   StatsActionTypes,
-  MainActionTypes
+  MainActionTypes,
+  GenresActionTypes,
+  GenreActionTypes
 } from 'flux/ActionTypes';
 import { UpdateUserData, UserData } from 'types/UserPage.types';
 import { MovieData, NewReviewDataJSON, Reviews } from 'types/movie_page.types';
 import { CSATStatisticDataJSON } from 'types/stats_page.types';
 import { Collections } from 'types/main_page.types';
+import { GenresData } from 'store/GenresPageStore';
+import { GenrePageData } from 'store/GenrePageStore';
 
 export function loginSubmit(username: string, password: string) {
   dispatcher.dispatch({
@@ -116,6 +120,17 @@ export const RenderActions = {
     dispatcher.dispatch({
       type: RenderActionTypes.RENDER_CSAT_PAGE
     });
+  },
+  renderGenresPage() {
+    dispatcher.dispatch({
+      type: RenderActionTypes.RENDER_GENRES_PAGE
+    });
+  },
+  renderGenrePage(id: number | string) {
+    dispatcher.dispatch({
+      type: RenderActionTypes.RENDER_GENRE_PAGE,
+      payload: id
+    });
   }
 };
 
@@ -200,6 +215,49 @@ export function mainDataLoaded(mainData: Collections) {
 export function mainDataError(error: string) {
   dispatcher.dispatch({
     type: MainActionTypes.MAIN_DATA_ERROR,
+    payload: error
+  });
+}
+
+// GenresPage Actions
+export function loadGenresData() {
+  dispatcher.dispatch({
+    type: GenresActionTypes.LOAD_GENRES_DATA
+  });
+}
+
+export function genresDataLoaded(genresData: GenresData) {
+  dispatcher.dispatch({
+    type: GenresActionTypes.GENRES_DATA_LOADED,
+    payload: genresData
+  });
+}
+
+export function genresDataError(error: string) {
+  dispatcher.dispatch({
+    type: GenresActionTypes.GENRES_DATA_ERROR,
+    payload: error
+  });
+}
+
+// GenrePage Actions
+export function loadGenreData(id: number | string) {
+  dispatcher.dispatch({
+    type: GenreActionTypes.LOAD_GENRE_DATA,
+    payload: id
+  });
+}
+
+export function genreDataLoaded(genreData: GenrePageData) {
+  dispatcher.dispatch({
+    type: GenreActionTypes.GENRE_DATA_LOADED,
+    payload: genreData
+  });
+}
+
+export function genreDataError(error: string) {
+  dispatcher.dispatch({
+    type: GenreActionTypes.GENRE_DATA_ERROR,
     payload: error
   });
 }

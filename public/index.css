@@ -8,6 +8,8 @@
 @import "pages/movie_page/movie_page.css";
 @import "pages/UserPage/UserPage.css";
 @import "pages/stats_page/stats_page.css";
+@import "pages/genresPage/genresPage.css";
+@import "pages/genrePage/genrePage.css";
 
 * {
     box-sizing: border-box;

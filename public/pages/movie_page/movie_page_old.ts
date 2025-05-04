@@ -99,7 +99,6 @@ class MoviePage {
 
     const nav = new Navbar(mainElemHeader);
     nav.render();
-    nav.self()?.classList.add('navbar--gradient-none');
 
     const mainElemContent = document.createElement('div');
     mainElemContent.classList.add('movie-page', 'flex-dir-col', 'flex-start', 'content');
@@ -129,20 +128,107 @@ class MoviePage {
 
     if (this.#state.movieData) {
       const movie = this.#state.movieData;
-      console.log('Movie data:', movie);
       const infoForDisplay = this.#prepareMovieInfo(movie);
 
-      container.innerHTML = template({ movie, info: infoForDisplay });
-      this.#renderActors(movie.staff || []);
+      container.innerHTML = template({
+        movie: movie,
+        info: infoForDisplay
+      });
+
+      this.#renderMovieCardAndButtons(movie);
+      this.#renderStaff(movie.staff || []);
       this.#renderReviewForm();
-      this.#renderButtons(this.#state.movieId!);
     } else {
       container.innerHTML = '<div class="info">Нет данных для отображения.</div>';
     }
   }
 
-  #renderActors(staff: Person[]): void {
-    const staffListElement = this.self()?.querySelector<HTMLElement>('.js-actors-list');
+  #renderMovieCardAndButtons(movie: MovieData): void {
+    const container = this.self();
+    if (!container) return;
+
+    const posterElem = container.querySelector<HTMLElement>('.js-poster');
+    const movieButtons = container.querySelector<HTMLElement>('.js-movie-buttons');
+    const ratingElement = container.querySelector<HTMLElement>('.js-movie__rating');
+    const reviewButtonElement = container.querySelector<HTMLElement>('.js-movie__review');
+
+    if (posterElem) posterElem.innerHTML = '';
+    if (movieButtons) movieButtons.innerHTML = '';
+
+    ratingElement?.querySelector('.movie__button')?.remove();
+    reviewButtonElement?.querySelector('.movie__button')?.remove();
+
+    if (posterElem) {
+      new MovieCard(posterElem, {
+        id: `movieCard--${movie.id}`,
+        previewUrl: movie.poster || '/static/img/default_preview.webp',
+        width: '250',
+        height: '375'
+      }).render();
+    }
+
+    // TODO till 3-d RK
+    // if (movieButtons) {
+    //   new Button(movieButtons, {
+    //     id: 'button--trailer-' + createID(),
+    //     type: 'button',
+    //     text: 'Трейлер',
+    //     addClasses: ['movie__button'],
+    //     srcIcon: '/static/svg/play.svg',
+    //     actions: {
+    //       click: () => {
+    //         // TODO
+    //         console.log(`Play trailer for movie ${movie.id}`);
+    //       }
+    //     }
+    //   }).render();
+
+    //   new Button(movieButtons, {
+    //     id: 'button--favourite-' + createID(),
+    //     type: 'button',
+    //     text: 'Любимое',
+    //     addClasses: ['movie__button'],
+    //     srcIcon: '/static/svg/favourite.svg',
+    //     actions: {
+    //       click: () => {
+    //         // TODO error handle
+    //         console.log(`Toggle favourite for movie ${movie.id}`);
+    //       }
+    //     }
+    //   }).render();
+    // }
+
+    if (ratingElement) {
+      new Button(ratingElement, {
+        id: 'button--rate-' + createID(),
+        type: 'button',
+        text: 'Оценить фильм',
+        addClasses: ['movie__button'],
+        actions: {
+          click: () => {
+            this.self()?.querySelector('.js-review-form')?.scrollIntoView({ behavior: 'smooth' });
+          }
+        }
+      }).render();
+    }
+
+    if (reviewButtonElement) {
+      new Button(reviewButtonElement, {
+        id: 'button--leave-review-' + createID(),
+        type: 'button',
+        text: 'Оставить отзыв',
+        addClasses: ['movie__button'],
+        actions: {
+          click: () => {
+            this.self()?.querySelector('.js-review-form')?.scrollIntoView({ behavior: 'smooth' });
+          }
+        }
+      }).render();
+    }
+  }
+
+  #renderStaff(staff: Person[]): void {
+    const staffListElement = this.self()?.querySelector<HTMLElement>('.js-staff-list');
     if (!staffListElement) return;
     staffListElement.innerHTML = '';
 
@@ -179,7 +265,7 @@ class MoviePage {
       id: 'textarea--review-' + createID(),
       name: 'review',
       placeholder: 'Введите текст отзыва...',
-      addClasses: ['movie-page__review-form-textarea']
+      addClasses: ['review-form__textarea']
     });
     textarea.render();
 
@@ -187,7 +273,7 @@ class MoviePage {
       id: 'button--submit-review-' + createID(),
       type: 'submit',
       text: 'Отправить',
-      addClasses: ['movie__button', 'movie-page__review-form-button']
+      addClasses: ['movie__button', 'review-form__button']
     }).render();
 
     formElement.addEventListener('submit', (event) => {
@@ -206,54 +292,6 @@ class MoviePage {
         score: rating
       });
     });
-  }
-
-  #renderButtons(id: string | number): void {
-    const container = this.self();
-    if (!container) return;
-    const movieButtons = container.querySelector<HTMLElement>('.js-movie-buttons');
-    if (movieButtons) {
-      movieButtons.innerHTML = '';
-
-      new Button(movieButtons, {
-        id: 'button--trailer-' + createID(),
-        type: 'button',
-        text: 'Смотреть трейлер',
-        addClasses: ['movie-info-column__trailer-button', 'movie-page-button'],
-        srcIcon: '/static/svg/play.svg',
-        actions: {
-          click: () => {
-            // TODO
-          }
-        }
-      }).render();
-
-      new Button(movieButtons, {
-        id: 'button--favourite-' + createID(),
-        type: 'button',
-        addClasses: ['movie-info-column__favoutite-button', 'movie-page-button'],
-        srcIcon: '/static/svg/favourite.svg',
-        actions: {
-          click: () => {
-            // TODO error handle
-            console.log(`Toggle favourite for movie ${id}`);
-          }
-        }
-      }).render();
-    }
-
-    new Button(movieButtons, {
-      id: 'button--review-' + createID(),
-      type: 'button',
-      addClasses: ['movie-info-column__review-button', 'movie-page-button'],
-      srcIcon: '/static/svg/review.svg',
-      actions: {
-        click: () => {
-          // TODO error handle
-          console.log(`Toggle favourite for movie ${id}`);
-        }
-      }
-    }).render();
   }
 }
 

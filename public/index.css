@@ -22,6 +22,7 @@
     --secondary-text-color: #979AA3;
     --background-color: #000000;
     --background-color-light: #080808;
+    --background-color-light-rgb: 8,8,8;
     --success-color: #50FF50;
     --error-color: #FF5050;
     --text-field-border-color: rgba(148, 161, 178, 0.5);

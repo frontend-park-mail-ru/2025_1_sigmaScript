@@ -16,7 +16,6 @@ export type Movie = {
   rating: number;
 };
 
-// Новый тип для жанра
 export type Genre = {
   id: number;
   name: string;

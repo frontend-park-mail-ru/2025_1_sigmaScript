@@ -1,33 +1,129 @@
-.flex-start {
-  justify-content:center;
-  align-items:start;
-  gap: 3%
+.navbar--gradient-none {
+  height: var(--navbar-content-height);
 }
 
-.flex-center {
-  justify-content:center;
-  align-items:center;
-  gap: 3%;
+.navbar--gradient-none > .navbar_gradient {
+  opacity: 0.8;
 }
 
-.movie-page {
-  color: #FFFE;
-  font-size: 1.4rem;
+.movie-page__general-info-block {
+  z-index: 2;
+  position: relative;
+  margin: 0 0 0 3%;
+  border-bottom: 1px solid #111111;
+}
+
+.general-info-block__movie-info-column {
+  width: 30%;
+  align-items: start;
+  justify-content: center;
   gap: 30px;
-  padding-left: 15%;
-  padding-right: 15%;
+}
+.general-info-block__backdrop {
+  width: 70%;
+} 
+
+.movie-info-column__additional-info {
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
 }
 
-.movie__center-column { 
-  gap: 15px;
-  max-width: 50%;
-}
-
-.movie__name {
-  font-size: 3rem;
+.movie-info__rating-element {
+  font-size: 2rem;
   font-weight: bold;
-
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
 }
+
+.movie-info-column__logo-image,
+.general-info-block__backdrop-image {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  object-position: center;
+}
+
+.movie-info-column__logo {
+  /* padding: 10% 15% 0 0; */
+}
+
+.general-info-block__backdrop-image {
+  z-index: 1;
+  overflow: hidden;
+  aspect-ratio: 16/8;
+}
+
+.movie-info-column__short-description {
+  font-size: 2.4rem;
+  text-align:start;
+}
+
+.general-info-block__gradient {
+  position: absolute;
+  left: 30%; /* совпадает с шириной .general-info-block__movie-info-column */
+  top: 0;
+  width: 25vw; /* ширина градиента, можно подогнать под дизайн */
+  height: 100%;
+  z-index: 3;
+  pointer-events: none;
+  background: linear-gradient(
+    to right,
+    rgba(var(--background-color-light-rgb), 1) 0%,
+    rgba(var(--background-color-light-rgb), 1) 5%,
+    rgba(var(--background-color-light-rgb), 0.8) 30%,
+    rgba(var(--background-color-light-rgb), 0.4) 70%,
+    rgba(var(--background-color-light-rgb), 0.0) 100%
+  );
+}
+
+.movie-info-column__buttons {
+  width: 100%;
+  justify-content: start;
+  gap: 15px;
+}
+
+.movie-page-button {
+  color: var(--primary-text-color);
+  background: linear-gradient(135deg, #5130b3 65%, var(--primary-color) 100%);
+  height: 60px;
+  padding: 0 20px;
+  cursor: pointer;
+  border: none;
+  border-radius: 35px;
+  white-space: nowrap;
+  justify-content: center;
+}
+
+.movie-page-button > .u_button__text-color_primary {
+  font-weight: bold;
+  font-size: 1.8rem;
+}
+
+.movie-info-column__review-button > .u_button__text,
+.movie-info-column__favoutite-button > .u_button__text {
+  display: none;
+}
+
+.movie-info-column__review-button,
+.movie-info-column__favoutite-button {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: rgba(50, 50, 50, 0.7);
+}
+
+.movie-page-button > .u_button__icon {
+  width: 15px;
+}
+
+.movie-info-column__review-button > .u_button__icon {
+  width: 22px;
+}
+
+/* temp */
 
 .movie__info{
   gap: 10px;
@@ -49,77 +145,147 @@
   width: 50%;
 }
 
-.movie__right-column {
-  gap: 15px;
+/* !!! produmat !!! */
+
+.movie-page__detailed-info {
+  margin-top: 30px;
+  gap: 30px;
 }
 
-.right-column__rating {
-  gap: 5px;
+.detailed-info__wrapper {
+  gap: 30px; 
+}
+/* !!! temp */
+
+.detailed-info__titles-wrapper {
+  width: 100%; 
+  gap: 30px;
+  /* !!! navesit classy na odin margin */
 }
 
-.right-column__rating-value {
-  font-size: 3rem;
+.detailed-info__movie-titles {
+  width: 30%;
+  padding: 0 0 0 3%;
+}
+
+.detailed-info__about-title {
+  width: 70%;
+  font-size: 2.4rem;
   font-weight: bold;
+  color: var(--primary-text-color);
+  /* padding: 0 0 0 3%; */
 }
 
-.right-column__rating-value-block {
-  gap: 5px;
+.detailed-info__left-column {
+  width: 30%;
+  padding: 0 0 0 3%; 
+  gap: 30px;
+  /* !!! navesit classy na odin margin */
 }
 
-.movie__button {
-  width: 140px;
-  height: 45px;;
-  min-height: 30px;
-  background-color: var(--primary-color);
-  background: linear-gradient(
-    to right, 
-    #5d37c4 0%,
-    #595cff 80%,
-    var(--primary-color) 100%
-  );
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+.detailed-info__title {
+  font-size: 2.4rem;
+  font-weight: bold;
+  color: var(--primary-text-color);
 }
 
-.movie__button > .u_button__text-color_primary {
-  font-weight: 700;
-  font-size: 1.8rem;
-}
-
-.movie__button > .u_button__icon {
-  width: 10%;
-  margin-right: 5px;
-}
-
-.movie__review {
-  font-size: 1.4rem;
-  gap: 5px;
-}
-
-.staff__title {
+.detailed-info__original-title {
   font-size: 2rem;
+  color: var(--secondary-text-color);
+}
+
+.detailed-info__detailed-description {
+  font-size: 1.6rem;
+  color: var(--primary-text-color);
+}
+
+.detailed-info__right-column {
+  width: 70%;
+  padding: 0 3% 0 0;
+}
+
+.detailed-info__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px 20px;
+  /* !!! */
+  width: 100%;
+}
+
+.detailed-info__grid-item {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  /* !!! */
+}
+
+.detailed-info__field-title {
+  font-size: 1.4rem;
+  color: var(--secondary-text-color);
   font-weight: bold;
 }
 
-.movie__staff {
-  gap: 10px;
+.detailed-info__field-value {
+  font-size: 1.6rem;
+  color: var(--primary-text-color);
+  /* font-weight: bold; */
 }
 
-.staff__list {
-  max-width: 1350px;
+
+.watchability__title {
+  font-size: 2rem;
+  color: var(--secondary-text-color);
 }
 
-.right-column__rating-star{
-  width: 3rem;
+.watchability__list {
+  display: flex;
+  flex-direction: row;
+  gap: 18px;
+  align-items: center;
+  margin-top: 10px;
 }
 
-.reviews__reviews{
+.watchability__item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.15s;
+}
+
+.watchability__item:hover {
+  transform: scale(1.08);
+}
+
+.watchability__logo {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+}
+
+.movie-page__actors {
+  margin: 30px 0 0 3%;
+  gap: 30px;
+}
+
+.movie-page__actors-title {
+  font-size: 2.4rem;
+  font-weight: bold;
+  color: var(--primary-text-color);
+}
+
+
+/* !!! reviews */
+
+.movie-page__reviews{
   width: 100%;
   gap: 15px;
   margin-top: 10px;
 }
 
-.reviews__review-form{
+.movie-page__review-form {
   width: 100%;
   gap: 10px;
 }
@@ -130,37 +296,36 @@
   gap: 5px;
 }
 
-.review-form__textarea{
+.movie-page__review-form-textarea{
   width: 100%;
 }
 
-.review-form__textarea > .textarea__field {
+.movie-page__review-form-textarea > .textarea__field {
   font-family: Helvetica;
   resize: vertical;
   font-size: 1.4rem;
   width: 100%;
   height: 100px;
-  padding: 1.4rem;
+  padding: 0 1.4rem;
 }
 
-.reviews__title{
+.movie-page__review-form-textarea .textarea__error-container {
+  padding: 0;
+}
+
+.movie-page__reviews-title{
   color: #FFFE;
   font-size: 2rem;
   font-weight: bold;
 }
 
-.movie-page__header{
-  color: #FFFE;
-  font-size: 2rem;
-  font-weight: bold;
-}
-
-.movie__reviews{
+.movie-page__reviews-wrapper{
   width: 100%;
   gap: 15px;
+  padding: 0 3% 0 3%;
 }
 
-.review-card{
+.movie-page__review-card {
   width: 100%;
   gap: 5px;
   background-color: var(--text-field-border-color);
@@ -171,39 +336,45 @@
   border-radius: 25px;
 }
 
-.review-card__rating{
+.movie-page__review-rating{
   gap: 1px;
   align-items: center;
 }
 
-.review-card__header{
+.movie-page__review-rating-wrapper {
+  color: #FFFE;
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+.movie-page__review-card-header{
   width: 100%;
   justify-content: space-between;
   align-items: start;
 }
 
-.review-card__info{
+.movie-page__review-info{
   justify-content: end;
   align-items: center;
   gap: 15px;
 }
 
-.review-card__user{
+.movie-page__review-user{
   gap: 2px;
   justify-content: right;
   align-items: center;
 }
 
-.review-card__avatar{
+.movie-page__review-user-avatar{
   width: 3rem;
   height: 3rem;
 }
 
-.review-card__star{
+.movie-page__review-star{
   width: 22.5px;
 }
 
-.review-card__text{
+.movie-page__review-text{
   word-wrap: break-word;
   overflow-wrap: break-word;
   white-space: pre-line;

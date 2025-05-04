@@ -1,0 +1,9 @@
+<div class="dropdown-container">
+  <div class="dropdown-menu" id="{{id}}_menu">
+    {{#each items}}
+      <div data-id="{{this.id}}" class="dropdown-item {{#unless this.visible}}hidden{{/unless}}">
+        {{this.label}}
+      </div>
+    {{/each}}
+  </div>
+</div>

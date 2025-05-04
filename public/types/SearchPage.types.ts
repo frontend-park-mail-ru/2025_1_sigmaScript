@@ -1,9 +1,8 @@
-import { MovieCollection } from 'types/main_page.types';
-import { PersonCollection } from 'types/Person.types';
+import { ActorsMap, MoviesMap } from './UserPage.types';
 
 export type SearchPageState = {
-  movieCollection: MovieCollection | null;
-  actorCollection: PersonCollection | null;
+  movieCollection: MoviesMap;
+  actorCollection: ActorsMap;
 };
 
 export type Listener = (state: SearchPageState) => void;

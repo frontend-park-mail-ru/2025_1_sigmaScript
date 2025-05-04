@@ -7,7 +7,7 @@ import { UserPage } from 'pages/UserPage/UserPage';
 import { AUTH_URL } from 'public/consts';
 import request from 'utils/fetch';
 import { serialize, deserialize } from 'utils/Serialize';
-import { getUser, noSession, updateUserPage } from 'flux/Actions';
+import { getUser, noSession, PopupActions, updateUserPage } from 'flux/Actions';
 import { router } from 'modules/router';
 import { BASE_URL } from 'public/consts';
 import { MovieDataJSON } from 'types/main_page.types';
@@ -22,9 +22,9 @@ class UserPageStore {
     this.state = {
       parent: null,
       userData: null,
-      movieCollection: [],
-      actorCollection: [],
-      reviews: [],
+      movieCollection: new Map<number, MovieDataJSON>(),
+      actorCollection: new Map<number, PersonCardInfo>(),
+      reviews: new Map<number, Review>(),
       needTabID: null
     };
     this.listeners = [];
@@ -114,29 +114,141 @@ class UserPageStore {
 
           getUser();
         } catch {
-          // TODO: пофиксить ошибку
-          // console.log(error.errorDetails.error);
+          PopupActions.showPopup({
+            message: 'Не удалось загрузить аватар!',
+            duration: 2500,
+            isError: true
+          });
         }
         break;
       case UserPageTypes.ADD_MOVIE_TO_FAVORITE: {
         const movieData = action.payload as MovieDataJSON;
-        this.state.movieCollection?.push(movieData);
+        this.state.movieCollection.set(movieData.id, movieData);
+        PopupActions.showPopup({
+          message: 'Фильм добавлен в избранное!',
+          duration: 2500,
+          isError: false
+        });
+
+        // заготовка под бд
+        // try {
+        //   const url = BASE_URL + 'movie/' + `${movieData.id}/` + 'favorite';
+        //   await request({ url: url, method: 'POST', credentials: true });
+        //   this.state.movieCollection.set(movieData.id, movieData);
+        //   PopupActions.showPopup({
+        //     message: 'Фильм добавлен в избранное!',
+        //     duration: 2500,
+        //     isError: false
+        //   });
+        // } catch {
+        //   PopupActions.showPopup({
+        //     message: 'Не удалось добавить фильм в избранное!',
+        //     duration: 2500,
+        //     isError: true
+        //   });
+        // }
+
         break;
       }
       case UserPageTypes.ADD_ACTOR_TO_FAVORITE: {
         const actor = action.payload as PersonCardInfo;
-        this.state.actorCollection?.push(actor);
+        this.state.actorCollection.set(actor.personID as number, actor);
+
+        PopupActions.showPopup({
+          message: 'Актёр добавлен в избранное!',
+          duration: 2500,
+          isError: false
+        });
+
+        // заготовка под бд
+        // try {
+        //   const url = BASE_URL + 'name/' + `${actor.personID}/` + 'favorite';
+        //   await request({ url: url, method: 'POST', credentials: true });
+        //   this.state.actorCollection.set(actor.personID as number, actor);
+        //   PopupActions.showPopup({
+        //     message: 'Актёр добавлен в избранное!',
+        //     duration: 2500,
+        //     isError: false
+        //   });
+        // } catch {
+        //   PopupActions.showPopup({
+        //     message: 'Не удалось добавить актёра в избранное!',
+        //     duration: 2500,
+        //     isError: true
+        //   });
+        // }
+
         break;
       }
       case UserPageTypes.ADD_REVIEW: {
         const review = action.payload as Review;
-        this.state.reviews?.push(review);
+        this.state.reviews.set(review.movieID as number, review);
         break;
       }
       case TabsActionTypes.FAVORITE_TOGGLE: {
         this.state.needTabID = action.payload as string;
         this.emitChange();
         this.state.needTabID = null;
+        break;
+      }
+      case UserPageTypes.REMOVE_MOVIE_FROM_FAVORITE: {
+        const movieID = action.payload as number;
+        this.state.movieCollection.delete(movieID);
+
+        PopupActions.showPopup({
+          message: 'Фильм успешно удалён из избранного!',
+          duration: 2500,
+          isError: false
+        });
+
+        // заготовка под бд
+        // try {
+        //   const url = BASE_URL + 'movie/' + `${movieID}/` + 'favorite';
+        //   await request({ url: url, method: 'DELETE', credentials: true });
+        //   this.state.movieCollection.delete(movieID);
+        //   PopupActions.showPopup({
+        //     message: 'Фильм успешно удалён из избранного!',
+        //     duration: 2500,
+        //     isError: false
+        //   });
+        // } catch {
+        //   PopupActions.showPopup({
+        //     message: 'Не удалось удалить фильм из избранного!',
+        //     duration: 2500,
+        //     isError: true
+        //   });
+        // }
+
+        break;
+      }
+      case UserPageTypes.REMOVE_ACTOR_FROM_FAVORITE: {
+        const actorID = action.payload as number;
+        this.state.actorCollection.delete(actorID);
+
+        PopupActions.showPopup({
+          message: 'Актёр успешно удалён из избранного!',
+          duration: 2500,
+          isError: false
+        });
+
+        // заготовка под бд
+        // try {
+        //   const url = BASE_URL + 'name/' + `${actorID}/` + 'favorite';
+        //   await request({ url: url, method: 'DELETE', credentials: true });
+        //   this.state.actorCollection.delete(actorID);
+        //   PopupActions.showPopup({
+        //     message: 'Актёр успешно удалён из избранного!',
+        //     duration: 2500,
+        //     isError: false
+        //   });
+        // } catch {
+        //   PopupActions.showPopup({
+        //     message: 'Не удалось удалить актёра из избранного!',
+        //     duration: 2500,
+        //     isError: true
+        //   });
+        // }
+
         break;
       }
       default:
@@ -176,23 +288,25 @@ class UserPageStore {
   }
 
   getMoviesCount(): number {
-    return this.state.movieCollection?.length || 0;
+    return this.state.movieCollection.size || 0;
   }
 
   getActorCount(): number {
-    return this.state.actorCollection?.length || 0;
+    return this.state.actorCollection.size || 0;
   }
 
   getAverageRating(): number {
-    if (!this.state.reviews || this.state.reviews.length === 0) {
+    if (this.state.reviews.size === 0) {
       return 0;
     }
 
-    const totalRating = this.state.reviews.reduce((sum, review) => {
-      return sum + (review.score || 0);
-    }, 0);
+    let totalRating = 0;
+    for (const review of this.state.reviews.values()) {
+      totalRating += review.score || 0;
+    }
 
-    return Math.round((totalRating / this.state.reviews.length) * 10) / 10;
+    const average = totalRating / this.state.reviews.size;
+    return Math.round(average * 10) / 10;
   }
 }
 

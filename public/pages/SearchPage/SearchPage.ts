@@ -9,12 +9,10 @@ import { FooterData } from 'types/Footer.types';
 import Input from 'components/universal_input/input';
 import { debounce } from 'utils/debounce';
 import Scroll from 'components/Scroll/Scroll';
-import UserPageStore from 'store/UserPageStore';
-import { MovieCollection } from 'types/main_page.types';
 import MovieCard from 'components/Card/Card';
 import { Urls } from 'modules/router';
-import { PersonCollection } from 'types/Person.types';
 import { search } from 'flux/Actions';
+import { ActorsMap, MoviesMap } from 'types/UserPage.types';
 
 export class SearchPage {
   #parent: HTMLElement;
@@ -27,7 +25,6 @@ export class SearchPage {
   /**
    * Создает новую страницу пользователя.
    * @param {HTMLElement} parent Родительский элемент, куда будет вставлена страница.
-   * @param {UserData} userData Объект с данными пользователя.
    */
   constructor(parent: HTMLElement) {
     this.#parent = parent;
@@ -83,7 +80,7 @@ export class SearchPage {
     SearchPageStore.unsubscribe(this.bindedHandleStoreChange);
 
     this.#navbar?.destroy();
-    this.#navbar?.destroy();
+    this.#input?.destroy();
     this.#footer?.destroy();
 
     this.self()?.remove();
@@ -131,7 +128,7 @@ export class SearchPage {
       id: 'searchInput' + createID(),
       name: 'search',
       type: 'text',
-      placeholder: 'Найдите фильм или актёра...'
+      placeholder: 'Поиск...'
     });
     this.#input.render();
   }
@@ -145,7 +142,7 @@ export class SearchPage {
     search(this.#input?.getValue() as string);
   }
 
-  #renderMovies(movieCollection: MovieCollection): void {
+  #renderMovies(movieCollection: MoviesMap): void {
     const moviesSection = this.#parent.querySelector('.search-page__movies') as HTMLElement;
     moviesSection.innerHTML = '';
 
@@ -158,11 +155,11 @@ export class SearchPage {
     moviesScroll.render();
     const moviesContainer = moviesScroll.getContentContainer();
     if (moviesContainer) {
-      for (const movie of movieCollection) {
+      for (const [id, movie] of movieCollection) {
         new MovieCard(moviesContainer, {
-          id: `movieCard--${movie.id}`,
+          id: `movieCard--${id}`,
           title: movie.title,
-          url: `${Urls.movie}/${movie.id}`,
+          url: `${Urls.movie}/${id}`,
           previewUrl: movie.preview_url || '/static/img/default_preview.webp',
           width: '130',
           height: '180'
@@ -171,7 +168,7 @@ export class SearchPage {
     }
   }
 
-  #renderActors(actorCollection: PersonCollection): void {
+  #renderActors(actorCollection: ActorsMap): void {
     const actorsSection = this.#parent.querySelector('.search-page__actors') as HTMLElement;
     actorsSection.innerHTML = '';
 
@@ -184,11 +181,11 @@ export class SearchPage {
     actorsScroll.render();
     const actorsContainer = actorsScroll.getContentContainer();
     if (actorsContainer) {
-      for (const actor of actorCollection) {
+      for (const [id, actor] of actorCollection) {
         new MovieCard(actorsContainer, {
-          id: `actorCard--${actor.personID}`,
+          id: `actorCard--${id}`,
           title: actor.nameRu as string,
-          url: `${Urls.person}/${actor.personID}`,
+          url: `${Urls.person}/${id}`,
           previewUrl: actor.photoUrl || '/static/img/default_person.webp',
           width: '130',
           height: '180'

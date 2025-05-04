@@ -4,19 +4,26 @@ import reviewTemplate from './review.hbs';
 import { Tabs } from 'components/Tab/Tab';
 import Button from 'components/universal_button/button.js';
 import { AVATAR_PLACEHOLDER } from 'public/consts';
-import { UserData, UserPageData, ButtonConfig, UserPageState } from 'types/UserPage.types';
+import {
+  UserData,
+  UserPageData,
+  ButtonConfig,
+  UserPageState,
+  MoviesMap,
+  ActorsMap,
+  ReviewsMap
+} from 'types/UserPage.types';
 import UserPageStore from 'store/UserPageStore';
 import Navbar from 'components/navbar/navbar';
 import { ALLOWED_MIME_TYPES, FOOTER_CONFIG } from '../../consts.js';
 import { Footer } from 'components/Footer/Footer';
 import UniversalModal from 'components/modal/modal';
-import { updateUser, updateUserAvatar } from 'flux/Actions';
+import { PopupActions, updateUser, updateUserAvatar } from 'flux/Actions';
 import { FooterData } from 'types/Footer.types';
 import { UniversalModalConfig } from 'types/Modal.types';
 import Scroll from 'components/Scroll/Scroll';
 import MovieCard from 'components/Card/Card';
 import { Urls } from 'modules/router';
-import { MovieCollection } from 'types/main_page.types.js';
 import { PersonCollection } from 'types/Person.types.js';
 import { Reviews } from 'types/movie_page.types.js';
 
@@ -43,11 +50,11 @@ export const TABS_DATA = {
         moviesScroll.render();
         const moviesContainer = moviesScroll.getContentContainer();
         if (moviesContainer) {
-          for (const movie of UserPageStore.getState().movieCollection as MovieCollection) {
+          for (const [id, movie] of UserPageStore.getState().movieCollection as MoviesMap) {
             new MovieCard(moviesContainer, {
-              id: `movieCard--${movie.id}`,
+              id: `movieCard--${id}`,
               title: movie.title,
-              url: `${Urls.movie}/${movie.id}`,
+              url: `${Urls.movie}/${id}`,
               previewUrl: movie.preview_url || '/static/img/default_preview.webp',
               width: '130',
               height: '180'
@@ -68,11 +75,11 @@ export const TABS_DATA = {
         actorsScroll.render();
         const actorsContainer = actorsScroll.getContentContainer();
         if (actorsContainer) {
-          for (const actor of UserPageStore.getState().actorCollection as PersonCollection) {
+          for (const [id, actor] of UserPageStore.getState().actorCollection as ActorsMap) {
             new MovieCard(actorsContainer, {
-              id: `actorCard--${actor.personID}`,
+              id: `actorCard--${id}`,
               title: actor.nameRu as string,
-              url: `${Urls.person}/${actor.personID}`,
+              url: `${Urls.person}/${id}`,
               previewUrl: actor.photoUrl || '/static/img/default_person.webp',
               width: '130',
               height: '180'
@@ -93,7 +100,7 @@ export const TABS_DATA = {
 
         reviewsDiv.className = 'reviews__reviews flex-dir-col flex-start';
         if (contentDiv) {
-          for (const review of UserPageStore.getState().reviews as Reviews) {
+          for (const review of (UserPageStore.getState().reviews as ReviewsMap).values()) {
             reviewsDiv.innerHTML += reviewTemplate(review);
           }
         }
@@ -348,7 +355,11 @@ export class UserPage {
 
                 if (!selectedFile || !ALLOWED_MIME_TYPES.includes(selectedFile.type)) {
                   // TODO error handle
-                  alert('Разрешены только изображения с разрешением SVG, PNG, JPG, JPEG или WEBP');
+                  PopupActions.showPopup({
+                    message: 'Разрешены только изображения с разрешением SVG, PNG, JPG, JPEG или WEBP',
+                    duration: 2500,
+                    isError: true
+                  });
                 } else {
                   updateUserAvatar(selectedFile);
                 }

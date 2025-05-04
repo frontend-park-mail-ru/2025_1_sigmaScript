@@ -1,4 +1,5 @@
 import { MovieCollection } from './main_page.types';
+import { MoviesMap } from './UserPage.types';
 
 export type PersonInfo = {
   personID: number | string | null;
@@ -16,7 +17,7 @@ export type PersonInfo = {
 
   favorite: boolean | null;
 
-  movieCollection: MovieCollection | null;
+  movieCollection: MoviesMap;
 };
 
 export type PersonCardInfo = {
@@ -27,8 +28,10 @@ export type PersonCardInfo = {
 
 export type PersonCollection = PersonCardInfo[];
 
+export type PersonsMap = Map<number, PersonInfo>;
+
 export type PersonState = {
-  person: PersonInfo | null;
+  persons: PersonsMap;
   error: string | null;
 };
 

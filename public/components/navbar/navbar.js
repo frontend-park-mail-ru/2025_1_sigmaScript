@@ -5,12 +5,14 @@ import { router } from 'public/modules/router.ts';
 import UniversalModal from 'components/modal/modal';
 import UserPageStore from 'store/UserPageStore';
 import NavbarStore from 'store/NavbarStore';
-import { favoriteToggle, logoutUser } from 'flux/Actions';
+import { favoriteToggle, logoutUser, searchToggle } from 'flux/Actions';
 import { Tabs } from 'components/Tab/Tab';
+import Dropdown from 'components/Dropdown/dropdown';
 
 const logoSvg = '/static/svg/logo_text_border_lining.svg';
 const userSvg = '/static/svg/Avatar large.svg';
 const searchSvg = '/static/svg/search.svg';
+const menuSvg = '/static/svg/menu.svg';
 
 export const TABS_DATA = {
   tabsData: [
@@ -32,6 +34,67 @@ export const TABS_DATA = {
       label: 'Поиск',
       onClick: () => {
         router.go('/search');
+        searchToggle();
+      }
+    }
+  ]
+};
+
+const dropdownConfig = {
+  id: 'userDropdown',
+  parent: document.getElementById('root'),
+  items: [
+    {
+      id: 'profile',
+      label: 'Профиль',
+      visible: true,
+      onClick: () => {
+        router.go('/profile', UserPageStore.getState().userData);
+      }
+    },
+    {
+      id: 'favorites',
+      label: 'Избранное',
+      visible: false,
+      onClick: () => {
+        router.go('/profile');
+        favoriteToggle();
+      }
+    },
+    {
+      id: 'genres',
+      label: 'Жанры',
+      visible: false,
+      onClick: () => {}
+    },
+    {
+      id: 'search',
+      label: 'Поиск',
+      visible: false,
+      onClick: () => {
+        router.go('/search');
+        searchToggle();
+      }
+    },
+    {
+      id: 'logout',
+      label: 'Выход',
+      visible: true,
+      onClick: () => {
+        const modal = new UniversalModal(document.body, {
+          title: 'Подтверждение действия',
+          message: 'Вы уверены, что хотите выйти?',
+          confirmText: 'Да',
+          cancelText: 'Нет',
+          onConfirm: () => {
+            logoutUser();
+            router.go('/');
+          },
+          addClasses: ['login_modal']
+        });
+
+        modal.render();
+        modal.open();
       }
     }
   ]
@@ -67,19 +130,25 @@ class Navbar {
   handleStoreChange(state) {
     let userData = UserPageStore.getState().userData;
     if (!userData?.username) {
+      this.user.parent().classList.remove('login__user');
       this.user.destroy();
-      this.LogoutButton.destroy();
+      // this.LogoutButton.destroy();
       this.LoginButton.render();
       this.LoginButton.self().classList.add('navbar__button');
+      this.LoginButton.parent().classList.add('logout__user');
     } else {
+      this.LoginButton.parent().classList.remove('logout__user');
       this.LoginButton.destroy();
+      this.searchIcon.render();
       this.user.changeConfig({
-        text: userData.username
+        text: userData.username,
+        srcIcon: UserPageStore.getState().userData?.avatar || userSvg
       });
       this.user.render();
+      this.user.parent().classList.add('login__user');
       this.tabs.render();
-      this.LogoutButton.render();
-      this.LogoutButton.self().classList.add('navbar__button');
+      // this.LogoutButton.render();
+      // this.LogoutButton.self().classList.add('navbar__button');
     }
     if (state.needTabID) {
       this.tabs.activateTabByIdDirect(state.needTabID);
@@ -95,7 +164,8 @@ class Navbar {
     this.logo.destroy();
     this.user.destroy();
     this.LoginButton?.destroy();
-    this.LogoutButton?.destroy();
+    this.userDropdown.destroy();
+    // this.LogoutButton?.destroy();
 
     this.self()?.remove();
   }
@@ -108,6 +178,9 @@ class Navbar {
     if (!this.#parent) {
       return;
     }
+
+    this.userDropdown = new Dropdown(dropdownConfig);
+    this.userDropdown.render();
 
     const navbar = document.createElement('navbar');
     navbar.classList.add('navbar');
@@ -133,8 +206,12 @@ class Navbar {
       srcIcon: searchSvg,
       size: 'small'
     });
-    this.searchIcon.setActions({ click: () => router.go('/search') });
-    this.searchIcon.render();
+    this.searchIcon.setActions({
+      click: () => {
+        router.go('/search');
+        searchToggle();
+      }
+    });
 
     this.logo = new Icon(navbarLogo, {
       id: 'navbarLogo',
@@ -149,10 +226,27 @@ class Navbar {
     navbarUser.classList.add('navbar__user', 'flex-box-row');
     this.#elements().appendChild(navbarUser);
 
-    const logout = async () => {
-      logoutUser();
-      router.go('/');
-    };
+    const navbarMenu = document.createElement('div');
+    navbarMenu.classList.add('navbar__menu');
+    this.#elements().appendChild(navbarMenu);
+
+    this.menu = new Icon(navbarMenu, {
+      id: 'menuIcon',
+      srcIcon: menuSvg,
+      size: 'medium'
+    });
+    this.menu.setActions({
+      click: async (e) => {
+        e.stopPropagation();
+        this.userDropdown.toggle(e.currentTarget);
+      }
+    });
+    this.menu.render();
+
+    // const logout = async () => {
+    //   logoutUser();
+    //   router.go('/');
+    // };
 
     this.LoginButtonAction = {
       click: () => {
@@ -166,33 +260,34 @@ class Navbar {
       actions: this.LoginButtonAction
     });
 
-    this.LogoutButtonAction = {
-      click: async () => {
-        const modal = new UniversalModal(this.#parent, {
-          title: 'Подтверждение действия',
-          message: 'Вы уверены, что хотите выйти?',
-          confirmText: 'Да',
-          cancelText: 'Нет',
-          onConfirm: () => {
-            logout();
-          },
-          addClasses: ['login_modal']
-        });
+    // this.LogoutButtonAction = {
+    //   click: async () => {
+    //     const modal = new UniversalModal(this.#parent, {
+    //       title: 'Подтверждение действия',
+    //       message: 'Вы уверены, что хотите выйти?',
+    //       confirmText: 'Да',
+    //       cancelText: 'Нет',
+    //       onConfirm: () => {
+    //         logout();
+    //       },
+    //       addClasses: ['login_modal']
+    //     });
 
-        modal.render();
-        modal.open();
-      }
-    };
+    //     modal.render();
+    //     modal.open();
+    //   }
+    // };
 
-    this.LogoutButton = new Button(navbarUser, {
-      id: 'logoutbtn',
-      text: 'Выйти',
-      actions: this.LogoutButtonAction
-    });
+    // this.LogoutButton = new Button(navbarUser, {
+    //   id: 'logoutbtn',
+    //   text: 'Выйти',
+    //   actions: this.LogoutButtonAction
+    // });
 
     this.user = new Icon(navbarUser, {
       id: 'user',
-      srcIcon: userSvg,
+      // srcIcon: userSvg,
+      srcIcon: UserPageStore.getState().userData?.avatar || userSvg,
       size: 'large',
       text: UserPageStore.getState().userData?.username,
       textColor: 'secondary',
@@ -201,20 +296,37 @@ class Navbar {
     });
 
     this.user.setActions({
-      click: async () => {
-        router.go('/profile', UserPageStore.getState().userData);
+      click: async (e) => {
+        e.stopPropagation();
+        this.userDropdown.toggle(e.currentTarget);
+        // this.userDropdown.toggle(this.user.self());
       }
     });
 
     if (!UserPageStore.getState().userData?.username) {
       this.LoginButton.render();
       this.LoginButton.self().classList.add('navbar__button');
+      this.LoginButton.parent().classList.add('logout__user');
     } else {
+      this.searchIcon.render();
       this.user.render();
+      this.user.parent().classList.add('login__user');
       this.tabs.render();
-      this.LogoutButton.render();
-      this.LogoutButton.self().classList.add('navbar__button');
+      // this.LogoutButton.render();
+      // this.LogoutButton.self().classList.add('navbar__button');
     }
+
+    // window.addEventListener('resize', () => {
+    //   if (window.innerWidth < 950) {
+    //     this.userDropdown.updateItemVisibility('favorites', true);
+    //     this.userDropdown.updateItemVisibility('genres', true);
+    //     this.userDropdown.updateItemVisibility('search', true);
+    //   } else {
+    //     this.userDropdown.updateItemVisibility('favorites', false);
+    //     this.userDropdown.updateItemVisibility('genres', false);
+    //     this.userDropdown.updateItemVisibility('search', false);
+    //   }
+    // });
   }
 }
 

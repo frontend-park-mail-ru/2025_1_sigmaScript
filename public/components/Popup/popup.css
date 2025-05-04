@@ -32,7 +32,7 @@
 }
 
 .popup--success {
-  background-color: var(--success-color);
+  background-color: var(--success-color-dark);
 }
 
 .popup__text {
@@ -48,4 +48,13 @@
   color: #fff;
   cursor: pointer;
   padding: 0 0.5rem;
+}
+
+@media (max-width: 499.98px) {
+  .popup__text {
+    font-size: 1.5rem;
+  }
+  .popup {
+    margin-left: 3rem;
+  };
 }

@@ -87,6 +87,20 @@ export function addActorToFavorite(actor: PersonCardInfo) {
   });
 }
 
+export function removeMovieFromFavorite(id: number) {
+  dispatcher.dispatch({
+    type: UserPageTypes.REMOVE_MOVIE_FROM_FAVORITE,
+    payload: id
+  });
+}
+
+export function removeActorFromFavorite(id: number) {
+  dispatcher.dispatch({
+    type: UserPageTypes.REMOVE_ACTOR_FROM_FAVORITE,
+    payload: id
+  });
+}
+
 export function addReview(review: Review) {
   dispatcher.dispatch({
     type: UserPageTypes.ADD_REVIEW,
@@ -246,5 +260,12 @@ export function favoriteToggle() {
   dispatcher.dispatch({
     type: TabsActionTypes.FAVORITE_TOGGLE,
     payload: 'favorites'
+  });
+}
+
+export function searchToggle() {
+  dispatcher.dispatch({
+    type: TabsActionTypes.SEARCH_TOGGLE,
+    payload: 'search'
   });
 }

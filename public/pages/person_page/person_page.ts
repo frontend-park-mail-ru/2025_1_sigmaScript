@@ -14,6 +14,8 @@ import { FooterData } from 'types/Footer.types';
 import Scroll from 'components/Scroll/Scroll.ts';
 import MovieCard from 'components/Card/Card.ts';
 import { MovieCollection } from 'types/main_page.types.ts';
+import Card from 'components/Card/Card.ts';
+import { MoviesMap } from 'types/UserPage.types.ts';
 
 // temp data
 const actorInfo: PersonInfo = {
@@ -129,6 +131,13 @@ export class PersonPage {
 
     mainElemContent.innerHTML = personTemplate(this.personData);
 
+    new Card(document.querySelector('.person-page__photo-container')!, {
+      id: `actorCard--${this.personData?.personID}`,
+      previewUrl: this.personData?.photoUrl || '/static/img/default_preview.webp',
+      width: '300',
+      height: '460'
+    }).render();
+
     new Button(this.parent.querySelector('.favorite-button__container'), {
       id: 'button--favourite-' + createID(),
       type: 'button',
@@ -141,11 +150,6 @@ export class PersonPage {
             personID: this.personData?.personID as number,
             nameRu: this.personData?.nameRu as string,
             photoUrl: this.personData?.photoUrl as string
-          });
-          PopupActions.showPopup({
-            message: 'Актёр добавлен в избранное!',
-            duration: 2500,
-            isError: false
           });
         }
       }
@@ -168,11 +172,11 @@ export class PersonPage {
     moviesScroll.render();
     const moviesContainer = moviesScroll.getContentContainer();
     if (moviesContainer) {
-      for (const movie of this.personData?.movieCollection as MovieCollection) {
+      for (const [id, movie] of this.personData?.movieCollection as MoviesMap) {
         new MovieCard(moviesContainer, {
-          id: `movieCard--${movie.id}`,
+          id: `movieCard--${id}`,
           title: movie.title,
-          url: `${Urls.movie}/${movie.id}`,
+          url: `${Urls.movie}/${id}`,
           previewUrl: movie.preview_url || '/static/img/default_preview.webp',
           width: '130',
           height: '180'
@@ -212,10 +216,11 @@ export class PersonPage {
    * @param {PersonInfo} state - текущее состояние из Store
    */
   handleStoreChange(state: PersonState) {
-    if (state.person && state.person.favorite) {
-      // TODO favorite actor
-      return;
-    }
+    // TODO: после бдшки
+    // if (state.person && state.person.favorite) {
+    //   // TODO favorite actor
+    //   return;
+    // }
     if (state.error) {
       this.renderEmpty();
       return;

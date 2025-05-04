@@ -5,7 +5,11 @@ import { initialStore } from './InitialStore';
 import { Listener, SearchPageState } from 'types/SearchPage.types';
 import { SearchPage } from 'pages/SearchPage/SearchPage';
 import UserPageStore from './UserPageStore';
-import { searchCompleted } from 'flux/Actions';
+import { PopupActions, searchCompleted } from 'flux/Actions';
+import { MovieDataJSON } from 'types/main_page.types';
+import { PersonCardInfo } from 'types/Person.types';
+import { BASE_URL } from 'public/consts';
+import request from 'utils/fetch';
 
 class SearchPageStore {
   private state: SearchPageState;
@@ -13,8 +17,8 @@ class SearchPageStore {
 
   constructor() {
     this.state = {
-      movieCollection: [],
-      actorCollection: []
+      movieCollection: new Map<number, MovieDataJSON>(),
+      actorCollection: new Map<number, PersonCardInfo>()
     };
     this.listeners = [];
 
@@ -33,6 +37,24 @@ class SearchPageStore {
           movieCollection: UserPageStore.getState().movieCollection
         };
         searchCompleted(state);
+
+        // заготовка под бд
+        // try {
+        //   const url = BASE_URL + 'search';
+        //   const body = {
+        //     text: action.payload as string
+        //   };
+        //   const response = await request({ url, method: 'POST', body, credentials: true });
+        //   const res = response.body as SearchPageState;
+        //   searchCompleted(res);
+        // } catch {
+        //   PopupActions.showPopup({
+        //     message: 'Не удалось выполнить поиск!',
+        //     duration: 2500,
+        //     isError: true
+        //   });
+        // }
+
         break;
       }
       case SearchActionTypes.SEARCH_COMPLETED:

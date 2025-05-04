@@ -23,7 +23,8 @@ class NavbarStore {
       case UserPageTypes.UPDATE_USER_PAGE:
         this.emitChange();
         break;
-      case TabsActionTypes.FAVORITE_TOGGLE: {
+      case TabsActionTypes.FAVORITE_TOGGLE:
+      case TabsActionTypes.SEARCH_TOGGLE: {
         this.state.needTabID = action.payload as string;
         this.emitChange();
         this.state.needTabID = null;

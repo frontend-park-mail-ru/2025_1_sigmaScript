@@ -14,7 +14,7 @@ import { Footer } from 'components/Footer/Footer';
 import { FOOTER_CONFIG } from '../../consts.js';
 import { router, Urls } from '../../modules/router';
 import { FooterData } from 'types/Footer.types.js';
-import { addMovieToFavorite, addReview, PopupActions, postMovieReview } from 'flux/Actions.ts';
+import { addMovieToFavorite, addReview, PopupActions, postMovieReview, removeMovieFromFavorite } from 'flux/Actions.ts';
 import UserPageStore from 'store/UserPageStore.ts';
 import { formatDateTime } from 'modules/time_serialiser';
 
@@ -197,11 +197,6 @@ class MoviePage {
               title: this.#state.movieData?.name as string,
               preview_url: this.#state.movieData?.poster as string
             });
-            PopupActions.showPopup({
-              message: 'Фильм добавлен в избранное!',
-              duration: 2500,
-              isError: false
-            });
           }
         }
       }).render();
@@ -301,15 +296,16 @@ class MoviePage {
         score: rating
       });
 
-      addReview({
-        id: -1,
-        user: {
-          login: UserPageStore.getState().userData?.username as string
-        },
-        reviewText: text,
-        score: rating,
-        createdAt: formatDateTime(new Date())
-      });
+      // addReview({
+      //   id: -1,
+      //   user: {
+      //     login: UserPageStore.getState().userData?.username as string
+      //   },
+      //   reviewText: text,
+      //   score: rating,
+      //   createdAt: formatDateTime(new Date()),
+      //   movieID: this.#state.movieId as number
+      // });
     });
   }
 }

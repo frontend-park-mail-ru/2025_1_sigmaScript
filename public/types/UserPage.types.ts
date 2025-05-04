@@ -1,13 +1,17 @@
-import { MovieCollection } from 'types/main_page.types';
-import { PersonCollection } from './Person.types';
-import { Reviews } from './movie_page.types';
+import { MovieDataJSON } from 'types/main_page.types';
+import { PersonCardInfo } from './Person.types';
+import { Review } from './movie_page.types';
+
+export type MoviesMap = Map<number, MovieDataJSON>;
+export type ActorsMap = Map<number, PersonCardInfo>;
+export type ReviewsMap = Map<number, Review>;
 
 export type UserPageState = {
   parent: HTMLElement | null;
   userData: UserData | null;
-  movieCollection: MovieCollection | null;
-  actorCollection: PersonCollection | null;
-  reviews: Reviews | null;
+  movieCollection: MoviesMap;
+  actorCollection: ActorsMap;
+  reviews: ReviewsMap;
   needTabID: string | null;
 };
 

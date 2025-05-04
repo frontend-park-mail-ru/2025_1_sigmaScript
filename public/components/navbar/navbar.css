@@ -105,14 +105,65 @@
 }
 
 .login_modal .modal_content {
-  min-width: 25%;
-  max-width: 25%;
-  min-height: 30%;
-  max-height: 30%;
+  max-width: 40rem;
+  max-height: 40rem;
 }
 
 .navbar__left {
   display: flex;
   flex-direction: row;
   gap: 1rem;
+}
+
+.navbar__menu {
+  display: none;
+}
+
+@media (max-width: 949.98px) {
+  .navbar .navbar__tabs,
+  /* .navbar .navbar__user, */
+ /* .navbar .navbar__button, */
+  .navbar #searchIcon {
+    display: none;
+  }
+
+  .dropdown-menu [data-id='favorites'] {
+    display: block;
+  }
+
+  .dropdown-menu [data-id='genres'] {
+    display: block;
+  }
+
+  .dropdown-menu [data-id='search'] {
+    display: block;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .navbar_elements {
+    padding-left: 3rem;
+  }
+}
+
+@media (max-width: 529.98px) {
+  .navbar .login__user,
+  .navbar .logout__user + .navbar__menu {
+    display: none;
+  }
+
+  .navbar__menu {
+    display: block;
+  }
+}
+
+@media (max-width: 359.98px) {
+  .navbar_elements {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+
+  .navbar .u_button__text {
+    font-size: 1.6rem;
+  }
 }

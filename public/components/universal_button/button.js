@@ -54,6 +54,10 @@ class Button {
     return this.#parent.querySelector('#' + this.#config.id);
   }
 
+  parent() {
+    return this.#parent;
+  }
+
   setText(text) {
     if (this.self()) {
       this.self().getElementsByTagName('span')[0].textContent = text;

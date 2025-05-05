@@ -24,6 +24,7 @@ import { UniversalModalConfig } from 'types/Modal.types';
 import Scroll from 'components/Scroll/Scroll';
 import MovieCard from 'components/Card/Card';
 import { Urls } from 'modules/router';
+import { serializeTimeZToHumanTime } from 'modules/time_serialiser';
 
 export const TABS_DATA = {
   tabsData: [
@@ -99,6 +100,7 @@ export const TABS_DATA = {
         reviewsDiv.className = 'movie-page__reviews flex-dir-col flex-start';
         if (contentDiv) {
           for (const review of (UserPageStore.getState().reviews as ReviewsMap).values()) {
+            review.createdAt = serializeTimeZToHumanTime(review.createdAt);
             reviewsDiv.innerHTML += reviewTemplate(review);
           }
         }

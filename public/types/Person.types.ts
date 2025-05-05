@@ -1,4 +1,4 @@
-import { MovieCollection } from './main_page.types';
+import { MovieDataJSON } from './main_page.types';
 import { MoviesMap } from './UserPage.types';
 
 export type PersonInfo = {
@@ -26,13 +26,21 @@ export type PersonCardInfo = {
   photoUrl: string | null;
 };
 
+export type PersonJSON = {
+  id: number;
+  full_name: string;
+  photo: string;
+};
+
 export type PersonCollection = PersonCardInfo[];
+export type PersonJSONCollection = PersonJSON[];
 
 export type PersonsMap = Map<number, PersonInfo>;
 
 export type PersonState = {
   persons: PersonsMap;
   error: string | null;
+  needUpdateFavorite: boolean;
 };
 
 export type PersonListener = (state: PersonState) => void;
@@ -54,5 +62,5 @@ export interface PersonPayload {
 
   favorite: boolean | null;
 
-  movie_collection: MovieCollection | null;
+  movie_collection: Record<string, MovieDataJSON>;
 }

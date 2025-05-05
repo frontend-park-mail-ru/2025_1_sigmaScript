@@ -18,7 +18,7 @@ import Navbar from 'components/navbar/navbar';
 import { ALLOWED_MIME_TYPES, FOOTER_CONFIG } from '../../consts.js';
 import { Footer } from 'components/Footer/Footer';
 import UniversalModal from 'components/modal/modal';
-import { PopupActions, updateUser, updateUserAvatar } from 'flux/Actions';
+import { PopupActions, updateLogin, updatePassword, updateUser, updateUserAvatar } from 'flux/Actions';
 import { FooterData } from 'types/Footer.types';
 import { UniversalModalConfig } from 'types/Modal.types';
 import Scroll from 'components/Scroll/Scroll';
@@ -265,14 +265,18 @@ export class UserPage {
                   placeholder: 'Введите новый логин',
                   type: 'text',
                   text: UserPageStore.getState().userData?.username
+                },
+                {
+                  id: 'passwordInput',
+                  name: 'password',
+                  placeholder: 'Введите старый пароль',
+                  type: 'text'
                 }
               ],
               onConfirm: () => {
                 const username = modal.getInputByName('login').getValue();
-                const oldPassword = '123456';
-                const newPassword = oldPassword;
-                const repeatedNewPassword = oldPassword;
-                updateUser({ username, oldPassword, newPassword, repeatedNewPassword });
+                const password = modal.getInputByName('password').getValue();
+                updateLogin({ username, password });
               }
             } as UniversalModalConfig);
 
@@ -314,11 +318,11 @@ export class UserPage {
                 }
               ],
               onConfirm: () => {
-                const username = 'test';
+                const username = UserPageStore.getState().userData?.username as string;
                 const oldPassword = modal.getInputByName('oldPassword').getValue();
                 const newPassword = modal.getInputByName('newPassword').getValue();
                 const repeatedNewPassword = modal.getInputByName('repeatedNewPassword').getValue();
-                updateUser({ username, oldPassword, newPassword, repeatedNewPassword });
+                updatePassword({ username, oldPassword, newPassword, repeatedNewPassword });
               }
             } as UniversalModalConfig);
 

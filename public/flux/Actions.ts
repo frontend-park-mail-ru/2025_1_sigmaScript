@@ -9,7 +9,7 @@ import {
   SearchActionTypes,
   TabsActionTypes
 } from 'flux/ActionTypes';
-import { UpdateUserData, UserData } from 'types/UserPage.types';
+import { UpdateLoginData, UpdatePasswordData, UpdateUserData, UserData } from 'types/UserPage.types';
 import { MovieData, NewReviewDataJSON, Review, Reviews } from 'types/movie_page.types';
 import { CSATStatisticDataJSON } from 'types/stats_page.types';
 import { PopupType } from 'types/Popup.types';
@@ -195,6 +195,20 @@ export function updateUser(userData: UpdateUserData) {
   dispatcher.dispatch({
     type: UserPageTypes.UPDATE_USER,
     payload: userData
+  });
+}
+
+export function updateLogin(loginData: UpdateLoginData) {
+  dispatcher.dispatch({
+    type: UserPageTypes.UPDATE_LOGIN,
+    payload: loginData
+  });
+}
+
+export function updatePassword(passwordData: UpdatePasswordData) {
+  dispatcher.dispatch({
+    type: UserPageTypes.UPDATE_PASSWORD,
+    payload: passwordData
   });
 }
 

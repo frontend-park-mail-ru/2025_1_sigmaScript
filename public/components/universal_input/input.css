@@ -47,3 +47,9 @@
   border: 1px solid #ff0000;
   border-radius: 25px;
 }
+
+@media (max-width: 439.98px) {
+  .modal .modal_content__inputs .u_input__field::placeholder {
+    font-size: 1.8rem;
+  }
+}

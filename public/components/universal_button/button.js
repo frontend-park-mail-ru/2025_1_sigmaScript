@@ -64,6 +64,12 @@ class Button {
     }
   }
 
+  setColor(color) {
+    this.self()?.classList.remove(`u_button-color_${this.#config.color}`);
+    this.self()?.classList.add(`u_button-color_${color}`);
+    this.#config.color = color;
+  }
+
   destroy() {
     if (!this.self()) {
       return;

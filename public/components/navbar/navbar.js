@@ -129,6 +129,7 @@ class Navbar {
 
   handleStoreChange(state) {
     let userData = UserPageStore.getState().userData;
+    console.log('in navbar', userData);
     if (!userData?.username) {
       this.user.parent().classList.remove('login__user');
       this.user.destroy();

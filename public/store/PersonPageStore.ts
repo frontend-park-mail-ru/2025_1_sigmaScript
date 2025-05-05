@@ -4,7 +4,7 @@ import { Action } from 'types/Dispatcher.types';
 import { PersonState, PersonListener, PersonPayload, PersonInfo } from 'types/Person.types';
 
 import request, { ErrorWithDetails } from 'utils/fetch';
-import { GetDataActionTypes, RenderActionTypes } from 'flux/ActionTypes';
+import { GetDataActionTypes, RenderActionTypes, UserPageTypes } from 'flux/ActionTypes';
 
 import { initialStore } from './InitialStore';
 import { PersonPage } from 'pages/person_page/person_page';
@@ -13,8 +13,6 @@ import { PERSON_URL } from 'public/consts';
 import { serializeTimeZToHumanTimeAndYearsOld } from '../modules/time_serialiser';
 import { cmToMeters } from '../modules/smToMetersSerialiser';
 import { ErrorPayload } from 'types/Auth.types';
-import UserPageStore from './UserPageStore';
-import { MovieDataJSON } from 'types/main_page.types';
 
 class PersonPageStore {
   private listeners: Array<PersonListener>;
@@ -23,23 +21,8 @@ class PersonPageStore {
   constructor() {
     this.state = {
       error: null,
-      persons: new Map<number, PersonInfo>()
-      // person: {
-      //   personID: null,
-      //   photoUrl: null,
-      //   nameRu: null,
-      //   nameEn: null,
-      //   career: null,
-      //   height: null,
-      //   gender: null,
-      //   dateOfBirth: null,
-      //   genres: null,
-      //   totalFilms: null,
-      //   biography: null,
-      //   favorite: null,
-      //   dateOfDeath: null,
-      //   movieCollection: new Map<number, MovieDataJSON>()
-      // }
+      persons: new Map<number, PersonInfo>(),
+      needUpdateFavorite: false
     };
 
     this.listeners = [];
@@ -55,6 +38,11 @@ class PersonPageStore {
       case GetDataActionTypes.PERSON_NOT_FOUND_ERROR:
         this.state.error = (action.payload as ErrorPayload).error;
         this.emitChange();
+        break;
+      case UserPageTypes.UPDATE_USER_PAGE:
+        this.state.needUpdateFavorite = true;
+        this.emitChange();
+        this.state.needUpdateFavorite = false;
         break;
       default:
         break;
@@ -100,14 +88,11 @@ class PersonPageStore {
 
           favorite: personJSON.favorite,
 
-          // временное решение, пока нет бдшки
-          // movieCollection: personJSON.movie_collection
-          movieCollection: UserPageStore.getState().movieCollection
+          movieCollection: new Map(
+            Object.values(personJSON.movie_collection).map((movieData) => [movieData.id, movieData])
+          )
         };
-        // временное решение, пока нет бдшки
-        // if (personState.persons && !personState.person.movieCollection) {
-        //   personState.person.movieCollection = UserPageStore.getState().movieCollection;
-        // }
+
         this.state.persons.set(id as number, person);
       } catch (error: unknown) {
         dispatcher.dispatch({

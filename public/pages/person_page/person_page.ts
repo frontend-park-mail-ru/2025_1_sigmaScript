@@ -7,7 +7,7 @@ import noPersonTemplate from './no_person_page.hbs';
 
 import Navbar from 'components/navbar/navbar.js';
 import Button from 'components/universal_button/button.js';
-import { addActorToFavorite, PopupActions } from 'flux/Actions.ts';
+import { addActorToFavorite, PopupActions, removeActorFromFavorite } from 'flux/Actions.ts';
 import { Footer } from 'components/Footer/Footer.ts';
 import { FOOTER_CONFIG } from 'public/consts';
 import { FooterData } from 'types/Footer.types';
@@ -16,6 +16,7 @@ import MovieCard from 'components/Card/Card.ts';
 import { MovieCollection } from 'types/main_page.types.ts';
 import Card from 'components/Card/Card.ts';
 import { MoviesMap } from 'types/UserPage.types.ts';
+import UserPageStore from 'store/UserPageStore.ts';
 
 // temp data
 const actorInfo: PersonInfo = {
@@ -40,6 +41,8 @@ export class PersonPage {
   private id: string;
   private personData: PersonInfo | null;
   private navbar: Navbar | null;
+  private favoriteButton: Button | null;
+  private isFavorite: boolean;
 
   private bindedHandleStoreChange: (state: PersonState) => void;
   prevPage: () => void;
@@ -67,6 +70,8 @@ export class PersonPage {
     };
 
     this.navbar = null;
+    this.favoriteButton = null;
+    this.isFavorite = false;
 
     this.bindedHandleStoreChange = this.handleStoreChange.bind(this);
     PersonPageStore.subscribe(this.bindedHandleStoreChange);
@@ -101,6 +106,7 @@ export class PersonPage {
   destroy(): void {
     PersonPageStore.unsubscribe(this.bindedHandleStoreChange);
     this.navbar?.destroy();
+    this.favoriteButton?.destroy();
     this.self()?.remove();
   }
 
@@ -130,6 +136,8 @@ export class PersonPage {
     mainElem.appendChild(mainElemContent);
 
     mainElemContent.innerHTML = personTemplate(this.personData);
+    this.isFavorite = UserPageStore.isFavoriteActor(this.personData?.personID as number);
+    console.log('любимый актёр:', this.isFavorite);
 
     new Card(document.querySelector('.person-page__photo-container')!, {
       id: `actorCard--${this.personData?.personID}`,
@@ -138,22 +146,35 @@ export class PersonPage {
       height: '460'
     }).render();
 
-    new Button(this.parent.querySelector('.favorite-button__container'), {
+    this.favoriteButton = new Button(this.parent.querySelector('.favorite-button__container'), {
       id: 'button--favourite-' + createID(),
+      color: this.isFavorite ? 'favorite' : 'primary',
       type: 'button',
-      text: 'Любимое',
+      text: this.isFavorite ? 'Удалить' : 'Добавить',
       addClasses: ['movie__button'],
       srcIcon: '/static/svg/favourite.svg',
       actions: {
         click: () => {
-          addActorToFavorite({
-            personID: this.personData?.personID as number,
-            nameRu: this.personData?.nameRu as string,
-            photoUrl: this.personData?.photoUrl as string
-          });
+          console.log('this', this);
+          if (this.isFavorite) {
+            removeActorFromFavorite(this.personData?.personID as number);
+            this.favoriteButton?.setColor('primary');
+            this.favoriteButton?.setText('Добавить');
+            this.isFavorite = false;
+          } else {
+            addActorToFavorite({
+              personID: this.personData?.personID as number,
+              nameRu: this.personData?.nameRu as string,
+              photoUrl: this.personData?.photoUrl as string
+            });
+            this.favoriteButton?.setColor('favorite');
+            this.favoriteButton?.setText('Удалить');
+            this.isFavorite = true;
+          }
         }
       }
-    }).render();
+    });
+    this.favoriteButton.render();
 
     const contentDiv = document.querySelector('.person-page__films') as HTMLElement;
     if (!contentDiv) return;
@@ -216,13 +237,20 @@ export class PersonPage {
    * @param {PersonInfo} state - текущее состояние из Store
    */
   handleStoreChange(state: PersonState) {
-    // TODO: после бдшки
-    // if (state.person && state.person.favorite) {
-    //   // TODO favorite actor
-    //   return;
-    // }
     if (state.error) {
       this.renderEmpty();
+      return;
+    }
+    if (state.needUpdateFavorite) {
+      this.isFavorite = UserPageStore.isFavoriteActor(this.personData?.personID as number);
+      console.log('ACTION: любимый актёр:', this.isFavorite, this.personData?.personID);
+      if (this.isFavorite) {
+        this.favoriteButton?.setColor('favorite');
+        this.favoriteButton?.setText('Удалить');
+      } else {
+        this.favoriteButton?.setColor('primary');
+        this.favoriteButton?.setText('Добавить');
+      }
       return;
     }
   }

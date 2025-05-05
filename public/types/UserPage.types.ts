@@ -1,5 +1,5 @@
-import { MovieDataJSON } from 'types/main_page.types';
-import { PersonCardInfo } from './Person.types';
+import { MovieCollection, MovieDataJSON } from 'types/main_page.types';
+import { PersonCardInfo, PersonCollection, PersonJSONCollection } from './Person.types';
 import { Review } from './movie_page.types';
 
 export type MoviesMap = Map<number, MovieDataJSON>;
@@ -24,6 +24,8 @@ export interface UserData {
   rating?: number;
   moviesCount?: number;
   actorsCount?: number;
+  movieCollection?: MovieCollection;
+  actors?: PersonJSONCollection;
 }
 
 export type TabData = {
@@ -40,6 +42,18 @@ export interface UserPageData extends UserData {
 export type UpdateUserData = {
   username: string;
   avatar?: string;
+  oldPassword: string;
+  newPassword: string;
+  repeatedNewPassword: string;
+};
+
+export type UpdateLoginData = {
+  username: string;
+  password: string;
+};
+
+export type UpdatePasswordData = {
+  username: string;
   oldPassword: string;
   newPassword: string;
   repeatedNewPassword: string;

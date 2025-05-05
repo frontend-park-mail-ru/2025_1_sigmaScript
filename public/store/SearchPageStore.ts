@@ -36,25 +36,25 @@ class SearchPageStore {
           actorCollection: UserPageStore.getState().actorCollection,
           movieCollection: UserPageStore.getState().movieCollection
         };
-        searchCompleted(state);
 
         // заготовка под бд
-        // try {
-        //   const url = BASE_URL + 'search';
-        //   const body = {
-        //     text: action.payload as string
-        //   };
-        //   const response = await request({ url, method: 'POST', body, credentials: true });
-        //   const res = response.body as SearchPageState;
-        //   searchCompleted(res);
-        // } catch {
-        //   PopupActions.showPopup({
-        //     message: 'Не удалось выполнить поиск!',
-        //     duration: 2500,
-        //     isError: true
-        //   });
-        // }
+        try {
+          const url = BASE_URL + 'search';
+          const body = {
+            search: action.payload as string
+          };
+          const response = await request({ url, method: 'POST', body, credentials: true });
+          const res = response.body as SearchPageState;
+          searchCompleted(res);
+        } catch {
+          PopupActions.showPopup({
+            message: 'Не удалось выполнить поиск!',
+            duration: 2500,
+            isError: true
+          });
+        }
 
+        searchCompleted(state);
         break;
       }
       case SearchActionTypes.SEARCH_COMPLETED:

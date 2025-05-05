@@ -12,6 +12,15 @@
     top: 0;
 }
 
+.navbar__logo {
+  width: 210px;
+  height: 40px;
+  min-width: 210px;
+  min-height: 40px;
+  max-width: 210px;
+  max-height: 40px;
+}
+
 .navbar_elements {
     transition: background-color 0.3s ease-in, background-color 0.2s ease-out;
     position: fixed;

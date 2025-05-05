@@ -34,6 +34,7 @@ class MoviePage {
     isLoading: true,
     error: null
   };
+  #favoriteButton: Button | null;
   #stars: Stars | null = null;
   private bindedHandleStoreChange: (state: MoviePageStateFromStore) => void;
 
@@ -41,6 +42,7 @@ class MoviePage {
     this.#parent = parent;
     this.#id = 'moviePage--' + createID();
     this.#state = MoviePageStore.getState();
+    this.#favoriteButton = null;
 
     this.bindedHandleStoreChange = this.handleStoreChange.bind(this);
     MoviePageStore.subscribe(this.bindedHandleStoreChange);
@@ -49,6 +51,18 @@ class MoviePage {
   handleStoreChange(newState: MoviePageStateFromStore): void {
     this.#state = newState;
     this.update();
+    if (UserPageStore.getState().userData?.username) {
+      this.#favoriteButton?.render();
+    }
+    if (newState.needUpdateFavorite) {
+      const isFavorite = UserPageStore.isFavoriteMovie(this.#state?.movieData?.id as number);
+      if (isFavorite) {
+        this.#favoriteButton?.setColor('favorite');
+      } else {
+        this.#favoriteButton?.setColor('primary');
+      }
+      return;
+    }
   }
 
   self(): HTMLElement | null {
@@ -230,25 +244,38 @@ class MoviePage {
         }
       }).render();
 
-      new Button(movieButtons, {
+      this.#favoriteButton = new Button(movieButtons, {
         id: 'button--favourite-' + createID(),
         type: 'button',
         addClasses: ['movie-info-column__favoutite-button', 'movie-page-button'],
         srcIcon: '/static/svg/favourite.svg',
         actions: {
           click: () => {
-            if (UserPageStore.isFavoriteMovie(this.#state.movieId as number)) {
-              removeMovieFromFavorite(this.#state.movieId as number);
+            const id = this.#state?.movieData?.id;
+            if (UserPageStore.isFavoriteMovie(id!)) {
+              removeMovieFromFavorite(id!);
+              this.#favoriteButton?.setColor('none');
             } else {
               addMovieToFavorite({
-                id: this.#state.movieId as number,
+                id: id!,
                 title: this.#state.movieData?.name as string,
                 preview_url: this.#state.movieData?.poster as string
               });
+              this.#favoriteButton?.setColor('favorite');
             }
           }
         }
-      }).render();
+      });
+      if (UserPageStore.getState().userData?.username) {
+        this.#favoriteButton?.render();
+
+        const isFavorite = UserPageStore.isFavoriteMovie(this.#state?.movieData?.id as number);
+        if (isFavorite) {
+          this.#favoriteButton?.setColor('favorite');
+        } else {
+          this.#favoriteButton?.setColor('primary');
+        }
+      }
     }
 
     new Button(movieButtons, {

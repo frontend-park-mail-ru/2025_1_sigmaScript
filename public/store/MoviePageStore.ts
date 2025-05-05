@@ -1,6 +1,6 @@
 import { dispatcher } from 'flux/Dispatcher';
 import { Action } from 'types/Dispatcher.types';
-import { RenderActionTypes, MovieActionTypes } from 'flux/ActionTypes';
+import { RenderActionTypes, MovieActionTypes, UserPageTypes } from 'flux/ActionTypes';
 import { MovieData, NewReviewDataJSON, Reviews } from 'types/movie_page.types';
 import { formatDateTime, serializeTimeZToHumanTime, serializeTimeZToHumanYear } from '../modules/time_serialiser';
 import { initialStore } from './InitialStore';
@@ -181,6 +181,12 @@ class MoviePageStore {
 
         renderCsat();
         break;
+      case UserPageTypes.UPDATE_USER_PAGE: {
+        this.state.needUpdateFavorite = true;
+        this.emitChange();
+        this.state.needUpdateFavorite = false;
+        break;
+      }
       default:
         break;
     }

@@ -37,7 +37,7 @@
 }
 
 .u_button-color_favorite {
-    background-color: #eb9534;
+    background-color: #eb9534 !important;
 }
 
 .u_button-color_success {

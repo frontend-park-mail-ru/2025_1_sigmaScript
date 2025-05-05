@@ -368,3 +368,103 @@
   font-size: 2rem;
   padding: 0 2.5rem;
 }
+
+.movie__button {
+  width: 140px;
+  height: 45px;;
+  min-height: 30px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+@media only screen and (max-width: 1024px) {
+.movie-page__general-info-block {
+  flex-direction: column !important;
+  margin: 0;
+}
+.general-info-block__movie-info-column,
+.general-info-block__backdrop {
+  width: 100% !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+.general-info-block__movie-info-column {
+  flex-direction: row !important;
+  display: none !important;
+}
+.general-info-block__gradient {
+  display: none;
+}
+movie-info-column__buttons {
+  justify-content: center !important;
+  align-items: center !important;
+}
+.movie-page__general-info-block {
+  flex-direction: column !important;
+}
+
+.detailed-info__titles-wrapper {
+  flex-direction: column !important;
+}
+
+.detailed-info__movie-titles {
+  width: 100%;
+}
+
+.detailed-info__about-title {
+  padding: 0 0 0 3%;
+}
+
+.detailed-info__grid {
+  padding: 0 3%;
+}
+
+.detailed-info__wrapper {
+  flex-direction: column !important;
+  width: 100%;
+}
+.detailed-info__left-column {
+  flex-direction: column !important;
+  width: 100%;
+}
+.detailed-info__right-column {
+  flex-direction: column !important;
+  width: 100%;
+}
+}
+
+@media only screen and (max-width: 900px) {
+  html {
+    font-size: 8px !important;
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  html {
+    font-size: 7px !important;
+  }
+}
+
+@media only screen and (max-width: 480) {
+  html {
+    font-size: 5px !important;
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .stars__star {
+    width: 28px;
+    height: 28px;
+  }
+
+  .stars__container {
+    gap: 2px;
+  }
+}
+
+@media only screen and (max-width: 400) {
+  html {
+    font-size: 4px !important;
+  }
+}
+

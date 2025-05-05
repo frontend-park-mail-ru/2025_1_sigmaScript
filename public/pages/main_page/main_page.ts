@@ -171,7 +171,7 @@ class MainPage {
     this.setupNavbarScrollEffect();
 
     const mainElemContent = document.createElement('div');
-    mainElemContent.classList.add('content');
+    mainElemContent.classList.add('content', 'main-page');
     mainElemContent.id = this.#config.id;
     mainElem.appendChild(mainElemContent);
 

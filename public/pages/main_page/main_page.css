@@ -119,3 +119,54 @@
 .navbar--overlay:hover .navbar_gradient {
   opacity: 1;
 }
+
+@media only screen and (max-width: 1024px) {
+  .compilation__title {
+    font-size: 2.8rem;
+  }
+}
+
+
+@media only screen and (max-width: 768px) {
+  .compilation__title {
+    font-size: rem;
+  }
+
+  .main-page .card {
+    width: 170px !important;
+    height: 255px !important;
+  }
+
+  .main-page .card__title {
+    width: 140px !important;
+    white-space: normal;
+  }
+
+  .main-page .compilations {
+    gap: 1rem;
+  }
+}
+
+@media only screen and (max-width: 480px) {
+  .compilation__title {
+    font-size: 20px;
+  }
+
+  .main-page .card {
+    width: 150px !important;
+    height: 225px !important;
+  }
+
+  .main-page .card__title {
+    width: 130px !important;
+    white-space: normal;
+  }
+
+  .main-page .compilation__title {
+    font-size: 2rem;
+  }
+
+  .main-page .compilations {
+    gap: 1.5rem;
+  }
+}

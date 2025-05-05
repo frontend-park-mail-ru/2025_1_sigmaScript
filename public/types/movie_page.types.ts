@@ -21,6 +21,7 @@ export type Review = {
   reviewText: string;
   score: number;
   createdAt: string;
+  movieID?: number;
 };
 
 export type NewReviewDataJSON = {

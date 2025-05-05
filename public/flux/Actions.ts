@@ -4,11 +4,18 @@ import {
   RenderActionTypes,
   UserPageTypes,
   MovieActionTypes,
-  StatsActionTypes
+  StatsActionTypes,
+  PopupActionTypes,
+  SearchActionTypes,
+  TabsActionTypes
 } from 'flux/ActionTypes';
-import { UpdateUserData, UserData } from 'types/UserPage.types';
-import { MovieData, NewReviewDataJSON, Reviews } from 'types/movie_page.types';
+import { UpdateLoginData, UpdatePasswordData, UpdateUserData, UserData } from 'types/UserPage.types';
+import { MovieData, NewReviewDataJSON, Review, Reviews } from 'types/movie_page.types';
 import { CSATStatisticDataJSON } from 'types/stats_page.types';
+import { PopupType } from 'types/Popup.types';
+import { MovieDataJSON } from 'types/main_page.types';
+import { PersonCardInfo } from 'types/Person.types';
+import { SearchPageState } from 'types/SearchPage.types';
 
 export function loginSubmit(username: string, password: string) {
   dispatcher.dispatch({
@@ -66,6 +73,41 @@ export function postMovieReview(reviewData: NewReviewDataJSON) {
   });
 }
 
+export function addMovieToFavorite(movieData: MovieDataJSON) {
+  dispatcher.dispatch({
+    type: UserPageTypes.ADD_MOVIE_TO_FAVORITE,
+    payload: movieData
+  });
+}
+
+export function addActorToFavorite(actor: PersonCardInfo) {
+  dispatcher.dispatch({
+    type: UserPageTypes.ADD_ACTOR_TO_FAVORITE,
+    payload: actor
+  });
+}
+
+export function removeMovieFromFavorite(id: number) {
+  dispatcher.dispatch({
+    type: UserPageTypes.REMOVE_MOVIE_FROM_FAVORITE,
+    payload: id
+  });
+}
+
+export function removeActorFromFavorite(id: number) {
+  dispatcher.dispatch({
+    type: UserPageTypes.REMOVE_ACTOR_FROM_FAVORITE,
+    payload: id
+  });
+}
+
+export function addReview(review: Review) {
+  dispatcher.dispatch({
+    type: UserPageTypes.ADD_REVIEW,
+    payload: review
+  });
+}
+
 export const RenderActions = {
   renderMainPage() {
     dispatcher.dispatch({
@@ -114,6 +156,25 @@ export const RenderActions = {
     dispatcher.dispatch({
       type: RenderActionTypes.RENDER_CSAT_PAGE
     });
+  },
+  renderSearchPage() {
+    dispatcher.dispatch({
+      type: RenderActionTypes.RENDER_SEARCH_PAGE
+    });
+  }
+};
+
+export const PopupActions = {
+  showPopup(payload: PopupType) {
+    dispatcher.dispatch({
+      type: PopupActionTypes.SHOW_POPUP,
+      payload
+    });
+  },
+  hidePopup() {
+    dispatcher.dispatch({
+      type: PopupActionTypes.HIDE_POPUP
+    });
   }
 };
 
@@ -134,6 +195,20 @@ export function updateUser(userData: UpdateUserData) {
   dispatcher.dispatch({
     type: UserPageTypes.UPDATE_USER,
     payload: userData
+  });
+}
+
+export function updateLogin(loginData: UpdateLoginData) {
+  dispatcher.dispatch({
+    type: UserPageTypes.UPDATE_LOGIN,
+    payload: loginData
+  });
+}
+
+export function updatePassword(passwordData: UpdatePasswordData) {
+  dispatcher.dispatch({
+    type: UserPageTypes.UPDATE_PASSWORD,
+    payload: passwordData
   });
 }
 
@@ -178,5 +253,33 @@ export function statsDataError(error: string) {
 export function loadStatsData() {
   dispatcher.dispatch({
     type: StatsActionTypes.LOAD_STATS_DATA
+  });
+}
+
+export function search(text: string) {
+  dispatcher.dispatch({
+    type: SearchActionTypes.SEARCH,
+    payload: text
+  });
+}
+
+export function searchCompleted(searchState: SearchPageState) {
+  dispatcher.dispatch({
+    type: SearchActionTypes.SEARCH_COMPLETED,
+    payload: searchState
+  });
+}
+
+export function favoriteToggle() {
+  dispatcher.dispatch({
+    type: TabsActionTypes.FAVORITE_TOGGLE,
+    payload: 'favorites'
+  });
+}
+
+export function searchToggle() {
+  dispatcher.dispatch({
+    type: TabsActionTypes.SEARCH_TOGGLE,
+    payload: 'search'
   });
 }

@@ -1,59 +1,62 @@
-<div class="person-page">
-  <div class="person__photo-container">
-    <img src="{{photoUrl}}" alt="{{nameRu}} - Фото" class="person__photo">
-  </div>
-  <div class="person__info-container">
-    <div class="person__header">
-      <h1 class="person__name-ru">{{nameRu}}</h1>
-      <p class="person__name-en">{{nameEn}}</p>
-      <div class="favorite-button__container">
+<div class='person-page'>
+  <div class='person-page__content'>
+    <div class='person-page__photo-container'>
+      {{!-- <img src='{{photoUrl}}' alt='{{nameRu}} - Фото' class='person-page__photo' /> --}}
+    </div>
+    <div class='person-page__info-container'>
+      <div class='person-page__header'>
+        <h1 class='person-page__name-ru'>{{nameRu}}</h1>
+        <p class='person-page__name-en'>{{nameEn}}</p>
+        <div class='favorite-button__container'>
+        </div>
+      </div>
+
+      <div class='person-page__details'>
+        <h2>Об актёре</h2>
+        <table class='details-table'>
+          <tbody>
+            <tr>
+              <td class='details-label'>Карьера</td>
+              <td class='details-value'>{{career}}</td>
+            </tr>
+            <tr>
+              <td class='details-label'>Рост</td>
+              <td class='details-value'>
+                {{#if height}}
+                  {{height}}
+                  м
+                {{else}}
+                {{/if}}
+              </td>
+            </tr>
+            {{#if gender}}
+              <tr>
+                <td class='details-label'>Пол</td>
+                <td class='details-value'>{{gender}}</td>
+              </tr>
+            {{/if}}
+            <tr>
+              <td class='details-label'>Дата рождения</td>
+              <td class='details-value'>{{dateOfBirth}}</td>
+            </tr>
+            <tr>
+              <td class='details-label'>Жанры</td>
+              <td class='details-value'>{{genres}}</td>
+            </tr>
+            <tr>
+              <td class='details-label'>Всего фильмов</td>
+              <td class='details-value'>{{totalFilms}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class='person-page__biography'>
+        <h2>Биография</h2>
+        {{{biography}}}
+        {{! Используем тройные фигурные скобки, если biography содержит HTML }}
       </div>
     </div>
-
-    <div class="person__details">
-      <h2>Информация</h2>
-      <table class="details-table">
-        <tbody>
-          <tr>
-            <td class="details-label">Карьера</td>
-            <td class="details-value">{{career}}</td>
-          </tr>
-          <tr>
-            <td class="details-label">Рост</td>
-            <td class="details-value">
-              {{#if height}}
-              {{height}} м
-              {{else}}
-              {{/if}}
-            </td>
-          </tr>
-          {{#if gender}}
-          <tr>
-            <td class="details-label">Пол</td>
-            <td class="details-value">{{gender}}</td>
-          </tr>
-          {{/if}}
-
-          <tr>
-            <td class="details-label">Дата рождения</td>
-            <td class="details-value">{{dateOfBirth}}</td>
-          </tr>
-          <tr>
-            <td class="details-label">Жанры</td>
-            <td class="details-value">{{genres}}</td>
-          </tr>
-          <tr>
-            <td class="details-label">Всего фильмов</td>
-            <td class="details-value">{{totalFilms}}</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-
-    <div class="person__biography">
-      <h2>Биография</h2>
-      {{{biography}}} {{! Use triple braces if biography contains HTML }}
-    </div>
   </div>
+  <div class='person-page__films'></div>
 </div>

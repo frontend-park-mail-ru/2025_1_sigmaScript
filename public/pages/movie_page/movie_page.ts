@@ -14,8 +14,9 @@ import { Footer } from 'components/Footer/Footer';
 import { FOOTER_CONFIG } from '../../consts.js';
 import { router, Urls } from '../../modules/router';
 import { FooterData } from 'types/Footer.types.js';
-import { postMovieReview } from 'flux/Actions.ts';
+import { addMovieToFavorite, addReview, PopupActions, postMovieReview, removeMovieFromFavorite } from 'flux/Actions.ts';
 import UserPageStore from 'store/UserPageStore.ts';
+import { formatDateTime } from 'modules/time_serialiser';
 
 type MoviePageStateFromStore = {
   movieId: number | string | null;
@@ -168,35 +169,38 @@ class MoviePage {
     }
 
     // TODO till 3-d RK
-    // if (movieButtons) {
-    //   new Button(movieButtons, {
-    //     id: 'button--trailer-' + createID(),
-    //     type: 'button',
-    //     text: 'Трейлер',
-    //     addClasses: ['movie__button'],
-    //     srcIcon: '/static/svg/play.svg',
-    //     actions: {
-    //       click: () => {
-    //         // TODO
-    //         console.log(`Play trailer for movie ${movie.id}`);
-    //       }
-    //     }
-    //   }).render();
+    if (movieButtons) {
+      //   new Button(movieButtons, {
+      //     id: 'button--trailer-' + createID(),
+      //     type: 'button',
+      //     text: 'Трейлер',
+      //     addClasses: ['movie__button'],
+      //     srcIcon: '/static/svg/play.svg',
+      //     actions: {
+      //       click: () => {
+      //         // TODO
+      //         console.log(`Play trailer for movie ${movie.id}`);
+      //       }
+      //     }
+      //   }).render();
 
-    //   new Button(movieButtons, {
-    //     id: 'button--favourite-' + createID(),
-    //     type: 'button',
-    //     text: 'Любимое',
-    //     addClasses: ['movie__button'],
-    //     srcIcon: '/static/svg/favourite.svg',
-    //     actions: {
-    //       click: () => {
-    //         // TODO error handle
-    //         console.log(`Toggle favourite for movie ${movie.id}`);
-    //       }
-    //     }
-    //   }).render();
-    // }
+      new Button(movieButtons, {
+        id: 'button--favourite-' + createID(),
+        type: 'button',
+        text: 'Любимое',
+        addClasses: ['movie__button'],
+        srcIcon: '/static/svg/favourite.svg',
+        actions: {
+          click: () => {
+            addMovieToFavorite({
+              id: this.#state.movieId as number,
+              title: this.#state.movieData?.name as string,
+              preview_url: this.#state.movieData?.poster as string
+            });
+          }
+        }
+      }).render();
+    }
 
     if (ratingElement) {
       new Button(ratingElement, {
@@ -291,6 +295,17 @@ class MoviePage {
         reviewText: text,
         score: rating
       });
+
+      // addReview({
+      //   id: -1,
+      //   user: {
+      //     login: UserPageStore.getState().userData?.username as string
+      //   },
+      //   reviewText: text,
+      //   score: rating,
+      //   createdAt: formatDateTime(new Date()),
+      //   movieID: this.#state.movieId as number
+      // });
     });
   }
 }

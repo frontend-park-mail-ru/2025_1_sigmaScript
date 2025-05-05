@@ -2,6 +2,7 @@ export const BACKEND_PORT = 8080;
 export const FRONTEND_PORT = 3000;
 // export const HOST = '217.16.20.177';
 export const HOST = 'localhost';
+// export const HOST = '127.0.0.1';
 export const AUTH_URL = `http://${HOST}:${BACKEND_PORT}/auth/`;
 export const PERSON_URL = `http://${HOST}:${BACKEND_PORT}/name/`;
 export const MOVIE_URL = `http://${HOST}:${BACKEND_PORT}/movie`;

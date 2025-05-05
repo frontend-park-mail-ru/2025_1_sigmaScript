@@ -8,7 +8,8 @@ export const Urls = {
   person: '/name',
   profile: '/profile',
   stats: '/csat/statistic',
-  csat: '/csat'
+  csat: '/csat',
+  search: '/search'
 };
 
 type lastScrollState = {
@@ -52,6 +53,9 @@ export const handler = (args: handlerInput) => {
       break;
     case Urls.csat:
       RenderActions.renderCsatPage();
+      break;
+    case Urls.search:
+      RenderActions.renderSearchPage();
       break;
     default:
       window.location.pathname = '/';

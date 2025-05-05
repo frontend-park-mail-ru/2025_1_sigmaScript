@@ -70,13 +70,13 @@
   width: 140px;
   height: 45px;;
   min-height: 30px;
-  background-color: var(--primary-color);
+  /* background-color: var(--primary-color);
   background: linear-gradient(
     to right, 
     #5d37c4 0%,
     #595cff 80%,
     var(--primary-color) 100%
-  );
+  ); */
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }

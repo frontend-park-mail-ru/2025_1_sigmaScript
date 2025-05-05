@@ -100,3 +100,27 @@ export const serializeTimeZToHumanTime = (timeString: string): string => {
     return 'Ошибка при обработке времени';
   }
 };
+
+export const formatDateTime = (date: Date): string => {
+  const optionsDate: Intl.DateTimeFormatOptions = {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric'
+  };
+  const formattedDate = date.toLocaleDateString('ru-RU', optionsDate);
+
+  const optionsTime: Intl.DateTimeFormatOptions = {
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: false
+  };
+  const formattedTime = date.toLocaleTimeString('ru-RU', optionsTime);
+
+  return `${formattedDate} в ${formattedTime}`;
+};
+
+export const formatTimestamp = (timestamp: number): string => {
+  const date = new Date(timestamp);
+  return formatDateTime(date);
+};

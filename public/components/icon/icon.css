@@ -1,110 +1,114 @@
 .icon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: var(--background-color);
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    outline: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--background-color);
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  outline: none;
 
-    width: fit-content;
-    height: 100%;
+  width: fit-content;
+  height: 100%;
 
-    max-height: var(--navbar-elements-height);
+  max-height: var(--navbar-elements-height);
 }
 
 .icon-dir_row {
-    flex-direction: row;
+  flex-direction: row;
 }
 
 .icon-dir_column {
-    flex-direction: column;
+  flex-direction: column;
 }
 
 .icon-color_none {
-    background-color: var(--transparent-element);
+  background-color: var(--transparent-element);
 }
 
 .icon-color_primary {
-    background-color: var(--primary-color);
+  background-color: var(--primary-color);
 }
 
 .icon-color_secondary {
-    background-color: var(--secondary-color);
+  background-color: var(--secondary-color);
 }
 
 .icon-color_success {
-    background-color: var(--success-color);
+  background-color: var(--success-color);
 }
 
 .icon__img {
-    height: 100%;
-    width: auto;
+  height: 100%;
+  width: auto;
 }
 
 .icon-size_small {
-    & .icon__img {
-        width: 24px;
-        height: 24px;
-    }
+  & .icon__img {
+    width: 24px;
+    height: 24px;
+  }
 
-    & .icon__text {
-        font-size: 12px;
-    }
+  & .icon__text {
+    font-size: 12px;
+  }
 }
 
 .icon-size_medium {
-    & .icon__img {
-        width: 32px;
-        height: 32px;
-    }
+  & .icon__img {
+    width: 32px;
+    height: 32px;
+  }
 
-    & .icon__text {
-        font-size: 14px;
-    }
+  & .icon__text {
+    font-size: 14px;
+  }
 }
 
 .icon-size_large {
-    & .icon__img {
-        width: 42px;
-        height: 42px;
-        margin: 3px;
-    }
+  & .icon__img {
+    width: 42px;
+    height: 42px;
+    margin: 3px;
+  }
 
-    & .icon__text {
-        font-size: 24px;
-    }
+  & .icon__text {
+    font-size: 24px;
+  }
 }
 
 .icon-circular {
-    & .icon__img {
-        border-radius: 50%;
-    }
+  & .icon__img {
+    border-radius: 50%;
+  }
 }
 
 .icon__text {
-    font-weight: 500;
-    line-height: 1.8rem;
-    color: var(--primary-text-color);
+  font-weight: 500;
+  line-height: 1.8rem;
+  color: var(--primary-text-color);
 }
 
 .icon__text-color_primary {
-    color: var(--primary-text-color);
+  color: var(--primary-text-color);
 }
 
 .icon__text-color_secondary {
-    color: var(--secondary-text-color);
+  color: var(--secondary-text-color);
 }
 
 .icon__text-color_success {
-    color: var(--success-color);
+  color: var(--success-color);
 }
 
 .wrapper {
-    border: none;
-    outline: none;
-    background-color: var(--transparent-element);
-    height: 100%;
-    width: auto;
+  border: none;
+  outline: none;
+  background-color: var(--transparent-element);
+  height: 100%;
+  width: auto;
+}
+
+.icon_active {
+  color: var(--primary-color);
 }

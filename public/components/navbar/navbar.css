@@ -1,18 +1,28 @@
 .navbar {
     display: block;
-
+    position: fixed;
     width: 100%;
     height: var(--navbar-height);
     min-width: 180px;
     min-height: 20px;
     background-color: var(--transparent-element);
 
-    z-index: 5;
+    z-index: 10;
     position: sticky;
     top: 0;
 }
 
+.navbar__logo {
+  width: 210px;
+  height: 40px;
+  min-width: 210px;
+  min-height: 40px;
+  max-width: 210px;
+  max-height: 40px;
+}
+
 .navbar_elements {
+    transition: background-color 0.3s ease-in, background-color 0.2s ease-out;
     position: fixed;
     left: 0;
     top: 0;
@@ -21,7 +31,7 @@
     padding-top: 22.5px;
     padding-bottom: 22.5px;
 
-    background: var(--background-color);
+    background-color: var(--background-color);
     height: var(--navbar-content-height);
     width: 100%;
     display: flex;
@@ -30,77 +40,134 @@
 }
 
 .navbar_gradient {
+    transition: opacity 0.1s ease-in, opacity 0.3s ease-out;
     position: fixed;
     left: 0;
     top: 0;
 
-    width: 100%;
-    height: var(--navbar-height);
-    min-width: 300px;
-    min-height: 20px;
+  width: 100%;
+  height: var(--navbar-height);
+  min-width: 300px;
+  min-height: 20px;
 
-    background: linear-gradient(180deg, #16161A 67%, rgba(22, 22, 26, 0.75) 75%, rgba(22, 22, 26, 0.453846) 84%, rgba(22, 22, 26, 0.2) 92%, rgba(22, 22, 26, 0) 100%);
+    background: linear-gradient(180deg, var(--background-color) 67%, rgba(08, 08, 08, 0.75) 75%, rgba(08, 08, 08, 0.453846) 84%, rgba(08, 08, 08, 0.2) 92%, rgba(08, 08, 08, 0) 100%);
 }
 
-
 .navbar__input_form {
-    display: flex;
-    flex-direction: row;
+  display: flex;
+  flex-direction: row;
 }
 
 .navbar__logo {
-    display: flex;
-    justify-content: center;
-    width: fit-content;
-    height: 40px;
+  display: flex;
+  justify-content: center;
+  width: fit-content;
+  height: 40px;
 
-    margin: 2.5px 0px;
+  margin: 2.5px 0px;
 
-    border: none;
-    outline: none;
-    background-color: var(--transparent-element);
+  border: none;
+  outline: none;
+  background-color: var(--transparent-element);
 }
 
-.navbar__button.u_button>.u_button__text-color_primary {
-    color: #979AA3;
+.navbar__button.u_button > .u_button__text-color_primary {
+  color: #979aa3;
 }
 
-.navbar__button.u_button>.u_button__text-color_primary:hover {
-    color: #FFFE;
+.navbar__button.u_button > .u_button__text-color_primary:hover {
+  color: #fffe;
 }
 
 .navbar__button.u_button {
     background-color: inherit;
-    margin-left: 10px;
-}
-
-.navbar__button.u_button:hover {
     border: none;
 }
 
+.navbar__button.u_button:hover {
+  border: none;
+}
+
 .navbar .u_input {
-    display: flex;
-    flex-direction: row;
-    justify-content: left;
-    align-items: center;
-    height: var(--navbar-elements-height);
-    background-color: var(--background-color);
-    padding-left: 5px;
+  display: flex;
+  flex-direction: row;
+  justify-content: left;
+  align-items: center;
+  height: var(--navbar-elements-height);
+  background-color: var(--background-color);
+  padding-left: 5px;
 }
 
 .navbar .u_input__field {
-    background-color: var(--background-color);
-    min-width: 360px;
-    height: var(--navbar-elements-height);
-    padding-left: 2rem;
-    font-size: 2.4rem;
-    border: solid;
-    border-color: var(--text-field-border-color);
+  background-color: var(--background-color);
+  min-width: 360px;
+  height: var(--navbar-elements-height);
+  padding-left: 2rem;
+  font-size: 2.4rem;
+  border: solid;
+  border-color: var(--text-field-border-color);
 }
 
 .login_modal .modal_content {
-    min-width: 25%;
-    max-width: 25%;
-    min-height: 30%;
-    max-height: 30%;
+  max-width: 40rem;
+  max-height: 40rem;
+}
+
+.navbar__left {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+}
+
+.navbar__menu {
+  display: none;
+}
+
+@media (max-width: 949.98px) {
+  .navbar .navbar__tabs,
+  /* .navbar .navbar__user, */
+ /* .navbar .navbar__button, */
+  .navbar #searchIcon {
+    display: none;
+  }
+
+  .dropdown-menu [data-id='favorites'] {
+    display: block;
+  }
+
+  .dropdown-menu [data-id='genres'] {
+    display: block;
+  }
+
+  .dropdown-menu [data-id='search'] {
+    display: block;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .navbar_elements {
+    padding-left: 3rem;
+  }
+}
+
+@media (max-width: 529.98px) {
+  .navbar .login__user,
+  .navbar .logout__user + .navbar__menu {
+    display: none;
+  }
+
+  .navbar__menu {
+    display: block;
+  }
+}
+
+@media (max-width: 359.98px) {
+  .navbar_elements {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+
+  .navbar .u_button__text {
+    font-size: 1.6rem;
+  }
 }

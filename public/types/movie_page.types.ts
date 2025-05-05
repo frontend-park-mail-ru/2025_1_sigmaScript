@@ -6,12 +6,13 @@ export type User = {
 export type Person = {
   id: number;
   fullName: string;
+  enFullName?: string;
   photo?: string;
   about?: string;
   sex?: string;
   growth?: string;
-  birthday?: Date;
-  death?: Date;
+  birthday?: string;
+  death?: string;
   role?: string;
 };
 
@@ -21,6 +22,7 @@ export type Review = {
   reviewText: string;
   score: number;
   createdAt: string;
+  movieID?: number;
 };
 
 export type NewReviewDataJSON = {
@@ -35,26 +37,40 @@ export type Genre = {
   name: string;
 };
 
+export type WatchProvider = {
+  name: string;
+  logoUrl: string;
+  movieUrl: string;
+};
+
 export type MovieData = {
   id: number;
   name: string;
+  originalName?: string;
   about?: string;
+  shortDescription?: string;
   poster?: string;
-  releaseYear?: number;
+  logo?: string;
+  backdrop?: string;
+  releaseYear?: string;
   country?: string;
   slogan?: string;
   director?: string;
+  isFavourite?: boolean;
   budget?: number;
   boxOfficeUS?: number;
   boxOfficeGlobal?: number;
   boxOfficeRussia?: number;
-  premierRussia?: Date;
-  premierGlobal?: Date;
+  premierRussia?: string;
+  premierGlobal?: string;
   rating?: number;
+  ratingKp?: number;
+  ratingImdb?: number;
   duration?: string;
   genres?: Genre[];
   staff?: Person[];
   reviews?: Reviews;
+  watchability?: WatchProvider[];
 };
 
 export type DisplayField = {
@@ -75,7 +91,8 @@ export const keysToShow: Array<keyof MovieData> = [
   'boxOfficeGlobal',
   'boxOfficeRussia',
   'premierRussia',
-  'premierGlobal'
+  'premierGlobal',
+  'originalName'
 ];
 
 export const fieldTranslations = {
@@ -83,7 +100,10 @@ export const fieldTranslations = {
   name: 'Название',
   originalName: 'Оригинальное название',
   about: 'Описание',
+  shortDescription: 'Краткое описание',
   poster: 'Постер',
+  logo: 'Логотип фильма',
+  backdrop: 'Фоновое изображение',
   releaseYear: 'Год выпуска',
   country: 'Страна',
   slogan: 'Слоган',
@@ -97,8 +117,10 @@ export const fieldTranslations = {
   rating: 'Рейтинг',
   duration: 'Время',
   genres: 'Жанры',
-  staff: 'Состав',
+  staff: 'В ролях и создатели',
   reviews: 'Отзывы',
+  watchability: 'Где смотреть',
+
   personRoles: {
     actor: 'Актёр',
     director: 'Режиссёр',
@@ -107,7 +129,9 @@ export const fieldTranslations = {
     operator: 'Оператор',
     composer: 'Композитор'
   },
+
   fullName: 'Имя',
+  enFullName: 'Имя (англ.)',
   photo: 'Фото',
   sex: 'Пол',
   growth: 'Рост',

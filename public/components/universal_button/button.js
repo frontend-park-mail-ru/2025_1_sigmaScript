@@ -54,10 +54,20 @@ class Button {
     return this.#parent.querySelector('#' + this.#config.id);
   }
 
+  parent() {
+    return this.#parent;
+  }
+
   setText(text) {
     if (this.self()) {
       this.self().getElementsByTagName('span')[0].textContent = text;
     }
+  }
+
+  setColor(color) {
+    this.self()?.classList.remove(`u_button-color_${this.#config.color}`);
+    this.self()?.classList.add(`u_button-color_${color}`);
+    this.#config.color = color;
   }
 
   destroy() {

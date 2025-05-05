@@ -54,66 +54,119 @@
   gap: 20px;
 }
 
-/* Секция compilation */
-.compilation__cards {
-  background-color: transparent;
-  width: auto;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(255, 255, 255, 0.15);
-  /* Светлая тень */
-  margin-bottom: 40px;
-}
-
-/* Карточка фильма */
-.movie_card {
-  width: 200px;
-  height: 300px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  border: 1px solid #555;
-  /* Темная рамка */
-  border-radius: 5px;
-  overflow: hidden;
-  transition: transform 0.3s ease-in-out;
-}
-
-.movie_card:hover {
-  transform: scale(1.05);
-  box-shadow: 0 4px 8px rgba(255, 255, 255, 0.35);
-  /* Светлая тень при наведении */
-}
-
-/* Изображение постера */
-.poster {
-  width: 100%;
-  height: auto;
-  object-fit: cover;
-}
-
-.poster_title {
-  margin: 10px 0;
-  font-size: 18px;
-  font-weight: bold;
-  color: var(--primary-text-color);
-}
-
-.details-link {
-  display: inline-block;
-  padding: 10px 20px;
-  background-color: #007bff;
-  color: var(--primary-text-color);
-  border-radius: 5px;
-  margin-bottom: 10px;
-  cursor: pointer;
-}
-
-.details-link:hover {
-  background-color: #0056b3;
-}
-
 .compilation__scroll {
   max-width: 95%;
+}
+
+.calendar .card__preview{
+  filter: brightness(40%);
+}
+
+.calendar .card__bottom-elems-container {
+  font-size: 3rem;
+  font-weight: bold;
+} 
+
+
+.calendar .card__top-text {
+  font-size: 1.6rem;
+  font-weight: bold;
+  background-color: var(--primary-color);
+  border-radius: 5px;
+  padding: 3px 15px;
+  width: min-content;
+}
+
+.loading-state {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.compilation .card__top-text {
+  font-size: 1.6rem;
+  font-weight: bold;
+  background-color: var(--primary-color);
+  border-radius: 5px;
+  padding: 2px 5px;
+  width: min-content;
+}
+
+.navbar--overlay {
+  position: fixed;
+}
+
+.navbar--overlay .navbar_elements {
+  background-color: transparent;
+}
+
+.navbar--scrolled .navbar_elements {
+  background-color: var(--background-color);
+}
+
+.navbar--overlay:hover .navbar_elements {
+  background-color: var(--background-color);
+}
+
+.navbar--overlay .navbar_gradient {
+  opacity: 0;
+}
+
+.navbar--scrolled .navbar_gradient {
+  opacity: 1;
+}
+
+.navbar--overlay:hover .navbar_gradient {
+  opacity: 1;
+}
+
+@media only screen and (max-width: 1024px) {
+  .compilation__title {
+    font-size: 2.8rem;
+  }
+}
+
+
+@media only screen and (max-width: 768px) {
+  .compilation__title {
+    font-size: rem;
+  }
+
+  .main-page .card {
+    width: 170px !important;
+    height: 255px !important;
+  }
+
+  .main-page .card__title {
+    width: 140px !important;
+    white-space: normal;
+  }
+
+  .main-page .compilations {
+    gap: 1rem;
+  }
+}
+
+@media only screen and (max-width: 480px) {
+  .compilation__title {
+    font-size: 20px;
+  }
+
+  .main-page .card {
+    width: 150px !important;
+    height: 225px !important;
+  }
+
+  .main-page .card__title {
+    width: 130px !important;
+    white-space: normal;
+  }
+
+  .main-page .compilation__title {
+    font-size: 2rem;
+  }
+
+  .main-page .compilations {
+    gap: 1.5rem;
+  }
 }

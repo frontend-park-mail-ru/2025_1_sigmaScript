@@ -1,10 +1,10 @@
 import { dispatcher } from 'flux/Dispatcher';
 import { Action } from 'types/Dispatcher.types';
 
-import { PersonState, PersonListener, PersonPayload } from 'types/Person.types';
+import { PersonState, PersonListener, PersonPayload, PersonInfo } from 'types/Person.types';
 
 import request, { ErrorWithDetails } from 'utils/fetch';
-import { GetDataActionTypes, RenderActionTypes } from 'flux/ActionTypes';
+import { GetDataActionTypes, RenderActionTypes, UserPageTypes } from 'flux/ActionTypes';
 
 import { initialStore } from './InitialStore';
 import { PersonPage } from 'pages/person_page/person_page';
@@ -21,21 +21,8 @@ class PersonPageStore {
   constructor() {
     this.state = {
       error: null,
-      person: {
-        personID: null,
-        photoUrl: null,
-        nameRu: null,
-        nameEn: null,
-        career: null,
-        height: null,
-        gender: null,
-        dateOfBirth: null,
-        genres: null,
-        totalFilms: null,
-        biography: null,
-        favorite: null,
-        dateOfDeath: null
-      }
+      persons: new Map<number, PersonInfo>(),
+      needUpdateFavorite: false
     };
 
     this.listeners = [];
@@ -52,36 +39,40 @@ class PersonPageStore {
         this.state.error = (action.payload as ErrorPayload).error;
         this.emitChange();
         break;
+      case UserPageTypes.UPDATE_USER_PAGE:
+        this.state.needUpdateFavorite = true;
+        this.emitChange();
+        this.state.needUpdateFavorite = false;
+        break;
       default:
         break;
     }
   }
 
   private async renderPersonPage(id: number | string) {
-    try {
-      const rootElement = document.getElementById('root');
-      if (!rootElement) {
-        return;
-      }
+    const rootElement = document.getElementById('root');
+    if (!rootElement) {
+      return;
+    }
 
-      initialStore.destroyStored();
-      const tempPersonPage = new PersonPage(rootElement, router.getCurrentPath(), null);
-      initialStore.store(tempPersonPage);
-      tempPersonPage.render();
+    initialStore.destroyStored();
+    const tempPersonPage = new PersonPage(rootElement, router.getCurrentPath(), null);
+    initialStore.store(tempPersonPage);
+    tempPersonPage.render();
 
-      const url = PERSON_URL + `${id}`;
-      const responseData = await request({ url, method: 'GET', credentials: true });
-      const jsonData = responseData.body;
-      const personJSON = jsonData as PersonPayload;
+    if (!this.state.persons.has(id as number)) {
+      try {
+        const url = PERSON_URL + `${id}`;
+        const responseData = await request({ url, method: 'GET', credentials: true });
+        const jsonData = responseData.body;
+        const personJSON = jsonData as PersonPayload;
 
-      let personBirthDate = null;
-      if (personJSON.birthday) {
-        personBirthDate = serializeTimeZToHumanTimeAndYearsOld(personJSON.birthday as string);
-      }
+        let personBirthDate = null;
+        if (personJSON.birthday) {
+          personBirthDate = serializeTimeZToHumanTimeAndYearsOld(personJSON.birthday as string);
+        }
 
-      let personState: PersonState = {
-        error: null,
-        person: {
+        let person: PersonInfo = {
           personID: personJSON.id,
           nameRu: personJSON.full_name,
           nameEn: personJSON.en_full_name,
@@ -95,21 +86,28 @@ class PersonPageStore {
           genres: personJSON.genres,
           totalFilms: personJSON.total_films,
 
-          favorite: personJSON.favorite
-        }
-      };
+          favorite: personJSON.favorite,
 
-      tempPersonPage.destroy();
-      initialStore.destroyStored();
-      const personPage = new PersonPage(rootElement, router.getCurrentPath(), personState.person);
-      initialStore.store(personPage);
-      personPage.render();
-    } catch (error: unknown) {
-      dispatcher.dispatch({
-        type: GetDataActionTypes.PERSON_NOT_FOUND_ERROR,
-        payload: { error: this.getErrorMessage(error) }
-      });
+          movieCollection: new Map(
+            Object.values(personJSON.movie_collection).map((movieData) => [movieData.id, movieData])
+          )
+        };
+
+        this.state.persons.set(id as number, person);
+      } catch (error: unknown) {
+        dispatcher.dispatch({
+          type: GetDataActionTypes.PERSON_NOT_FOUND_ERROR,
+          payload: { error: this.getErrorMessage(error) }
+        });
+        return;
+      }
     }
+
+    tempPersonPage.destroy();
+    initialStore.destroyStored();
+    const personPage = new PersonPage(rootElement, router.getCurrentPath(), this.state.persons.get(id as number));
+    initialStore.store(personPage);
+    personPage.render();
   }
 
   private getErrorMessage(error: unknown): string {

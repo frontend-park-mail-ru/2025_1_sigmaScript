@@ -1,55 +1,106 @@
 import { dispatcher } from 'flux/Dispatcher';
 import { Action } from 'types/Dispatcher.types';
 
-import { Listener, AuthState } from 'types/Auth.types';
-import { ErrorWithDetails } from 'utils/fetch';
-import { RenderActionTypes } from 'flux/ActionTypes';
+import { AuthState } from 'types/Auth.types';
+import request, { ErrorWithDetails } from 'utils/fetch';
+import { RenderActionTypes, MainActionTypes } from 'flux/ActionTypes';
+
+import { mainDataLoaded, mainDataError, loadMainData, renderCsat } from 'flux/Actions';
 
 import MainPage from 'pages/main_page/main_page';
 import { createID } from 'utils/createID';
 import { initialStore } from './InitialStore';
-import { MainPageConfig } from 'types/main_page.types';
-import { renderCsat } from 'flux/Actions';
+import { MainPageConfig, Collections } from 'types/main_page.types';
+import { BASE_URL } from 'public/consts';
+import { deserialize } from 'utils/Serialize';
+
+type MainPageState = {
+  auth: AuthState;
+  mainData: Collections | null;
+  isLoading: boolean;
+  error: string | null;
+};
+
+type Listener = (state: MainPageState) => void;
 
 class MainPageStore {
-  private state: AuthState;
+  private state: MainPageState;
   private listeners: Array<Listener>;
 
   constructor() {
     this.state = {
-      user: null,
+      auth: {
+        user: null,
+        error: null
+      },
+      mainData: null,
+      isLoading: false,
       error: null
     };
     this.listeners = [];
-
     dispatcher.register(this.handleActions.bind(this));
   }
 
-  private handleActions(action: Action): void {
+  private async handleActions(action: Action): Promise<void> {
     switch (action.type) {
       case RenderActionTypes.RENDER_MAIN_PAGE:
-        this.renderMain();
+        this.state.isLoading = true;
+        this.state.error = null;
+        this.renderMainPageContainer();
+        if (this.state.mainData) {
+          mainDataLoaded(this.state.mainData);
+          break;
+        }
+        loadMainData();
+        break;
+
+      case MainActionTypes.LOAD_MAIN_DATA:
+        try {
+          const url = BASE_URL + 'collections/';
+          const response = await request({ url: url, method: 'GET', credentials: true });
+          const mainData = deserialize(response.body) as Collections;
+          mainDataLoaded(mainData as Collections);
+        } catch (error: unknown) {
+          const errorMessage =
+            error instanceof ErrorWithDetails
+              ? error.errorDetails.error || error.message
+              : 'Не удалось загрузить данные подборок';
+          mainDataError(errorMessage);
+        }
+        break;
+
+      case MainActionTypes.MAIN_DATA_LOADED:
+        this.state.mainData = action.payload as Collections;
+        this.state.isLoading = false;
+        this.state.error = null;
+        this.emitChange();
+        break;
+
+      case MainActionTypes.MAIN_DATA_ERROR:
+        this.state.mainData = null;
+        this.state.isLoading = false;
+        this.state.error = action.payload as string;
+        this.emitChange();
         break;
       default:
         break;
     }
   }
 
-  private renderMain() {
+  private renderMainPageContainer() {
+    const rootElement = document.getElementById('root');
+    if (!rootElement) {
+      return;
+    }
     setTimeout(
       () => {
         renderCsat();
       },
       1000 * 60 * 10
     );
-    const rootElement = document.getElementById('root');
-    if (!rootElement) {
-      return;
-    }
     initialStore.destroyStored();
     const main = new MainPage(rootElement, { id: createID() } as MainPageConfig);
     initialStore.store(main);
-
     main.render();
   }
 
@@ -80,7 +131,7 @@ class MainPageStore {
     }
   }
 
-  getState(): AuthState {
+  getState(): MainPageState {
     return this.state;
   }
 }

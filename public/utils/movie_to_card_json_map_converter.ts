@@ -8,7 +8,7 @@ export function ConvertMovieJSONToCardConfigs(
 ): CardConfig[] {
   return movies.map((movie) => ({
     id: String(movie.id), // Преобразуем числовой id в строковый
-    previewUrl: movie.preview_url,
+    previewUrl: movie.previewUrl,
     title: movie.title,
     text: movie.duration,
     url: `/movie/${movie.id}`,

@@ -6,12 +6,15 @@
   border: 1px solid #555;
   border-radius: 5px;
   overflow: hidden;
-  transition: transform 0.3s ease-in-out;
-
   flex-shrink: 0;
+  position: relative;
 }
 
-.card:hover {
+.card--hover {
+  transition: transform 0.3s ease-in-out;
+}
+
+.card--hover:hover {
   transform: scale(1.05);
   box-shadow: 0 4px 8px rgba(255, 255, 255, 0.35);
 }
@@ -35,4 +38,21 @@
   white-space: pre-line;
   width: 100%;
   overflow: visible; 
+}
+
+.card__top-elems-container,
+.card__bottom-elems-container {
+  position: absolute;
+  width: 100%;
+  z-index: 1;
+  padding: 10px;
+  color: #FFFFFF;
+}
+
+.card__top-elems-container {
+  top: 0;
+}
+
+.card__bottom-elems-container {
+  bottom: 0;
 }

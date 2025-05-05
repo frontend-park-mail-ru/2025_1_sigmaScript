@@ -36,6 +36,10 @@
     background-color: var(--primary-color);
 }
 
+.u_button-color_favorite {
+    background-color: #eb9534 !important;
+}
+
 .u_button-color_success {
     background: var(--success-color);
 }

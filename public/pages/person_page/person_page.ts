@@ -172,7 +172,9 @@ export class PersonPage {
         }
       }
     });
-    this.favoriteButton.render();
+    if (UserPageStore.getState().userData?.username) {
+      this.favoriteButton.render();
+    }
 
     const contentDiv = document.querySelector('.person-page__films') as HTMLElement;
     if (!contentDiv) return;
@@ -235,6 +237,9 @@ export class PersonPage {
    * @param {PersonInfo} state - текущее состояние из Store
    */
   handleStoreChange(state: PersonState) {
+    if (UserPageStore.getState().userData?.username) {
+      this.favoriteButton?.render();
+    }
     if (state.error) {
       this.renderEmpty();
       return;

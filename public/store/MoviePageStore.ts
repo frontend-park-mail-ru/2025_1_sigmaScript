@@ -14,7 +14,8 @@ import {
   loadMovieReviewsData,
   renderCsat,
   PopupActions,
-  addReview
+  addReview,
+  getUser
 } from 'flux/Actions';
 
 import { MOVIE_URL, MOVIE_REVIEWS_PATH } from 'public/consts';
@@ -151,6 +152,7 @@ class MoviePageStore {
           await request({ url: url, method: 'POST', body, credentials: true });
 
           addReview({
+            // TODO: перекинуть айдишник нормальный
             id: -1,
             user: {
               login: UserPageStore.getState().userData?.username as string
@@ -162,6 +164,8 @@ class MoviePageStore {
           });
 
           loadMovieReviewsData(this.state.movieId);
+          // TODO: временное решение, потом переделать
+          getUser();
         } catch {
           const errorMessage = 'Не удалось отправить данные нового отзыва фильма';
           movieDataError(errorMessage);

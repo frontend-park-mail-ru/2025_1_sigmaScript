@@ -2,14 +2,15 @@ import { RenderActionTypes, SearchActionTypes } from 'flux/ActionTypes';
 import { dispatcher } from 'flux/Dispatcher';
 import { Action } from 'types/Dispatcher.types';
 import { initialStore } from './InitialStore';
-import { Listener, SearchPageState } from 'types/SearchPage.types';
+import { Listener, SearchJSONState, SearchPageState } from 'types/SearchPage.types';
 import { SearchPage } from 'pages/SearchPage/SearchPage';
 import UserPageStore from './UserPageStore';
 import { PopupActions, searchCompleted } from 'flux/Actions';
-import { MovieDataJSON } from 'types/main_page.types';
-import { PersonCardInfo } from 'types/Person.types';
+import { MovieCollection, MovieDataJSON } from 'types/main_page.types';
+import { PersonCardInfo, PersonCollection, PersonJSONCollection } from 'types/Person.types';
 import { BASE_URL } from 'public/consts';
 import request from 'utils/fetch';
+import { deserialize, serialize } from 'utils/Serialize';
 
 class SearchPageStore {
   private state: SearchPageState;
@@ -32,29 +33,40 @@ class SearchPageStore {
         break;
       case SearchActionTypes.SEARCH: {
         // временное решение пока нет бд
-        let state: SearchPageState = {
-          actorCollection: UserPageStore.getState().actorCollection,
-          movieCollection: UserPageStore.getState().movieCollection
-        };
+        // let state: SearchPageState = {
+        //   actorCollection: UserPageStore.getState().actorCollection,
+        //   movieCollection: UserPageStore.getState().movieCollection
+        // };
 
-        // заготовка под бд
         try {
           const url = BASE_URL + 'search';
           const body = {
             search: action.payload as string
           };
           const response = await request({ url, method: 'POST', body, credentials: true });
-          const res = response.body as SearchPageState;
-          searchCompleted(res);
-        } catch {
-          PopupActions.showPopup({
-            message: 'Не удалось выполнить поиск!',
-            duration: 2500,
-            isError: true
-          });
-        }
+          const res = deserialize(response.body) as SearchJSONState;
+          res.movieCollection = serialize(res?.movieCollection) as MovieCollection;
+          res.actors = serialize(res?.actors) as PersonJSONCollection;
+          const actors = res?.actors?.map((actor) => {
+            return {
+              personID: actor.id,
+              nameRu: actor.full_name,
+              photoUrl: actor.photo
+            };
+          }) as PersonCollection;
 
-        searchCompleted(state);
+          this.state.movieCollection = new Map(res.movieCollection?.map((movie) => [movie.id, movie]));
+          this.state.actorCollection = new Map(actors?.map((actor) => [actor.personID as number, actor]));
+
+          searchCompleted(this.state);
+        } catch {
+          // TODO: сделать нормальную обработку ошибок
+          // PopupActions.showPopup({
+          //   message: 'Не удалось выполнить поиск!',
+          //   duration: 2500,
+          //   isError: true
+          // });
+        }
         break;
       }
       case SearchActionTypes.SEARCH_COMPLETED:

@@ -64,8 +64,6 @@ class UserPageStore {
         break;
       case UserPageTypes.GET_USER:
         try {
-          // const sess = AUTH_URL + 'session';
-          // await request({ url: sess, method: 'GET', credentials: true });
           const url = BASE_URL + 'profile';
           const res = await request({ url: url, method: 'GET', credentials: true });
           let userData = deserialize(res.body) as UserData;
@@ -82,8 +80,9 @@ class UserPageStore {
           }) as PersonCollection;
           this.state.userData = userData;
 
-          this.state.movieCollection = new Map(userData.movieCollection?.map((movie) => [movie.id, movie]));
+          this.state.movieCollection = new Map(userData?.movieCollection?.map((movie) => [movie.id, movie]));
           this.state.actorCollection = new Map(actors?.map((actor) => [actor.personID as number, actor]));
+          this.state.reviews = new Map(userData?.reviews?.map((review) => [review.id as number, review]));
 
           updateUserPage(userData);
         } catch {
@@ -119,9 +118,17 @@ class UserPageStore {
           const url = BASE_URL + 'users/' + 'login';
           const body = serialize({
             // ...this.state.userData,
-            ...payload
+            username: payload.username,
+            oldPassword: payload.password
+            // ...payload
           }) as Record<string, unknown>;
           await request({ url: url, method: 'POST', body, credentials: true });
+
+          PopupActions.showPopup({
+            message: 'Логин успешно изменён!',
+            duration: 2500,
+            isError: false
+          });
 
           getUser();
         } catch {
@@ -141,6 +148,12 @@ class UserPageStore {
             ...payload
           }) as Record<string, unknown>;
           await request({ url: url, method: 'POST', body, credentials: true });
+
+          PopupActions.showPopup({
+            message: 'Пароль успешно изменён!',
+            duration: 2500,
+            isError: false
+          });
 
           getUser();
         } catch {

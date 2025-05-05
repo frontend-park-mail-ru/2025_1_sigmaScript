@@ -137,7 +137,6 @@ export class PersonPage {
 
     mainElemContent.innerHTML = personTemplate(this.personData);
     this.isFavorite = UserPageStore.isFavoriteActor(this.personData?.personID as number);
-    console.log('любимый актёр:', this.isFavorite);
 
     new Card(document.querySelector('.person-page__photo-container')!, {
       id: `actorCard--${this.personData?.personID}`,
@@ -155,7 +154,6 @@ export class PersonPage {
       srcIcon: '/static/svg/favourite.svg',
       actions: {
         click: () => {
-          console.log('this', this);
           if (this.isFavorite) {
             removeActorFromFavorite(this.personData?.personID as number);
             this.favoriteButton?.setColor('primary');
@@ -243,7 +241,6 @@ export class PersonPage {
     }
     if (state.needUpdateFavorite) {
       this.isFavorite = UserPageStore.isFavoriteActor(this.personData?.personID as number);
-      console.log('ACTION: любимый актёр:', this.isFavorite, this.personData?.personID);
       if (this.isFavorite) {
         this.favoriteButton?.setColor('favorite');
         this.favoriteButton?.setText('Удалить');

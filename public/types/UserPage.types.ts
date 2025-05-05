@@ -1,6 +1,6 @@
 import { MovieCollection, MovieDataJSON } from 'types/main_page.types';
 import { PersonCardInfo, PersonCollection, PersonJSONCollection } from './Person.types';
-import { Review } from './movie_page.types';
+import { Review, Reviews } from './movie_page.types';
 
 export type MoviesMap = Map<number, MovieDataJSON>;
 export type ActorsMap = Map<number, PersonCardInfo>;
@@ -26,6 +26,7 @@ export interface UserData {
   actorsCount?: number;
   movieCollection?: MovieCollection;
   actors?: PersonJSONCollection;
+  reviews?: Reviews;
 }
 
 export type TabData = {

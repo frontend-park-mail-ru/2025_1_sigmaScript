@@ -82,12 +82,13 @@ class GenrePage {
 
     if (this.#state.genreData) {
       const { name, movies } = this.#state.genreData;
+      const capitalizedName = name.charAt(0).toUpperCase() + name.slice(1);
 
       const compilationElem = document.createElement('div');
       compilationElem.className = 'genre-page__compilation flex-dir-col';
       const titleElem = document.createElement('div');
       titleElem.classList.add('genre-page__compilation-title', 'flex-dir-row');
-      titleElem.textContent = name;
+      titleElem.textContent = capitalizedName;
       compilationElem.appendChild(titleElem);
 
       const grid = document.createElement('div');

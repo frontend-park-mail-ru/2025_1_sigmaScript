@@ -2,12 +2,11 @@ import { dispatcher } from 'flux/Dispatcher';
 import { Action } from 'types/Dispatcher.types';
 import { RenderActionTypes, GenresActionTypes } from 'flux/ActionTypes';
 import { initialStore } from './InitialStore';
-// TODO (waiting DB)
-// import request, { ErrorWithDetails } from 'utils/fetch';
-// genresDataError
-import { genresDataLoaded, loadGenresData } from 'flux/Actions';
+import request, { ErrorWithDetails } from 'utils/fetch';
+import { genresDataError, genresDataLoaded, loadGenresData } from 'flux/Actions';
 import { deserialize } from 'utils/Serialize';
 import GenresPage from 'pages/genresPage/genresPage';
+import { GENRES_URL } from 'public/consts';
 
 export type Movie = {
   id: number;
@@ -19,7 +18,7 @@ export type Movie = {
 export type Genre = {
   id: number;
   name: string;
-  movies: Movie[];
+  movies?: Movie[];
 };
 
 export type GenresData = Genre[];
@@ -57,21 +56,18 @@ class GenresPageStore {
         break;
 
       case GenresActionTypes.LOAD_GENRES_DATA: {
-        // TODO (waiting DB)
-        // try {
-        //   const url = GENRES_URL;
-        //   const response = await request({ url: url, method: 'GET', credentials: true });
-        //   const genresData = deserialize(response.body) as Collections;
-        //   genresDataLoaded(genresData as Collections);
-        // } catch (error: unknown) {
-        //   const errorMessage =
-        //     error instanceof ErrorWithDetails
-        //       ? error.errorDetails.error || error.message
-        //       : 'Не удалось загрузить данные жанров';
-        //   genresDataError(errorMessage);
-        // }
-        const genresData = deserialize(tempGenresData) as GenresData;
-        genresDataLoaded(genresData as GenresData);
+        try {
+          const url = GENRES_URL;
+          const response = await request({ url: url, method: 'GET', credentials: true });
+          const genresData = deserialize(response.body) as GenresData;
+          genresDataLoaded(genresData as GenresData);
+        } catch (error: unknown) {
+          const errorMessage =
+            error instanceof ErrorWithDetails
+              ? error.errorDetails.error || error.message
+              : 'Не удалось загрузить данные жанров';
+          genresDataError(errorMessage);
+        }
         break;
       }
 
@@ -120,56 +116,5 @@ class GenresPageStore {
     return this.state;
   }
 }
-
-const tempGenresData: GenresData = [
-  {
-    id: 1,
-    name: 'Боевик',
-    movies: [
-      { id: 1, title: 'Бойцовский клуб', previewUrl: '/img/0.webp', rating: 9.8 },
-      { id: 2, title: 'Матрица', previewUrl: '/img/7.webp', rating: 9.5 },
-      { id: 3, title: 'Форрест Гамп', previewUrl: '/img/2.webp', rating: 9.7 },
-      { id: 4, title: 'Крестный отец', previewUrl: '/img/3.webp', rating: 9.9 },
-      { id: 5, title: 'Интерстеллар', previewUrl: '/img/4.webp', rating: 9.6 },
-      { id: 6, title: 'Криминальное чтиво', previewUrl: '/img/5.webp', rating: 9.4 },
-      { id: 7, title: 'Побег из Шоушенка', previewUrl: '/img/6.webp', rating: 9.9 },
-      { id: 8, title: 'Тёмный рыцарь', previewUrl: '/img/1.webp', rating: 9.5 },
-      { id: 9, title: 'Зелёная миля', previewUrl: '/img/8.webp', rating: 9.6 },
-      { id: 10, title: 'Одержимость', previewUrl: '/img/9.webp', rating: 9.3 }
-    ]
-  },
-  {
-    id: 2,
-    name: 'Драма',
-    movies: [
-      { id: 11, title: 'Оппенгеймер', previewUrl: '/img/11.webp', rating: 9.2 },
-      { id: 12, title: 'Звёздные войны: Эпизод 4 – Новая надежда', previewUrl: '/img/12.webp', rating: 9 },
-      { id: 13, title: 'Рокки', previewUrl: '/img/13.webp', rating: 8.8 },
-      { id: 14, title: 'Джокер', previewUrl: '/img/14.webp', rating: 9.1 },
-      { id: 15, title: 'Игра в имитацию', previewUrl: '/img/15.webp', rating: 8.9 },
-      { id: 16, title: 'Начало', previewUrl: '/img/16.webp', rating: 9.4 },
-      { id: 17, title: 'Назад в будущее', previewUrl: '/img/17.webp', rating: 9.3 },
-      { id: 18, title: 'Гладиатор', previewUrl: '/img/18.webp', rating: 9 },
-      { id: 19, title: 'Титаник', previewUrl: '/img/19.webp', rating: 8.7 },
-      { id: 20, title: 'Ford против Ferrari', previewUrl: '/img/10.webp', rating: 8.9 }
-    ]
-  },
-  {
-    id: 3,
-    name: 'Фантастика',
-    movies: [
-      { id: 1, title: 'Бойцовский клуб', previewUrl: '/img/0.webp', rating: 9.8 },
-      { id: 2, title: 'Матрица', previewUrl: '/img/7.webp', rating: 9.5 },
-      { id: 3, title: 'Форрест Гамп', previewUrl: '/img/2.webp', rating: 9.7 },
-      { id: 4, title: 'Крестный отец', previewUrl: '/img/3.webp', rating: 9.9 },
-      { id: 5, title: 'Интерстеллар', previewUrl: '/img/4.webp', rating: 9.6 },
-      { id: 6, title: 'Криминальное чтиво', previewUrl: '/img/5.webp', rating: 9.4 },
-      { id: 7, title: 'Побег из Шоушенка', previewUrl: '/img/6.webp', rating: 9.9 },
-      { id: 8, title: 'Тёмный рыцарь', previewUrl: '/img/1.webp', rating: 9.5 },
-      { id: 9, title: 'Зелёная миля', previewUrl: '/img/8.webp', rating: 9.6 },
-      { id: 10, title: 'Одержимость', previewUrl: '/img/9.webp', rating: 9.3 }
-    ]
-  }
-];
 
 export default new GenresPageStore();

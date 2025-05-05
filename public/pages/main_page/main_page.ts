@@ -84,7 +84,7 @@ class MainPage {
         url: movieUrl,
         width: config?.width,
         height: config?.height,
-        topText: movie.rating.toFixed(1),
+        topText: movie.rating?.toFixed(1),
         bottomText: config?.bottomText || ''
       };
       new MovieCard(contentContainer, cardConfig).render();
@@ -127,7 +127,7 @@ class MainPage {
     compilationsData: Record<string, MovieCollection>
   ): void {
     for (const key in compilationsData) {
-      if (key === 'Календарь') {
+      if (key === 'calendar') {
         const compData = compilationsData[key];
         const compilationElem = this.createCompilationElement(compilationsElem, 'Календарь премьер');
         const scroll = new Scroll(compilationElem);

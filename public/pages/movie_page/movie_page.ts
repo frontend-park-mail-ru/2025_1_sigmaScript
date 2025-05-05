@@ -5,7 +5,7 @@ import Button from 'components/universal_button/button';
 import Scroll from 'components/Scroll/Scroll';
 import Stars from 'components/Stars/Stars';
 import Textarea from 'components/Textarea/Textarea';
-import { Person, Genre, MovieData, DisplayField, fieldTranslations, keysToShow } from 'types/movie_page.types';
+import { Person, MovieData, DisplayField, fieldTranslations, keysToShow } from 'types/movie_page.types';
 import MoviePageStore from 'store/MoviePageStore';
 import Loading from 'components/Loading/loading';
 import Navbar from 'components/navbar/navbar';
@@ -16,6 +16,7 @@ import { router, Urls } from '../../modules/router';
 import { FooterData } from 'types/Footer.types.js';
 import { postMovieReview } from 'flux/Actions.ts';
 import UserPageStore from 'store/UserPageStore.ts';
+import { serializeTimeZToHumanDate } from 'modules/time_serialiser';
 
 type MoviePageStateFromStore = {
   movieId: number | string | null;
@@ -69,9 +70,7 @@ class MoviePage {
       }
       const title = fieldTranslations[key as keyof typeof fieldTranslations] as string;
       let formattedValue = '';
-      if (key === 'genres') {
-        formattedValue = (value as Genre[]).map((genre) => genre.name).join(', ');
-      } else if (key === 'staff') {
+      if (key === 'staff') {
         formattedValue = (value as Person[])
           .slice(0, 4)
           .map((person) => person.fullName)
@@ -80,6 +79,10 @@ class MoviePage {
         formattedValue = `$${value.toLocaleString('us-US')}`;
       } else if (key === 'duration') {
         formattedValue = `${value}`;
+      } else if (key === 'premierGlobal') {
+        formattedValue = serializeTimeZToHumanDate(value as string);
+      } else if (key === 'premierRussia') {
+        formattedValue = serializeTimeZToHumanDate(value as string);
       } else {
         formattedValue = String(value);
       }
@@ -129,7 +132,6 @@ class MoviePage {
 
     if (this.#state.movieData) {
       const movie = this.#state.movieData;
-      console.log('Movie data:', movie);
       const infoForDisplay = this.#prepareMovieInfo(movie);
 
       container.innerHTML = template({ movie, info: infoForDisplay });

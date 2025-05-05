@@ -2,13 +2,12 @@ import { dispatcher } from 'flux/Dispatcher';
 import { Action } from 'types/Dispatcher.types';
 import { RenderActionTypes, GenreActionTypes } from 'flux/ActionTypes';
 import { initialStore } from './InitialStore';
-// TODO (waiting DB)
-// import request, { ErrorWithDetails } from 'utils/fetch';
-// genreDataError
-import { genreDataLoaded, loadGenreData } from 'flux/Actions';
+import request, { ErrorWithDetails } from 'utils/fetch';
+import { genreDataError, genreDataLoaded, loadGenreData } from 'flux/Actions';
 import { deserialize } from 'utils/Serialize';
 import { MovieCollection } from 'types/main_page.types';
 import GenrePage from 'pages/genrePage/genrePage';
+import { GENRES_URL } from 'public/consts';
 
 export type GenrePageData = {
   name: string;
@@ -51,21 +50,18 @@ class GenrePageStore {
         break;
 
       case GenreActionTypes.LOAD_GENRE_DATA: {
-        // TODO (waiting DB)
-        // try {
-        //   const url = GENRES_URL;
-        //   const response = await request({ url: url, method: 'GET', credentials: true });
-        //   const genresData = deserialize(response.body) as Collections;
-        //   genresDataLoaded(genresData as Collections);
-        // } catch (error: unknown) {
-        //   const errorMessage =
-        //     error instanceof ErrorWithDetails
-        //       ? error.errorDetails.error || error.message
-        //       : 'Не удалось загрузить данные жанров';
-        //   genresDataError(errorMessage);
-        // }
-        const genreData = deserialize(tempGenreData) as GenrePageData;
-        genreDataLoaded(genreData as GenrePageData);
+        try {
+          const url = `${GENRES_URL}/${this.state.genreId}`;
+          const response = await request({ url: url, method: 'GET', credentials: true });
+          const genresData = deserialize(response.body) as GenrePageData;
+          genreDataLoaded(genresData as GenrePageData);
+        } catch (error: unknown) {
+          const errorMessage =
+            error instanceof ErrorWithDetails
+              ? error.errorDetails.error || error.message
+              : 'Не удалось загрузить данные жанров';
+          genreDataError(errorMessage);
+        }
         break;
       }
 
@@ -114,41 +110,5 @@ class GenrePageStore {
     return this.state;
   }
 }
-
-const tempGenreData: GenrePageData = {
-  name: 'Боевик',
-  movies: [
-    { id: 11, title: 'Оппенгеймер', previewUrl: '/img/11.webp', rating: 9.2 },
-    { id: 12, title: 'Звёздные войны: Эпизод 4 – Новая надежда', previewUrl: '/img/12.webp', rating: 9 },
-    { id: 13, title: 'Рокки', previewUrl: '/img/13.webp', rating: 8.8 },
-    { id: 14, title: 'Джокер', previewUrl: '/img/14.webp', rating: 9.1 },
-    { id: 15, title: 'Игра в имитацию', previewUrl: '/img/15.webp', rating: 8.9 },
-    { id: 16, title: 'Начало', previewUrl: '/img/16.webp', rating: 9.4 },
-    { id: 17, title: 'Назад в будущее', previewUrl: '/img/17.webp', rating: 9.3 },
-    { id: 18, title: 'Гладиатор', previewUrl: '/img/18.webp', rating: 9 },
-    { id: 19, title: 'Титаник', previewUrl: '/img/19.webp', rating: 8.7 },
-    { id: 20, title: 'Ford против Ferrari', previewUrl: '/img/10.webp', rating: 8.9 },
-    { id: 11, title: 'Оппенгеймер', previewUrl: '/img/11.webp', rating: 9.2 },
-    { id: 12, title: 'Звёздные войны: Эпизод 4 – Новая надежда', previewUrl: '/img/12.webp', rating: 9 },
-    { id: 13, title: 'Рокки', previewUrl: '/img/13.webp', rating: 8.8 },
-    { id: 14, title: 'Джокер', previewUrl: '/img/14.webp', rating: 9.1 },
-    { id: 15, title: 'Игра в имитацию', previewUrl: '/img/15.webp', rating: 8.9 },
-    { id: 16, title: 'Начало', previewUrl: '/img/16.webp', rating: 9.4 },
-    { id: 17, title: 'Назад в будущее', previewUrl: '/img/17.webp', rating: 9.3 },
-    { id: 18, title: 'Гладиатор', previewUrl: '/img/18.webp', rating: 9 },
-    { id: 19, title: 'Титаник', previewUrl: '/img/19.webp', rating: 8.7 },
-    { id: 20, title: 'Ford против Ferrari', previewUrl: '/img/10.webp', rating: 8.9 },
-    { id: 11, title: 'Оппенгеймер', previewUrl: '/img/11.webp', rating: 9.2 },
-    { id: 12, title: 'Звёздные войны: Эпизод 4 – Новая надежда', previewUrl: '/img/12.webp', rating: 9 },
-    { id: 13, title: 'Рокки', previewUrl: '/img/13.webp', rating: 8.8 },
-    { id: 14, title: 'Джокер', previewUrl: '/img/14.webp', rating: 9.1 },
-    { id: 15, title: 'Игра в имитацию', previewUrl: '/img/15.webp', rating: 8.9 },
-    { id: 16, title: 'Начало', previewUrl: '/img/16.webp', rating: 9.4 },
-    { id: 17, title: 'Назад в будущее', previewUrl: '/img/17.webp', rating: 9.3 },
-    { id: 18, title: 'Гладиатор', previewUrl: '/img/18.webp', rating: 9 },
-    { id: 19, title: 'Титаник', previewUrl: '/img/19.webp', rating: 8.7 },
-    { id: 20, title: 'Ford против Ferrari', previewUrl: '/img/10.webp', rating: 8.9 }
-  ]
-};
 
 export default new GenrePageStore();

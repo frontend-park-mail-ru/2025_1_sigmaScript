@@ -1,7 +1,7 @@
 import { createID } from 'utils/createID';
 import MovieCard, { CardConfig } from 'components/Card/Card';
 import Scroll from 'components/Scroll/Scroll';
-import GenresPageStore, { GenresData, GenresPageState } from 'store/GenresPageStore';
+import GenresPageStore, { GenresData, GenresPageState, Genre } from 'store/GenresPageStore';
 import Loading from 'components/Loading/loading';
 import Navbar from 'components/navbar/navbar';
 import compilationTempl from './compilation.hbs';
@@ -127,7 +127,11 @@ class GenresPage {
     const compilationsElem = this.self()?.querySelector<HTMLElement>('.js-genres-compilations');
     if (!compilationsElem) return;
     for (const genre of genresData) {
-      const compilationElem = this.createCompilationElement(compilationsElem, genre);
+      if (!genre.movies) {
+        continue;
+      }
+
+      const compilationElem = this.createCompilationElement(compilationsElem, this.capitalizeGenre(genre));
       const scroll = new Scroll(compilationElem);
       scroll.render();
       scroll.self()?.classList.add('genres-page__compilation-scroll');
@@ -147,6 +151,14 @@ class GenresPage {
       router.go(url);
     }
   }
+
+  capitalizeGenre = (genre: Genre): Genre => {
+    if (!genre.name) return genre;
+    return {
+      ...genre,
+      name: genre.name.charAt(0).toUpperCase() + genre.name.slice(1)
+    };
+  };
 }
 
 export default GenresPage;

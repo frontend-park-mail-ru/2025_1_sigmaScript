@@ -99,7 +99,7 @@ class GenrePage {
           previewUrl: movie.previewUrl,
           title: movie.title,
           url: `${Urls.movie}/${movie.id}`,
-          topText: movie.rating.toFixed(1),
+          topText: movie.rating?.toFixed(1),
           bottomText: ''
         };
         const cardWrapper = document.createElement('div');

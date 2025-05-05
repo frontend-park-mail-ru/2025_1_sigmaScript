@@ -107,7 +107,7 @@ class GenresPage {
         url: movieUrl,
         width: config?.width,
         height: config?.height,
-        topText: movie.rating.toFixed(1),
+        topText: movie.rating?.toFixed(1),
         bottomText: config?.bottomText || ''
       };
       new MovieCard(contentContainer, cardConfig).render();

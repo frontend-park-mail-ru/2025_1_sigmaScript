@@ -7,7 +7,7 @@
   width: 100%;
   height: auto;
   gap: 50px;
-  padding-bottom: 100px;
+  /* padding-bottom: 100px; */
 }
 
 .genres-page__compilation {
@@ -28,7 +28,7 @@
 .genres-page__compilation-template {
   width: 95%;
   gap: 25px;
-  align-items:end;
+  align-items: end;
 }
 
 .genres-page__compilation-title {
@@ -48,6 +48,54 @@
 
 .genres-page__compilation-all:hover {
   color: var(--primary-color);
-  filter: drop-shadow(0 3px 10px rgba(255,255,255,0.5));
+  filter: drop-shadow(0 3px 10px rgba(255, 255, 255, 0.5));
   cursor: pointer;
+}
+
+.genres-page__compilation-template {
+  width: 90%;
+}
+
+@media screen and (max-width: 899.98px) {
+  .genres-page .card {
+    width: 150px !important;
+    height: 225px !important;
+  }
+  .genres-page .card__title {
+    width: 150px !important;
+  }
+  .genres-page .card__title {
+    white-space: normal;
+  }
+  .genres-page__compilation-title {
+    font-size: 2.5rem;
+  }
+  .genres-page__compilation-all {
+    font-size: 2rem;
+  }
+  .genres-page__compilations {
+    gap: 0rem;
+  }
+}
+
+@media screen and (max-width: 530.98px) {
+  .genres-page .card {
+    width: 120px !important;
+    height: 180px !important;
+  }
+  .genres-page .card__title {
+    width: 120px !important;
+  }
+  .genres-page .card__title {
+    white-space: normal;
+  }
+  .genres-page__compilation-title {
+    font-size: 2rem;
+  }
+  .genres-page__compilation-all {
+    font-size: 1.5rem;
+  }
+  .genres-page__compilations {
+    gap: 0rem;
+  }
 }

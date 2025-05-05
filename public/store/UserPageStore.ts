@@ -20,6 +20,7 @@ import { BASE_URL } from 'public/consts';
 import { MovieCollection, MovieDataJSON } from 'types/main_page.types';
 import { PersonCardInfo, PersonCollection, PersonJSONCollection } from 'types/Person.types';
 import { Review } from 'types/movie_page.types';
+import { serializeTimeZToHumanTime } from 'modules/time_serialiser';
 
 class UserPageStore {
   private state: UserPageState;
@@ -82,7 +83,15 @@ class UserPageStore {
 
           this.state.movieCollection = new Map(userData?.movieCollection?.map((movie) => [movie.id, movie]));
           this.state.actorCollection = new Map(actors?.map((actor) => [actor.personID as number, actor]));
-          this.state.reviews = new Map(userData?.reviews?.map((review) => [review.id as number, review]));
+          this.state.reviews = new Map(
+            userData?.reviews?.map((review) => [
+              review.id as number,
+              {
+                ...review,
+                createdAt: serializeTimeZToHumanTime(review.createdAt)
+              }
+            ])
+          );
 
           updateUserPage(userData);
         } catch {

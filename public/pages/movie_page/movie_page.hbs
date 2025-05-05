@@ -1,22 +1,24 @@
 <div class="movie-page__general-info-block flex-dir-row">
 
   <div class="general-info-block__movie-info-column flex-dir-col">
-    <div class="movie-info-column__logo">
+
+    <div class="movie-info-column__logo flex-dir-col flex-center" style="gap: 30px;">
       <img class="movie-info-column__logo-image" src="{{movie.logo}}">
-    </div>
-    <div class="movie-info-column__additional-info flex-dir-row">
-      <div class="movie-info__rating-element flex-dir-row">
-        <img src="/static/svg/imdb.svg">{{movie.ratingImdb}}
+
+      <div class="movie-info-column__additional-info flex-dir-row">
+        <div class="movie-info__rating-element flex-dir-row">
+          <img src="/static/svg/imdb.svg">{{movie.ratingImdb}}
+        </div>
+        <div class="movie-info__rating-element flex-dir-row">
+        <img src="/static/svg/kinopoisk.svg">{{movie.ratingKp}}
+        </div>
+        <div class="movie-info__rating-element flex-dir-row">
+          <img src="/static/svg/flk.svg">{{movie.rating}}
+        </div>
       </div>
-      <div class="movie-info__rating-element flex-dir-row">
-      <img src="/static/svg/kinopoisk.svg">{{movie.ratingKp}}
-      </div>
-      <div class="movie-info__rating-element flex-dir-row">
-      <img src="/static/svg/flk.svg">{{movie.rating}}
-      </div>
-      
 
     </div>
+
     <div class="movie-info-column__short-description">{{movie.shortDescription}}</div>
     <div class="movie-info-column__buttons flex-dir-row js-movie-buttons"></div>
   </div>
@@ -102,7 +104,7 @@
           </div>
           <div class="movie-page__review-info flex-dir-row flex-center">
             <div class="movie-page__review-user flex-dir-row">
-              <div class="movie-page__review-user-name"><b> {{ user.login }} </b></div>
+              <div class="movie-page__review-user-name">{{ user.login }}</div>
               <img class="movie-page__review-user-avatar" src="{{#if user.avatar}} {{ user.avatar }} {{else}} /static/svg/Avatar large.svg {{/if}}" alt="avatar">
             </div>
              <div class="movie-page__review-date">{{ createdAt }}</div>

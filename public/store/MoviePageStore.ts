@@ -2,7 +2,7 @@ import { dispatcher } from 'flux/Dispatcher';
 import { Action } from 'types/Dispatcher.types';
 import { RenderActionTypes, MovieActionTypes } from 'flux/ActionTypes';
 import { MovieData, NewReviewDataJSON, Reviews } from 'types/movie_page.types';
-import { serializeTimeZToHumanTime } from '../modules/time_serialiser';
+import { serializeTimeZToHumanDate, serializeTimeZToHumanTime } from '../modules/time_serialiser';
 import { initialStore } from './InitialStore';
 import MoviePage from 'pages/movie_page/movie_page';
 import request, { ErrorWithDetails } from 'utils/fetch';
@@ -102,6 +102,13 @@ class MoviePageStore {
         this.state.movieData = action.payload as MovieData;
         this.state.isLoading = false;
         this.state.error = null;
+
+        if (this.state.movieData.premierGlobal)
+          this.state.movieData.premierGlobal = serializeTimeZToHumanDate(this.state.movieData.premierGlobal);
+
+        if (this.state.movieData.premierRussia)
+          this.state.movieData.premierRussia = serializeTimeZToHumanDate(this.state.movieData.premierRussia);
+
         this.emitChange();
         break;
 
@@ -112,7 +119,7 @@ class MoviePageStore {
           for (let i = 0; i < this.state.movieData.reviews.length; i++) {
             this.state.movieData.reviews[i].createdAt = serializeTimeZToHumanTime(
               this.state.movieData.reviews[i].createdAt
-            );
+            ).slice(0, -3);
           }
         } else {
           movieDataError('Movie ID is missing');

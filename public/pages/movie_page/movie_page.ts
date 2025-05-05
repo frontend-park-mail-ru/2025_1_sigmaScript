@@ -158,12 +158,12 @@ class MoviePage {
 
     for (const person of staff) {
       new MovieCard(contentContainer, {
-        id: `personCard--${person.id}`,
+        id: createID(),
         title: person.fullName,
         url: `${Urls.person}/${person.id}`,
         previewUrl: person.photo || '/static/img/default_person.webp',
-        width: '130',
-        height: '180'
+        width: '150',
+        height: '225'
       }).render();
     }
   }
@@ -187,7 +187,7 @@ class MoviePage {
       id: 'button--submit-review-' + createID(),
       type: 'submit',
       text: 'Отправить',
-      addClasses: ['movie__button', 'movie-page__review-form-button']
+      addClasses: ['movie-page-button', 'movie-page__review-form-button']
     }).render();
 
     formElement.addEventListener('submit', (event) => {

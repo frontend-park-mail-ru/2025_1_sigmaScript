@@ -92,11 +92,20 @@ export const serializeTimeZToHumanTime = (timeString: string): string => {
     const optionsDate: Intl.DateTimeFormatOptions = { day: 'numeric', month: 'long', year: 'numeric' };
     const formattedDate = date.toLocaleDateString('ru-RU', optionsDate);
 
-    const optionsTime: Intl.DateTimeFormatOptions = { hour: 'numeric', minute: 'numeric', second: 'numeric' };
+    const optionsTime: Intl.DateTimeFormatOptions = { hour: 'numeric', minute: 'numeric' };
     const formattedTime = date.toLocaleTimeString('ru-RU', optionsTime);
 
     return `${formattedDate} в ${formattedTime}`;
   } catch (error) {
     return 'Ошибка при обработке времени';
   }
+};
+
+export const serializeTimeZToHumanDate = (timestamp: string): string => {
+  const date = new Date(timestamp);
+  const day = date.getDate().toString().padStart(2, '0');
+  const month = (date.getMonth() + 1).toString().padStart(2, '0');
+  const year = date.getFullYear();
+
+  return `${day}.${month}.${year}`;
 };

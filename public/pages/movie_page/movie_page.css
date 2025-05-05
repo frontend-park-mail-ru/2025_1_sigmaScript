@@ -14,13 +14,13 @@
 }
 
 .general-info-block__movie-info-column {
-  width: 30%;
+  width: 35%;
   align-items: start;
   justify-content: center;
   gap: 30px;
 }
 .general-info-block__backdrop {
-  width: 70%;
+  width: 65%;
 } 
 
 .movie-info-column__additional-info {
@@ -47,7 +47,7 @@
 }
 
 .movie-info-column__logo {
-  /* padding: 10% 15% 0 0; */
+  width: 80%;
 }
 
 .general-info-block__backdrop-image {
@@ -57,15 +57,15 @@
 }
 
 .movie-info-column__short-description {
-  font-size: 2.4rem;
+  font-size: 2.6rem;
   text-align:start;
 }
 
 .general-info-block__gradient {
   position: absolute;
-  left: 30%; /* совпадает с шириной .general-info-block__movie-info-column */
+  left: 35%;
   top: 0;
-  width: 25vw; /* ширина градиента, можно подогнать под дизайн */
+  width: 25vw;
   height: 100%;
   z-index: 3;
   pointer-events: none;
@@ -89,17 +89,24 @@
   color: var(--primary-text-color);
   background: linear-gradient(135deg, #5130b3 65%, var(--primary-color) 100%);
   height: 60px;
-  padding: 0 20px;
+  padding: 0 25px;
   cursor: pointer;
   border: none;
   border-radius: 35px;
   white-space: nowrap;
   justify-content: center;
+  transition: ease-in-out 0.2s;
+}
+
+.movie-page-button:hover {
+  border: none;
+  transform: scale(1.05);
+  filter: drop-shadow(0 0px 4px rgba(80, 80, 80, 0.9))
 }
 
 .movie-page-button > .u_button__text-color_primary {
   font-weight: bold;
-  font-size: 1.8rem;
+  font-size: 2rem;
 }
 
 .movie-info-column__review-button > .u_button__text,
@@ -115,6 +122,10 @@
   background: rgba(50, 50, 50, 0.7);
 }
 
+.movie-info-column__trailer-button > .u_button__icon {
+  margin-right: 5px;
+}
+
 .movie-page-button > .u_button__icon {
   width: 15px;
 }
@@ -122,30 +133,6 @@
 .movie-info-column__review-button > .u_button__icon {
   width: 22px;
 }
-
-/* temp */
-
-.movie__info{
-  gap: 10px;
-  width: 50%;
-}
-
-.movie__info-header {
-  font-size: 2rem;
-  font-weight: bold;
-}
-
-.movie__info-field {
-  display: flex;
-  flex-direction: row;
-  justify-content: start;
-}
-
-.movie__field-element{
-  width: 50%;
-}
-
-/* !!! produmat !!! */
 
 .movie-page__detailed-info {
   margin-top: 30px;
@@ -155,52 +142,48 @@
 .detailed-info__wrapper {
   gap: 30px; 
 }
-/* !!! temp */
 
 .detailed-info__titles-wrapper {
   width: 100%; 
   gap: 30px;
-  /* !!! navesit classy na odin margin */
 }
 
 .detailed-info__movie-titles {
-  width: 30%;
+  width: 35%;
   padding: 0 0 0 3%;
 }
 
 .detailed-info__about-title {
-  width: 70%;
-  font-size: 2.4rem;
+  width: 65%;
+  font-size: 3rem;
   font-weight: bold;
   color: var(--primary-text-color);
-  /* padding: 0 0 0 3%; */
 }
 
 .detailed-info__left-column {
-  width: 30%;
+  width: 35%;
   padding: 0 0 0 3%; 
   gap: 30px;
-  /* !!! navesit classy na odin margin */
 }
 
 .detailed-info__title {
-  font-size: 2.4rem;
+  font-size: 3rem;
   font-weight: bold;
   color: var(--primary-text-color);
 }
 
 .detailed-info__original-title {
-  font-size: 2rem;
+  font-size: 2.5rem;
   color: var(--secondary-text-color);
 }
 
 .detailed-info__detailed-description {
-  font-size: 1.6rem;
+  font-size: 2rem;
   color: var(--primary-text-color);
 }
 
 .detailed-info__right-column {
-  width: 70%;
+  width: 65%;
   padding: 0 3% 0 0;
 }
 
@@ -220,29 +203,28 @@
 }
 
 .detailed-info__field-title {
-  font-size: 1.4rem;
+  font-size: 1.7rem;
   color: var(--secondary-text-color);
   font-weight: bold;
 }
 
 .detailed-info__field-value {
-  font-size: 1.6rem;
+  font-size: 2rem;
   color: var(--primary-text-color);
-  /* font-weight: bold; */
 }
 
 
 .watchability__title {
-  font-size: 2rem;
+  font-size: 2.5rem;
   color: var(--secondary-text-color);
 }
 
 .watchability__list {
   display: flex;
   flex-direction: row;
-  gap: 18px;
+  gap: 15px;
   align-items: center;
-  margin-top: 10px;
+  margin-top: 15px;
 }
 
 .watchability__item {
@@ -257,43 +239,51 @@
 }
 
 .watchability__logo {
-  width: 40px;
-  height: 40px;
+  width: 60px;
+  height: 60px;
   object-fit: contain;
   border-radius: 8px;
   background: #fff;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.07);
 }
 
 .movie-page__actors {
-  margin: 30px 0 0 3%;
+  margin: 30px 3% 0 3%;
   gap: 30px;
 }
 
 .movie-page__actors-title {
-  font-size: 2.4rem;
+  font-size: 3rem;
   font-weight: bold;
   color: var(--primary-text-color);
 }
 
+.movie-page__reviews-wrapper{
+  width: 100%;
+  gap: 30px;
+  padding: 0 3% 0 3%;
+  margin-top: 60px;
+}
 
-/* !!! reviews */
+.movie-page__reviews-title{
+  color: #FFFE;
+  font-size: 3rem;
+  font-weight: bold;
+}
 
 .movie-page__reviews{
   width: 100%;
   gap: 15px;
-  margin-top: 10px;
+  align-items: center;
+}
+
+.movie-page__review-form-button {
+  width: 180px;
+  height: 50px;
 }
 
 .movie-page__review-form {
   width: 100%;
-  gap: 10px;
-}
-
-.right-column__review-counter {
-  font-size: 2rem;
-  font-weight: bold;
-  gap: 5px;
+  gap: 15px;
 }
 
 .movie-page__review-form-textarea{
@@ -303,48 +293,42 @@
 .movie-page__review-form-textarea > .textarea__field {
   font-family: Helvetica;
   resize: vertical;
-  font-size: 1.4rem;
+  font-size: 2rem;
   width: 100%;
   height: 100px;
-  padding: 0 1.4rem;
+  padding: 15px 20px;
 }
 
 .movie-page__review-form-textarea .textarea__error-container {
   padding: 0;
 }
 
-.movie-page__reviews-title{
-  color: #FFFE;
-  font-size: 2rem;
-  font-weight: bold;
-}
-
-.movie-page__reviews-wrapper{
-  width: 100%;
-  gap: 15px;
-  padding: 0 3% 0 3%;
-}
-
 .movie-page__review-card {
   width: 100%;
   gap: 5px;
-  background-color: var(--text-field-border-color);
+  background-color: rgba(50, 50, 50, 0.7);
   min-width: 80px;
   min-height: 80px;
   max-height: 500px;
-  padding: 2rem;
+  padding: 2rem 2rem 3rem 2rem;
   border-radius: 25px;
 }
 
 .movie-page__review-rating{
-  gap: 1px;
-  align-items: center;
+  gap: 100px;
+  
 }
 
 .movie-page__review-rating-wrapper {
-  color: #FFFE;
-  font-size: 2rem;
+  color: var(--primary-text-color);
+  font-size: 2.5rem;
   font-weight: bold;
+  align-items: center;
+  gap: 2px;
+}
+
+.movie-page__review-star{
+  width: 2.5rem;
 }
 
 .movie-page__review-card-header{
@@ -365,13 +349,14 @@
   align-items: center;
 }
 
+.movie-page__review-date,
+.movie-page__review-user-name {
+  font-size: 2rem;
+}
+
 .movie-page__review-user-avatar{
   width: 3rem;
   height: 3rem;
-}
-
-.movie-page__review-star{
-  width: 22.5px;
 }
 
 .movie-page__review-text{
@@ -380,4 +365,5 @@
   white-space: pre-line;
   width: 100%;
   overflow: visible; 
+  font-size: 2rem;
 }

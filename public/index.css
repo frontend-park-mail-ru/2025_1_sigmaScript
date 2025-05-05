@@ -10,6 +10,7 @@
 @import "pages/stats_page/stats_page.css";
 @import "pages/genresPage/genresPage.css";
 @import "pages/genrePage/genrePage.css";
+@import "pages/SearchPage/SearchPage.css";
 
 * {
     box-sizing: border-box;
@@ -24,6 +25,7 @@
     --background-color-light: #080808;
     --background-color-light-rgb: 8,8,8;
     --success-color: #50FF50;
+    --success-color-dark: #27ae60;
     --error-color: #FF5050;
     --text-field-border-color: rgba(148, 161, 178, 0.5);
     --transparent-element: rgba(22, 22, 26, 0);

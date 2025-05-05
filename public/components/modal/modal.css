@@ -20,10 +20,12 @@
 }
 
 .modal_content {
+  padding-bottom: 2rem;
   background: var(--background-color);
   width: 100%;
-  height: 100%;
-  min-height: 30rem;
+  /* TODO: если ничего не сломается потом, то уберём */
+  /* height: 100%; */
+  min-height: 20rem;
   max-width: 60rem;
   max-height: 40rem;
   border-radius: 25px;
@@ -31,7 +33,12 @@
   box-shadow: 0 0.1rem 0.6rem rgba(0, 0, 0, 0.3);
   position: relative;
   justify-content: space-around;
+  gap: 3rem;
   align-items: center;
+}
+
+.csat-modal-content {
+  height: 100%;
 }
 
 .modal_content__header {
@@ -63,6 +70,8 @@
 }
 
 .modal_content__inputs {
+  width: 70%;
+  height: 100%;
   display: flex;
   flex-direction: column;
   gap: 2rem;
@@ -70,7 +79,7 @@
 
 .modal_content-actions {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
 
   width: 70%;
 }
@@ -119,4 +128,20 @@
   left: 6%;
   cursor: pointer;
   font-size: 3rem;
+}
+
+.stars:empty {
+  display: none;
+}
+
+.modal_content__inputs .u_input {
+  width: 100%;
+  height: 100%;
+}
+
+.modal_content__inputs .u_input .u_input__field {
+  font-size: 2.4rem;
+  width: 100%;
+  height: 100%;
+  min-height: 5rem;
 }

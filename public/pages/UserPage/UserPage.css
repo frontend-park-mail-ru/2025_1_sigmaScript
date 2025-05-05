@@ -1,25 +1,27 @@
 .user-page {
-  max-width: 90rem;
+  max-width: 120rem;
   width: 100%;
-  margin: 2rem auto;
-  padding: 2rem;
+  margin: 0rem auto;
   background-color: transparent;
   border-radius: 0.5rem;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
   gap: 2rem;
+  padding-left: 5rem;
+  padding-right: 5rem;
 }
 
 .user-page__upper {
+  width: 100%;
   display: flex;
   gap: 2rem;
-  margin-bottom: 2rem;
+  align-items: center;
 }
 
 .user-page__avatar {
-  width: 20rem;
-  height: 20rem;
+  width: 25rem;
+  height: 25rem;
   border-radius: 50%;
   overflow: hidden;
   background-color: #3a3a3a;
@@ -65,36 +67,24 @@
   font-weight: 600;
   margin: 0;
   color: var(--primary-text-color);
+  word-break: break-word;
 }
 
 .user-page__info-middle {
-  /* TODO: решить, оставляем ли отзывы. если да, то раскомментируем */
-  /* display: flex;
-  gap: 4rem;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%; */
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(2, 20rem);
+  row-gap: 2rem;
+  column-gap: 15rem;
   padding-left: 6rem;
-  gap: 15rem;
-  justify-content: flex-start;
-  flex-wrap: wrap;
-  align-items: center;
+  padding-right: 6rem;
 }
 
 .user-page__detail {
   font-size: 1.6rem;
   color: var(--primary-text-color);
   margin: 0;
-}
-
-.user-page__info-bottom {
-  display: flex;
-  padding-left: 6rem;
-  gap: 15rem;
-  justify-content: flex-start;
-  flex-wrap: wrap;
+  max-width: 20rem;
+  word-wrap: break-word;
 }
 
 .user-page__stats-item {
@@ -120,24 +110,104 @@
 .user-page__action-button {
   display: flex;
   flex-direction: column;
-
-  gap: 10px;
+  gap: 1.5rem;
+  flex-shrink: 0;
 }
 
-.user-page_modal .modal_content {
-  min-width: 30%;
-  min-height: 70%
+.user-page__content {
+  font-size: 5rem;
 }
 
-.modal_content__inputs {
-  width: 80%;
+.favorites-section {
+  margin-bottom: 2rem;
 }
 
-
-/* .user-page_modal .u_input {
-  min-width: 100%;
+.favorites-section__title {
+  font-size: 3rem;
+  margin: 0 0 1rem 0;
+  color: var(--primary-text-color);
 }
 
-.user-page_modal .u_input__field {
-  min-width: 90%;
-} */
+.user-page__content .reviews__reviews {
+  font-size: 1.4rem;
+}
+
+@media (max-width: 991.98px) {
+  .user-page__upper {
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+  }
+
+  .user-page__info {
+    /* width: 100%; */
+    gap: 3rem;
+    padding-bottom: 2rem;
+    /* align-items: center; */
+  }
+
+  .user-page__info-top {
+    flex-direction: column;
+    gap: 2rem;
+    /* text-align: center; */
+  }
+
+  .user-page__action-button {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+  }
+
+  .user-page__info-middle {
+    grid-template-columns: repeat(2, 1fr);
+    column-gap: 2rem;
+    row-gap: 2rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    width: 100%;
+    max-width: 50rem;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .user-page__detail {
+    text-align: center;
+    max-width: none;
+  }
+
+  .favorites-section__title {
+    font-size: 2.5rem;
+    /* TODO: решить как отображаем, по центру или слева */
+    /* text-align: center; */
+  }
+}
+
+@media (max-width: 600px) {
+  /* TODO: спросить как лучше */
+  /* .user-page {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  } */
+
+  .user-page__info-top {
+    padding-left: 0rem;
+    padding-right: 0rem;
+  }
+}
+
+@media (max-width: 479.98px) {
+  .user-page {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+
+  .user-page__avatar {
+    width: 20rem;
+    height: 20rem;
+  }
+
+  .user-page .u_button__text {
+    font-size: 1.6rem;
+  }
+}

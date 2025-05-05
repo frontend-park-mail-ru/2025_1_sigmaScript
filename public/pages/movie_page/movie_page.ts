@@ -14,7 +14,7 @@ import { Footer } from 'components/Footer/Footer';
 import { FOOTER_CONFIG } from '../../consts.js';
 import { router, Urls } from '../../modules/router';
 import { FooterData } from 'types/Footer.types.js';
-import { postMovieReview } from 'flux/Actions.ts';
+import { addMovieToFavorite, postMovieReview, removeMovieFromFavorite } from 'flux/Actions.ts';
 import UserPageStore from 'store/UserPageStore.ts';
 import { serializeTimeZToHumanDate } from 'modules/time_serialiser';
 
@@ -237,8 +237,15 @@ class MoviePage {
         srcIcon: '/static/svg/favourite.svg',
         actions: {
           click: () => {
-            // TODO error handle
-            console.log(`Toggle favourite for movie ${id}`);
+            if (UserPageStore.isFavoriteMovie(this.#state.movieId as number)) {
+              removeMovieFromFavorite(this.#state.movieId as number);
+            } else {
+              addMovieToFavorite({
+                id: this.#state.movieId as number,
+                title: this.#state.movieData?.name as string,
+                preview_url: this.#state.movieData?.poster as string
+              });
+            }
           }
         }
       }).render();

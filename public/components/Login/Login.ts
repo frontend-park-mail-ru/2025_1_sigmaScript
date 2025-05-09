@@ -4,7 +4,7 @@ import Input from '../universal_input/input.js';
 import { Switch } from '../Switch/Switch.js';
 import { ERRORS, ERROR_HANDLERS } from 'public/consts';
 import { isValidLogin, isVaidPassword } from 'utils/validate.js';
-import { debounce } from 'utils/debounce.js';
+import { debounce } from 'utils/debounce';
 import template from './Login.hbs';
 import { getUser, loginSubmit, registerSubmit } from 'flux/Actions';
 import AuthStore from 'store/LoginStore';

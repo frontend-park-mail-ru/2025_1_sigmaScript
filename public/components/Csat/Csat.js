@@ -1,6 +1,6 @@
 import './Csat.css'; // Импортируем выделенный файл CSS
 import template from './Csat.hbs';
-import CsatStore from 'store/NavbarStore';
+import CsatStore from 'store/CsatStore';
 
 /**
  * Модальное окно CSAT (Customer Satisfaction)

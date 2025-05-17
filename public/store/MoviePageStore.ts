@@ -1,8 +1,8 @@
 import { dispatcher } from 'flux/Dispatcher';
 import { Action } from 'types/Dispatcher.types';
-import { RenderActionTypes, MovieActionTypes } from 'flux/ActionTypes';
+import { RenderActionTypes, MovieActionTypes, UserPageTypes } from 'flux/ActionTypes';
 import { MovieData, NewReviewDataJSON, Reviews } from 'types/movie_page.types';
-import { serializeTimeZToHumanTime } from '../modules/time_serialiser';
+import { formatDateTime, serializeTimeZToHumanTime, serializeTimeZToHumanYear } from '../modules/time_serialiser';
 import { initialStore } from './InitialStore';
 import MoviePage from 'pages/movie_page/movie_page';
 import request, { ErrorWithDetails } from 'utils/fetch';
@@ -12,11 +12,15 @@ import {
   loadMovieData,
   movieReviewsDataLoaded,
   loadMovieReviewsData,
-  renderCsat
+  renderCsat,
+  PopupActions,
+  addReview,
+  getUser
 } from 'flux/Actions';
 
 import { MOVIE_URL, MOVIE_REVIEWS_PATH } from 'public/consts';
 import { deserialize, serialize } from 'utils/Serialize';
+import UserPageStore from './UserPageStore';
 
 type MoviePageState = {
   movieId: number | string | null;
@@ -102,13 +106,14 @@ class MoviePageStore {
         this.state.movieData = action.payload as MovieData;
         this.state.isLoading = false;
         this.state.error = null;
+        if (this.state.movieData.releaseYear)
+          this.state.movieData.releaseYear = serializeTimeZToHumanYear(this.state.movieData.releaseYear);
         this.emitChange();
         break;
 
       case MovieActionTypes.MOVIE_REVIEWS_DATA_LOADED:
         if (this.state.movieData && this.state.movieId) {
           this.state.movieData.reviews = action.payload as Reviews;
-
           for (let i = 0; i < this.state.movieData.reviews.length; i++) {
             this.state.movieData.reviews[i].createdAt = serializeTimeZToHumanTime(
               this.state.movieData.reviews[i].createdAt
@@ -137,6 +142,8 @@ class MoviePageStore {
           return;
         }
         try {
+          const date = new Date();
+
           const payload = action.payload as NewReviewDataJSON;
 
           const url = `${MOVIE_URL}/${this.state.movieId}/${MOVIE_REVIEWS_PATH}`;
@@ -145,16 +152,41 @@ class MoviePageStore {
           }) as Record<string, unknown>;
           await request({ url: url, method: 'POST', body, credentials: true });
 
+          addReview({
+            // TODO: перекинуть айдишник нормальный
+            id: -1,
+            user: {
+              login: UserPageStore.getState().userData?.username as string
+            },
+            reviewText: payload.reviewText,
+            score: payload.score,
+            createdAt: formatDateTime(date),
+            movieID: this.state.movieId as number
+          });
+
           loadMovieReviewsData(this.state.movieId);
+          // TODO: временное решение, потом переделать
+          getUser();
         } catch {
-          // const errorMessage = 'Не удалось отправить данные нового отзыва фильма';
-          // movieDataError(errorMessage);
+          const errorMessage = 'Не удалось отправить данные нового отзыва фильма';
+          movieDataError(errorMessage);
           // TODO error handle
           // alert(errorMessage);
+          PopupActions.showPopup({
+            message: errorMessage,
+            duration: 2500,
+            isError: true
+          });
         }
 
         renderCsat();
         break;
+      case UserPageTypes.UPDATE_USER_PAGE: {
+        this.state.needUpdateFavorite = true;
+        this.emitChange();
+        this.state.needUpdateFavorite = false;
+        break;
+      }
       default:
         break;
     }

@@ -1,48 +1,53 @@
 .person-page {
-  display: flex;
-  gap: 40px;
-  flex-direction: row;
-  max-width: 1200px;
-  overflow: hidden;
-
-  margin: auto auto;
-  padding: 50px 50px 0px 50px;
-
+  max-width: 120rem;
+  margin: auto;
+  padding: 5rem 5rem 0 5rem;
   color: var(--primary-text-color);
+  display: flex;
+  flex-direction: column;
+  gap: 4rem;
+  overflow: hidden;
 }
 
-.person__photo-container {
+.person-page__content {
+  display: flex;
+  gap: 4rem;
+}
+
+.person-page__photo-container {
   flex-shrink: 0;
-  height: 460px;
-  width: 300px;
+  width: 30rem;
+  height: 46rem;
 }
 
-.person__photo {
+.person-page__photo {
   width: 100%;
   height: auto;
-  border-radius: 25px;
+  border-radius: 2.5rem;
   display: block;
 }
 
-.person__info-container {
+.person-page__info-container {
   flex-grow: 1;
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  gap: 1.8rem;
 }
 
-.person__header {
-  margin-bottom: 15px;
-  padding-bottom: 10px;
+.person-page__header {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
 }
 
-.person__name-ru {
-  margin: 0 0 5px 0;
+.person-page__name-ru {
+  margin: 0 0 0.5rem 0;
   font-size: var(--header-1-text);
 }
 
-.person__name-en {
-  margin: 0 0 10px 0;
+.person-page__name-en {
+  margin: 0 0 1rem 0;
   font-style: italic;
   font-size: var(--header-2-text);
 }
@@ -52,43 +57,112 @@
   width: fit-content;
 }
 
-.person__details,
+.person-page__details,
 .details-label,
 .details-value {
   font-size: var(--paragraph-text);
 }
 
-.person__biography h2,
-.person__details h2 {
+.person-page__details h2,
+.person-page__biography h2 {
   margin-top: 0;
-  margin-bottom: 10px;
+  margin-bottom: 1rem;
   font-size: var(--header-2-text);
 }
 
-.person__biography {
+.person-page__biography {
   line-height: var(--peragraph-line-height);
   font-size: var(--paragraph-text);
 }
 
-
 .details-table {
   width: 100%;
   border-collapse: collapse;
-  margin-bottom: 18px;
+  margin-bottom: 1.8rem;
 }
 
 .details-table td {
-  padding: 6px 0;
+  padding: 0.6rem 0;
   vertical-align: top;
 }
 
 .details-label {
   font-weight: bold;
   color: var(--primary-text-color);
-  width: 150px;
-  padding-right: 10px;
+  width: 15rem;
+  padding-right: 1rem;
 }
 
 .details-value {
   color: var(--primary-text-color);
+}
+
+.person-page__films {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+@media (max-width: 767.98px) {
+  .person-page__content {
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .person-page__details {
+    width: 100%;
+  }
+
+  .details-label {
+    font-size: 1.8rem;
+  }
+  .details-value,
+  .person-page__biography {
+    font-size: 1.7rem;
+  }
+
+  .person-page__info-container {
+    /* align-items: flex-start; */
+    align-items: center;
+  }
+  .person-page__header {
+    align-items: center;
+  }
+}
+
+@media (max-width: 499.98px) {
+  .person-page {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+
+  .details-label {
+    font-size: 1.6rem;
+  }
+  .details-value,
+  .person-page__biography {
+    font-size: 1.5rem;
+  }
+
+  .person-page__photo-container,
+  .person-page .card {
+    width: 225px !important;
+    height: 345px !important;
+  }
+
+  .person-page .favorites-section--movies .card {
+    width: 105px !important;
+    height: 161px !important;
+  }
+}
+
+.person-page .movie__button {
+  width: 140px;
+  height: 45px;
+  min-height: 30px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
 }

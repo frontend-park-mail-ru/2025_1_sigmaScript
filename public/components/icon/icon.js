@@ -53,6 +53,10 @@ class Icon {
     return this.#parent.querySelector('#' + this.#config.id);
   }
 
+  parent() {
+    return this.#parent;
+  }
+
   destroy() {
     if (!this.self()) {
       return;

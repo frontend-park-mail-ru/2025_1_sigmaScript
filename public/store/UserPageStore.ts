@@ -1,15 +1,26 @@
 import { dispatcher } from 'flux/Dispatcher';
 import { Action } from 'types/Dispatcher.types';
-import { RenderActionTypes, UserPageTypes } from 'flux/ActionTypes';
-import { UserPageState, Listener, UserData, UpdateUserData } from 'types/UserPage.types';
+import { RenderActionTypes, TabsActionTypes, UserPageTypes } from 'flux/ActionTypes';
+import {
+  UserPageState,
+  Listener,
+  UserData,
+  UpdateUserData,
+  UpdateLoginData,
+  UpdatePasswordData
+} from 'types/UserPage.types';
 import { initialStore } from './InitialStore';
 import { UserPage } from 'pages/UserPage/UserPage';
 import { AUTH_URL } from 'public/consts';
 import request from 'utils/fetch';
 import { serialize, deserialize } from 'utils/Serialize';
-import { getUser, noSession, updateUserPage } from 'flux/Actions';
+import { getUser, noSession, PopupActions, updateUserPage } from 'flux/Actions';
 import { router } from 'modules/router';
 import { BASE_URL } from 'public/consts';
+import { MovieCollection, MovieDataJSON } from 'types/main_page.types';
+import { PersonCardInfo, PersonCollection, PersonJSONCollection } from 'types/Person.types';
+import { Review } from 'types/movie_page.types';
+import { serializeTimeZToHumanTime } from 'modules/time_serialiser';
 
 class UserPageStore {
   private state: UserPageState;
@@ -18,7 +29,11 @@ class UserPageStore {
   constructor() {
     this.state = {
       parent: null,
-      userData: null
+      userData: null,
+      movieCollection: new Map<number, MovieDataJSON>(),
+      actorCollection: new Map<number, PersonCardInfo>(),
+      reviews: new Map<number, Review>(),
+      needTabID: null
     };
     this.listeners = [];
 
@@ -34,8 +49,10 @@ class UserPageStore {
   private async handleActions(action: Action): Promise<void> {
     switch (action.type) {
       case RenderActionTypes.RENDER_PROFILE_PAGE:
-        this.state.userData = action.payload as UserData;
-        this.renderUserPage(this.state.userData);
+        if (action.payload) {
+          this.state.userData = action.payload as UserData;
+        }
+        this.renderUserPage(this.state.userData as UserData);
         break;
       case UserPageTypes.UPDATE_USER_PAGE:
         this.state.userData = action.payload as UserData;
@@ -48,12 +65,33 @@ class UserPageStore {
         break;
       case UserPageTypes.GET_USER:
         try {
-          const url = AUTH_URL + 'session';
+          const url = BASE_URL + 'profile';
           const res = await request({ url: url, method: 'GET', credentials: true });
-
           let userData = deserialize(res.body) as UserData;
           userData.createdAt = this.#formatDate(userData.createdAt);
+          // НЕ ТРОГАТЬ ВСË ЧТО СНИЗУ, ОНО РАБОТАЕТ
+          userData.movieCollection = serialize(userData?.movieCollection) as MovieCollection;
+          userData.actors = serialize(userData?.actors) as PersonJSONCollection;
+          const actors = userData?.actors?.map((actor) => {
+            return {
+              personID: actor.id,
+              nameRu: actor.full_name,
+              photoUrl: actor.photo
+            };
+          }) as PersonCollection;
           this.state.userData = userData;
+
+          this.state.movieCollection = new Map(userData?.movieCollection?.map((movie) => [movie.id, movie]));
+          this.state.actorCollection = new Map(actors?.map((actor) => [actor.personID as number, actor]));
+          this.state.reviews = new Map(
+            userData?.reviews?.map((review) => [
+              review.id as number,
+              {
+                ...review,
+                createdAt: serializeTimeZToHumanTime(review.createdAt)
+              }
+            ])
+          );
 
           updateUserPage(userData);
         } catch {
@@ -75,8 +113,64 @@ class UserPageStore {
 
           getUser();
         } catch {
-          // TODO: пофиксить ошибку
-          // console.log(error.errorDetails.error);
+          PopupActions.showPopup({
+            message: 'Не удалось обновить данные пользователя!',
+            duration: 2500,
+            isError: true
+          });
+        }
+        break;
+      case UserPageTypes.UPDATE_LOGIN:
+        try {
+          const payload = action.payload as UpdateLoginData;
+
+          const url = BASE_URL + 'users/' + 'login';
+          const body = serialize({
+            // ...this.state.userData,
+            username: payload.username,
+            oldPassword: payload.password
+            // ...payload
+          }) as Record<string, unknown>;
+          await request({ url: url, method: 'POST', body, credentials: true });
+
+          PopupActions.showPopup({
+            message: 'Логин успешно изменён!',
+            duration: 2500,
+            isError: false
+          });
+
+          getUser();
+        } catch {
+          PopupActions.showPopup({
+            message: 'Не удалось обновить логин!',
+            duration: 2500,
+            isError: true
+          });
+        }
+        break;
+      case UserPageTypes.UPDATE_PASSWORD:
+        try {
+          const payload = action.payload as UpdatePasswordData;
+
+          const url = BASE_URL + 'users/' + 'password';
+          const body = serialize({
+            ...payload
+          }) as Record<string, unknown>;
+          await request({ url: url, method: 'POST', body, credentials: true });
+
+          PopupActions.showPopup({
+            message: 'Пароль успешно изменён!',
+            duration: 2500,
+            isError: false
+          });
+
+          getUser();
+        } catch {
+          PopupActions.showPopup({
+            message: 'Не удалось обновить пароль!',
+            duration: 2500,
+            isError: true
+          });
         }
         break;
       case UserPageTypes.LOGOUT_USER:
@@ -105,10 +199,108 @@ class UserPageStore {
 
           getUser();
         } catch {
-          // TODO: пофиксить ошибку
-          // console.log(error.errorDetails.error);
+          PopupActions.showPopup({
+            message: 'Не удалось загрузить аватар!',
+            duration: 2500,
+            isError: true
+          });
         }
         break;
+      case UserPageTypes.ADD_MOVIE_TO_FAVORITE: {
+        const movieData = action.payload as MovieDataJSON;
+        try {
+          const url = BASE_URL + 'movie/' + `${movieData.id}/` + 'favorite';
+          await request({ url: url, method: 'POST', credentials: true });
+          this.state.movieCollection.set(movieData.id, movieData);
+          PopupActions.showPopup({
+            message: 'Фильм добавлен в избранное!',
+            duration: 2500,
+            isError: false
+          });
+        } catch {
+          PopupActions.showPopup({
+            message: 'Не удалось добавить фильм в избранное!',
+            duration: 2500,
+            isError: true
+          });
+        }
+
+        break;
+      }
+      case UserPageTypes.ADD_ACTOR_TO_FAVORITE: {
+        const actor = action.payload as PersonCardInfo;
+        try {
+          const url = BASE_URL + 'name/' + `${actor.personID}/` + 'favorite';
+          await request({ url: url, method: 'POST', credentials: true });
+          this.state.actorCollection.set(actor.personID as number, actor);
+          PopupActions.showPopup({
+            message: 'Актёр добавлен в избранное!',
+            duration: 2500,
+            isError: false
+          });
+        } catch {
+          PopupActions.showPopup({
+            message: 'Не удалось добавить актёра в избранное!',
+            duration: 2500,
+            isError: true
+          });
+        }
+
+        break;
+      }
+      case UserPageTypes.ADD_REVIEW: {
+        const review = action.payload as Review;
+        this.state.reviews.set(review.movieID as number, review);
+        break;
+      }
+      case TabsActionTypes.FAVORITE_TOGGLE: {
+        this.state.needTabID = action.payload as string;
+        this.emitChange();
+        this.state.needTabID = null;
+        break;
+      }
+      case UserPageTypes.REMOVE_MOVIE_FROM_FAVORITE: {
+        const movieID = action.payload as number;
+        try {
+          const url = BASE_URL + 'movie/' + `${movieID}/` + 'favorite';
+          await request({ url: url, method: 'DELETE', credentials: true });
+          this.state.movieCollection.delete(movieID);
+          PopupActions.showPopup({
+            message: 'Фильм успешно удалён из избранного!',
+            duration: 2500,
+            isError: false
+          });
+        } catch {
+          PopupActions.showPopup({
+            message: 'Не удалось удалить фильм из избранного!',
+            duration: 2500,
+            isError: true
+          });
+        }
+
+        break;
+      }
+      case UserPageTypes.REMOVE_ACTOR_FROM_FAVORITE: {
+        const actorID = action.payload as number;
+        try {
+          const url = BASE_URL + 'name/' + `${actorID}/` + 'favorite';
+          await request({ url: url, method: 'DELETE', credentials: true });
+          this.state.actorCollection.delete(actorID);
+          PopupActions.showPopup({
+            message: 'Актёр успешно удалён из избранного!',
+            duration: 2500,
+            isError: false
+          });
+        } catch {
+          PopupActions.showPopup({
+            message: 'Не удалось удалить актёра из избранного!',
+            duration: 2500,
+            isError: true
+          });
+        }
+
+        break;
+      }
       default:
         break;
     }
@@ -143,6 +335,36 @@ class UserPageStore {
 
   getState(): UserPageState {
     return this.state;
+  }
+
+  getMoviesCount(): number {
+    return this.state.movieCollection.size || 0;
+  }
+
+  getActorCount(): number {
+    return this.state.actorCollection.size || 0;
+  }
+
+  getAverageRating(): number {
+    if (this.state.reviews.size === 0) {
+      return 0;
+    }
+
+    let totalRating = 0;
+    for (const review of this.state.reviews.values()) {
+      totalRating += review.score || 0;
+    }
+
+    const average = totalRating / this.state.reviews.size;
+    return Math.round(average * 10) / 10;
+  }
+
+  isFavoriteMovie(id: number): boolean {
+    return this.state.movieCollection.has(id);
+  }
+
+  isFavoriteActor(id: number): boolean {
+    return this.state.actorCollection.has(id);
   }
 }
 

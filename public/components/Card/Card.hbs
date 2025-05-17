@@ -1,6 +1,14 @@
-  {{#if url}}<a href="{{this.url}}" id="{{this.id}}">{{else}}<span id="{{this.id}}"></span>{{/if}}
-    <div class="card" style="width: {{ this.width }}px; height: {{ this.height }}px;">
+  {{#if url}}<a class="card-a" href="{{this.url}}" id="{{this.id}}">{{else}}<span id="{{this.id}}"></span>{{/if}}
+    <div class="card {{#if hover}}card--hover{{/if}}" style="width: {{ this.width }}px; height: {{ this.height }}px;">
+      <div class="card__top-elems-container">
+        <div class="card__top-text">{{this.topText}}</div>
+      </div>
+      
       <img src="{{this.previewUrl}}" alt="{{this.title}} card__preview" class="card__preview">
+
+      <div class="card__bottom-elems-container">
+        <div class="card__bottom-text">{{this.bottomText}}</div>
+      </div>
     </div>
     {{#if this.title}}
       <div class="card__title" style="width: {{ this.width }}px;">{{this.title}}</div>

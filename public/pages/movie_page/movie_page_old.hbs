@@ -1,0 +1,74 @@
+<div class="movie-page__movie flex-dir-row flex-start">
+  <div class="movie__left-column flex-dir-col flex-start">
+    <div class="movie__poster js-poster">
+    </div>
+  </div>
+  <div class="movie__center-column flex-dir-col flex-start">
+    <div class="movie__name">{{movie.name}} ({{movie.releaseYear}})</div>
+    <div class="movie__about">{{#if movie.about }}{{movie.about}}{{else}}Описание фильма недоступно.{{/if}}</div>
+    <div class="movie__buttons flex-dir-row flex-start js-movie-buttons">
+    </div>
+    <div class="movie__info flex-dir-col">
+      <div class="movie__info-header">О фильме:</div>
+      {{#each this.info}}
+        <div class="movie__info-field flex-dir-row">
+          <div class="movie__field-element">{{ title }}</div>
+          <div class="movie__field-element">{{ value }}</div>
+        </div>
+      {{else}}
+        <p>Подробная информация о фильме недоступна.</p>
+      {{/each}}
+    </div>
+  </div>
+  <div class="movie__right-column flex-dir-col flex-center">
+    <div class="right-column__rating flex-dir-col flex-center js-movie__rating">
+      <div class="right-column__rating-value-block flex-dir-row flex-center">
+        <img class="right-column__rating-star" src="/static/svg/star.svg" alt="star">
+        <div class="right-column__rating-value">{{#if movie.rating}}{{movie.rating}}{{else}}Нет оценки{{/if}}</div>
+      </div>
+    </div>
+    <div class="right-column__review-button flex-dir-col flex-center js-movie__review">
+       <div class="right-column__review-counter">
+           {{#if movie.reviews.length}}
+               Отзывы: {{movie.reviews.length}}
+           {{else}}
+               Нет отзывов
+           {{/if}}
+       </div>
+    </div>
+  </div>
+</div>
+
+<div class="movie__staff flex-dir-col flex-start">
+  <div class="staff__title">Состав:</div>
+  <div class="staff__list flex-dir-row flex-start js-staff-list">
+  </div>
+</div>
+
+<div class="movie__reviews flex-dir-col flex-start js-reviews">
+  <div class="reviews__title">Отзывы:</div>
+  <form class="reviews__review-form flex-dir-col flex-start js-review-form" type="submit">
+  </form>
+  <div class="reviews__reviews flex-dir-col flex-start">
+    {{#each movie.reviews}}
+      <div class="review-card flex-dir-col flex-start">
+        <div class="review-card__header flex-dir-row">
+          <div class="header__rating flex-dir-row movie-page__header">
+            <img class="review-card__star" src="/static/svg/star.svg" alt="star">
+            <div class="review-card__rating">{{ score }}</div>
+          </div>
+          <div class="review-card__info flex-dir-row flex-center">
+            <div class="review-card__user flex-dir-row">
+              <div class="review-card__name"><b> {{ user.login }} </b></div>
+              <img class="review-card__avatar" src="{{#if user.avatar}} {{ user.avatar }} {{else}} /static/svg/Avatar large.svg {{/if}}" alt="avatar">
+            </div>
+             <div class="review-card__date">{{ createdAt }}</div>
+          </div>
+        </div>
+        <div class="review-card__text">{{ reviewText }}</div>
+      </div>
+    {{else}}
+      <p>Отзывов пока нет. Будьте первым!</p>
+    {{/each}}
+  </div>
+</div>

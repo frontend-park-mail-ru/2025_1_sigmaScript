@@ -10,5 +10,5 @@ export const cmToMeters = (heightCm: string | null): string => {
   }
 
   const meters = height / 100;
-  return `${meters.toFixed(2)}`;
+  return `${meters?.toFixed(2)}`;
 };

@@ -9,6 +9,11 @@ import 'store/UserPageStore';
 import 'store/NavbarStore';
 import 'store/CsatStore';
 import 'store/StatsPageStore';
+import 'store/GenresPageStore';
+import 'store/GenrePageStore';
+import 'store/PopupStore';
+import 'components/Popup/popup';
+import 'store/SearchPageStore';
 
 import { router } from 'public/modules/router';
 

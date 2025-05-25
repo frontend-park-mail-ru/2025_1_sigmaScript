@@ -1,0 +1,30 @@
+<div class="notification-dropdown-container">
+  <div class="notification-dropdown-menu" id="{{id}}_menu">
+    {{#if title}}
+    <div class="notification-dropdown-header">
+      <span class="notification-dropdown-title">{{title}}</span>
+    </div>
+    {{/if}}
+    <div class="notification-dropdown-list">
+      {{#if notifications.length}}
+        {{#each notifications}}
+          <div class="notification-item" data-id="{{this.id}}">
+            <div class="notification-item-content">
+              <div class="notification-item-title">{{this.title}}</div>
+              <div class="notification-item-text">{{this.text}}</div>
+            </div>
+            <button class="notification-item-close" data-id="{{this.id}}" title="Удалить уведомление">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path d="M12 4L4 12M4 4L12 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+          </div>
+        {{/each}}
+      {{else}}
+        <div class="notification-dropdown-empty">
+          <div class="notification-empty-text">Нет уведомлений</div>
+        </div>
+      {{/if}}
+    </div>
+  </div>
+</div>

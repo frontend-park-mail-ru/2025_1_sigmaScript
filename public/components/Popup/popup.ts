@@ -49,7 +49,7 @@ export class Popup {
   /**
    * Отвечает за отрисовку попапа.
    *
-   * @param popupData — данные для отображения попапа (сообщение и флаг ошибки)
+   * @param popupData — данные для отображения попапа
    */
   render(popupData: PopupState['current']): void {
     if (!popupData) {
@@ -57,12 +57,21 @@ export class Popup {
     }
 
     const wrapper = document.createElement('div');
-    wrapper.innerHTML = template({ message: popupData.message, isError: popupData.isError }).trim();
+    wrapper.innerHTML = template(popupData).trim();
     const popup = wrapper.firstElementChild as HTMLElement;
 
+    // обработчик для обычного попапа
     const close = popup.querySelector<HTMLElement>('.popup__close');
     if (close) {
       close.addEventListener('click', () => {
+        PopupActions.hidePopup();
+      });
+    }
+
+    // обработчик для уведомления о фильме
+    const notificationClose = popup.querySelector<HTMLElement>('.popup__notification-close');
+    if (notificationClose) {
+      notificationClose.addEventListener('click', () => {
         PopupActions.hidePopup();
       });
     }

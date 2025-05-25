@@ -137,7 +137,7 @@
 
 .movie-page__detailed-info {
   margin-top: 3rem;
-  gap: 3rem;
+  gap: 1.5rem;
 }
 
 .detailed-info__wrapper {
@@ -251,6 +251,17 @@
 }
 
 .movie-page__actors-title {
+  font-size: 3rem;
+  font-weight: bold;
+  color: var(--primary-text-color);
+}
+
+.movie-page__similar {
+  margin: 3rem 3% 0 3%;
+  gap: 3rem;
+}
+
+.movie-page__similar-title {
   font-size: 3rem;
   font-weight: bold;
   color: var(--primary-text-color);

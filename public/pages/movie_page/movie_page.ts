@@ -17,10 +17,12 @@ import { FooterData } from 'types/Footer.types.js';
 import { addMovieToFavorite, postMovieReview, removeMovieFromFavorite } from 'flux/Actions.ts';
 import UserPageStore from 'store/UserPageStore.ts';
 import { serializeTimeZToHumanDate } from 'modules/time_serialiser';
+import { MovieCollection } from 'types/main_page.types.js';
 
 type MoviePageStateFromStore = {
   movieId: number | string | null;
   movieData: MovieData | null;
+  similar: MovieCollection | null;
   isLoading: boolean;
   error: string | null;
 };
@@ -31,6 +33,7 @@ class MoviePage {
   #state: MoviePageStateFromStore = {
     movieId: null,
     movieData: null,
+    similar: null,
     isLoading: true,
     error: null
   };
@@ -158,6 +161,7 @@ class MoviePage {
 
       container.innerHTML = template({ movie, info: infoForDisplay });
       this.#renderActors(movie.staff || []);
+      this.#renderSimilar(movie.similarMovies || []);
       this.#renderReviewForm();
       this.#renderButtons(this.#state.movieId!);
     } else {
@@ -188,6 +192,31 @@ class MoviePage {
         previewUrl: person.photo || '/static/img/default_person.webp',
         width: '150',
         height: '225'
+      }).render();
+    }
+  }
+
+  #renderSimilar(similar: MovieCollection): void {
+    const similarListElement = this.self()?.querySelector<HTMLElement>('.js-similar-list');
+    if (!similarListElement) return;
+    similarListElement.innerHTML = '';
+
+    if (similar.length === 0) {
+      similarListElement.innerHTML = 'Этот фильм пока уникален, вернитесь сюда позже.</p>';
+      return;
+    }
+
+    const scroll = new Scroll(similarListElement);
+    scroll.render();
+    const contentContainer = scroll.getContentContainer();
+    if (!contentContainer) return;
+
+    for (const movie of similar) {
+      new MovieCard(contentContainer, {
+        id: createID(),
+        title: movie.title,
+        url: `${Urls.movie}/${movie.id}`,
+        previewUrl: movie.previewUrl || '/static/img/default_preview.webp'
       }).render();
     }
   }

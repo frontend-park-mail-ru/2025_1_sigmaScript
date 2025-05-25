@@ -149,16 +149,6 @@ class MainPage {
         continue;
       }
 
-      if (key === 'Горизонт') {
-        const compData = compilationsData[key];
-        const compilationElem = this.createCompilationElement(compilationsElem, 'Новые карточки');
-        const scroll = new Scroll(compilationElem);
-        scroll.render();
-        scroll.self()?.classList.add('compilation__scroll');
-        this.renderMovieCards(scroll, compData, { width: '400', height: '220' });
-        continue;
-      }
-
       const compData = compilationsData[key];
       const compilationElem = this.createCompilationElement(compilationsElem, key);
       const scroll = new Scroll(compilationElem);

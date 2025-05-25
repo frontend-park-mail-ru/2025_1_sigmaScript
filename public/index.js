@@ -14,6 +14,7 @@ import 'store/GenrePageStore';
 import 'store/PopupStore';
 import 'components/Popup/popup';
 import 'store/SearchPageStore';
+import 'store/NotificationStore';
 
 import { router } from 'public/modules/router';
 

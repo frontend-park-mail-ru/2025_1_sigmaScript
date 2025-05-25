@@ -134,4 +134,35 @@ export class Tabs {
     const targetTab = component.querySelector(`.tabs__item[data-tab="${tabId}"]`) as HTMLElement;
     targetTab?.classList.add('active');
   }
+
+  /**
+   * Скрывает все табы (display: none).
+   */
+  hideAllTabs(): void {
+    const component = this.self();
+    if (!component) {
+      return;
+    }
+
+    const tabElements = component.querySelectorAll('.tabs__item');
+    tabElements.forEach((el) => {
+      (el as HTMLElement).style.display = 'none';
+    });
+  }
+
+  /**
+   * Показывает таб с указанным ID (убирает display: none).
+   * @param tabId Идентификатор таба, который нужно показать
+   */
+  showTabById(tabId: string): void {
+    const component = this.self();
+    if (!component) {
+      return;
+    }
+
+    const targetTab = component.querySelector(`.tabs__item[data-tab="${tabId}"]`) as HTMLElement;
+    if (targetTab) {
+      targetTab.style.display = '';
+    }
+  }
 }

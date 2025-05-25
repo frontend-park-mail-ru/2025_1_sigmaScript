@@ -23,6 +23,7 @@ type MainPageStateFromStore = {
 class MainPage {
   #parent: HTMLElement;
   #config: MainPageConfig;
+  #carousel: MovieCarousel | null = null;
   #state: MainPageStateFromStore = {
     auth: {
       user: null,
@@ -61,6 +62,8 @@ class MainPage {
 
   destroy(): void {
     MainPageStore.unsubscribe(this.bindedHandleStoreChange);
+    this.#carousel?.destroy();
+    this.#carousel = null;
     this.self()?.remove();
   }
 
@@ -141,7 +144,18 @@ class MainPage {
         const promoData = compilationsData[key];
 
         const carousel = new MovieCarousel(promoElem, { movies: promoData, interval: 12000 });
-        carousel.render();
+        this.#carousel = carousel;
+        this.#carousel.render();
+        continue;
+      }
+
+      if (key === 'Горизонт') {
+        const compData = compilationsData[key];
+        const compilationElem = this.createCompilationElement(compilationsElem, 'Новые карточки');
+        const scroll = new Scroll(compilationElem);
+        scroll.render();
+        scroll.self()?.classList.add('compilation__scroll');
+        this.renderMovieCards(scroll, compData, { width: '400', height: '220' });
         continue;
       }
 

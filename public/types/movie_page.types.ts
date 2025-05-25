@@ -71,6 +71,7 @@ export type MovieData = {
   staff?: Person[];
   reviews?: Reviews;
   watchability?: WatchProvider[];
+  similarMovies?: Record<string, MovieData>;
 };
 
 export type DisplayField = {

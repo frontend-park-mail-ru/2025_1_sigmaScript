@@ -142,7 +142,9 @@ export class PersonPage {
       id: `actorCard--${this.personData?.personID}`,
       previewUrl: this.personData?.photoUrl || '/static/img/default_preview.webp',
       width: '300',
-      height: '460'
+      height: '460',
+      hover: false,
+      addClass: ['actor-card']
     }).render();
 
     this.favoriteButton = new Button(this.parent.querySelector('.favorite-button__container'), {
@@ -200,7 +202,8 @@ export class PersonPage {
           url: `${Urls.movie}/${id}`,
           previewUrl: movie.preview_url || '/static/img/default_preview.webp',
           width: '130',
-          height: '180'
+          height: '180',
+          addClass: ['movie-card']
         }).render();
       }
     }

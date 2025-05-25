@@ -7,7 +7,7 @@
 }
 
 .movie-page__general-info-block {
-  z-index: 2;
+  z-index: 2; 
   position: relative;
   margin: 0 0 0 3%;
   border-bottom: 1px solid #111111;
@@ -17,7 +17,7 @@
   width: 35%;
   align-items: start;
   justify-content: center;
-  gap: 30px;
+  gap: 3rem;
 }
 .general-info-block__backdrop {
   width: 65%;
@@ -27,7 +27,7 @@
   width: 100%;
   justify-content: center;
   align-items: center;
-  gap: 20px;
+  gap: 2rem;
 }
 
 .movie-info__rating-element {
@@ -35,7 +35,7 @@
   font-weight: bold;
   justify-content: center;
   align-items: center;
-  gap: 5px;
+  gap: 0.5rem;
 }
 
 .movie-info-column__logo-image,
@@ -48,6 +48,7 @@
 
 .movie-info-column__logo {
   width: 80%;
+  gap: 3rem;
 }
 
 .general-info-block__backdrop-image {
@@ -82,17 +83,17 @@
 .movie-info-column__buttons {
   width: 100%;
   justify-content: start;
-  gap: 15px;
+  gap: 1.5rem;
 }
 
 .movie-page-button {
   color: var(--primary-text-color);
   background: linear-gradient(135deg, #5130b3 65%, var(--primary-color) 100%);
-  height: 60px;
-  padding: 0 25px;
+  height: 6rem; 
+  padding: 0 2.5rem;
   cursor: pointer;
   border: none;
-  border-radius: 35px;
+  border-radius: 3.5rem;
   white-space: nowrap;
   justify-content: center;
   transition: ease-in-out 0.2s;
@@ -116,36 +117,36 @@
 
 .movie-info-column__review-button,
 .movie-info-column__favoutite-button {
-  width: 60px;
-  height: 60px;
+  width: 6rem; 
+  height: 6rem;
   border-radius: 50%;
   background: rgba(50, 50, 50, 0.7);
 }
 
 .movie-info-column__trailer-button > .u_button__icon {
-  margin-right: 5px;
+  margin-right: 0.5rem;
 }
 
 .movie-page-button > .u_button__icon {
-  width: 15px;
+  width: 1.5rem;
 }
 
 .movie-info-column__review-button > .u_button__icon {
-  width: 22px;
+  width: 2.2rem;
 }
 
 .movie-page__detailed-info {
-  margin-top: 30px;
-  gap: 30px;
+  margin-top: 3rem;
+  gap: 3rem;
 }
 
 .detailed-info__wrapper {
-  gap: 30px; 
+  gap: 3rem; 
 }
 
 .detailed-info__titles-wrapper {
   width: 100%; 
-  gap: 30px;
+  gap: 3rem;
 }
 
 .detailed-info__movie-titles {
@@ -163,7 +164,7 @@
 .detailed-info__left-column {
   width: 35%;
   padding: 0 0 0 3%; 
-  gap: 30px;
+  gap: 3rem;
 }
 
 .detailed-info__title {
@@ -190,8 +191,7 @@
 .detailed-info__grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 20px 20px;
-  /* !!! */
+  gap: 2rem 2rem;
   width: 100%;
 }
 
@@ -199,7 +199,6 @@
   display: flex;
   flex-direction: column;
   align-items: start;
-  /* !!! */
 }
 
 .detailed-info__field-title {
@@ -222,9 +221,9 @@
 .watchability__list {
   display: flex;
   flex-direction: row;
-  gap: 15px;
+  gap: 1.5rem;
   align-items: center;
-  margin-top: 15px;
+  margin-top: 1.5rem;
 }
 
 .watchability__item {
@@ -239,16 +238,16 @@
 }
 
 .watchability__logo {
-  width: 60px;
-  height: 60px;
+  width: 6rem;
+  height: 6rem;
   object-fit: contain;
-  border-radius: 8px;
+  border-radius: 0.8rem;
   background: #fff;
 }
 
 .movie-page__actors {
-  margin: 30px 3% 0 3%;
-  gap: 30px;
+  margin: 3rem 3% 0 3%;
+  gap: 3rem;
 }
 
 .movie-page__actors-title {
@@ -259,9 +258,9 @@
 
 .movie-page__reviews-wrapper{
   width: 100%;
-  gap: 30px;
+  gap: 3rem;
   padding: 0 3% 0 3%;
-  margin-top: 60px;
+  margin-top: 6rem;
 }
 
 .movie-page__reviews-title{
@@ -272,18 +271,18 @@
 
 .movie-page__reviews{
   width: 100%;
-  gap: 15px;
+  gap: 1.5rem;
   align-items: center;
 }
 
 .movie-page__review-form-button {
-  width: 180px;
-  height: 50px;
+  width: 18rem;
+  height: 6rem; 
 }
 
 .movie-page__review-form {
   width: 100%;
-  gap: 15px;
+  gap: 1.5em;
 }
 
 .movie-page__review-form-textarea{
@@ -296,7 +295,7 @@
   font-size: 2rem;
   width: 100%;
   height: 100px;
-  padding: 15px 20px;
+  padding: 1.5rem 2rem;
 }
 
 .movie-page__review-form-textarea .textarea__error-container {
@@ -305,13 +304,13 @@
 
 .movie-page__review-card {
   width: 100%;
-  gap: 5px;
+  gap: 0.5rem;
   background-color: rgba(50, 50, 50, 0.7);
-  min-width: 80px;
-  min-height: 80px;
-  max-height: 500px;
+  min-width: 8rem;
+  min-height: 8rem;
+  max-height: 50rem;
   padding: 2rem 2rem 3rem 2rem;
-  border-radius: 25px;
+  border-radius: 2.5rem;
 }
 
 .movie-page__review-rating{
@@ -324,7 +323,7 @@
   font-size: 2.5rem;
   font-weight: bold;
   align-items: center;
-  gap: 2px;
+  gap: 0.2rem;
 }
 
 .movie-page__review-star{
@@ -340,11 +339,11 @@
 .movie-page__review-info{
   justify-content: end;
   align-items: center;
-  gap: 15px;
+  gap: 1.5rem;
 }
 
 .movie-page__review-user{
-  gap: 2px;
+  gap: 0.2rem;
   justify-content: right;
   align-items: center;
 }
@@ -370,44 +369,70 @@
 }
 
 .movie__button {
-  width: 140px;
-  height: 45px;;
-  min-height: 30px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  width: 14rem;
+  height: 4.5rem;
+  min-height: 3rem;
+  box-shadow: 0 0.4em 1em rgba(0, 0, 0, 0.2);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-@media only screen and (max-width: 1024px) {
-.movie-page__general-info-block {
-  flex-direction: column !important;
-  margin: 0;
-}
-.general-info-block__movie-info-column,
-.general-info-block__backdrop {
-  width: 100% !important;
-  align-items: center !important;
-  justify-content: center !important;
-}
-.general-info-block__movie-info-column {
-  flex-direction: row !important;
-  display: none !important;
-}
-.general-info-block__gradient {
+.movie-page .movie-page__mobile {
   display: none;
 }
-movie-info-column__buttons {
-  justify-content: center !important;
-  align-items: center !important;
-}
-.movie-page__general-info-block {
-  flex-direction: column !important;
+
+.movie-info__rating-element {
+  width: 8rem;
+  height: 2.4rem;
 }
 
-.detailed-info__titles-wrapper {
-  flex-direction: column !important;
+.movie-page__rating-svg {
+  max-height: 2.4rem;
 }
 
-.detailed-info__movie-titles {
+.movie-page .card-component {
+  max-width: 15rem;
+}
+
+@media only screen and (max-width: 1260px) {
+  html.movie-page-html {
+    font-size: 9px;
+  }
+  
+  .movie-page .movie-page__general-info-block {
+    flex-direction: column;
+    margin: 0;
+  }
+  
+  .movie-page .general-info-block__movie-info-column,
+  .movie-page .general-info-block__backdrop {
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .movie-page .movie-page__pc {
+    display: none;
+  }
+
+  .movie-page .movie-page__mobile {
+    display: block;
+  }
+  
+  .movie-page .general-info-block__gradient {
+    display: none;
+  }
+  
+  .movie-page .movie-info-column__buttons {
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .movie-page .detailed-info__titles-wrapper {
+    flex-direction: column;
+  }
+
+.detailed-info__movie-titles,
+.movie-info-column__logo {
   width: 100%;
 }
 
@@ -419,52 +444,52 @@ movie-info-column__buttons {
   padding: 0 3%;
 }
 
-.detailed-info__wrapper {
-  flex-direction: column !important;
+.movie-page .detailed-info__wrapper {
+  flex-direction: column;
   width: 100%;
 }
-.detailed-info__left-column {
-  flex-direction: column !important;
+
+.movie-page .detailed-info__left-column {
+  flex-direction: column;
   width: 100%;
 }
-.detailed-info__right-column {
-  flex-direction: column !important;
+.movie-page .detailed-info__right-column {
+  flex-direction: column;
   width: 100%;
 }
+
 }
 
 @media only screen and (max-width: 900px) {
-  html {
-    font-size: 8px !important;
+  html.movie-page-html {
+    font-size: 8px;
   }
 }
 
 @media only screen and (max-width: 600px) {
-  html {
-    font-size: 7px !important;
+  html.movie-page-html {
+    font-size: 7px;
   }
-}
-
-@media only screen and (max-width: 480) {
-  html {
-    font-size: 5px !important;
-  }
-}
-
-@media only screen and (max-width: 600px) {
-  .stars__star {
+  
+  .movie-page .stars__star {
     width: 28px;
     height: 28px;
   }
-
-  .stars__container {
+  
+  .movie-page .stars__container {
     gap: 2px;
   }
 }
 
-@media only screen and (max-width: 400) {
-  html {
-    font-size: 4px !important;
+@media only screen and (max-width: 480px) {
+  html.movie-page-html {
+    font-size: 6px;
+  }
+}
+
+@media only screen and (max-width: 400px) {
+  html.movie-page-html {
+    font-size: 5px;
   }
 }
 

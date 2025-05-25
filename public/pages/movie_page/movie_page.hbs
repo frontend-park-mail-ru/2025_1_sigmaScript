@@ -1,6 +1,6 @@
 <div class="movie-page__general-info-block flex-dir-row">
 
-  <div class="general-info-block__movie-info-column flex-dir-col">
+  <div class="general-info-block__movie-info-column flex-dir-col movie-page__pc">
 
     <div class="movie-info-column__logo flex-dir-col flex-center" style="gap: 30px;">
       <img class="movie-info-column__logo-image" src="{{movie.logo}}">
@@ -37,6 +37,23 @@
     <div class="detailed-info__movie-titles flex-dir-col">
       <div class="detailed-info__title">{{movie.name}} ({{movie.releaseYear}})</div>
       <div class="detailed-info__original-title">{{movie.originalName}}</div>
+    </div>
+
+    <div class="general-info-block__movie-info-column flex-dir-col movie-page__mobile">
+      <div class="movie-info-column__logo flex-dir-col flex-center">
+        <div class="movie-info-column__buttons flex-dir-row js-movie-buttons-mobile"></div>
+        <div class="movie-info-column__additional-info flex-dir-row">
+          <div class="movie-info__rating-element flex-dir-row">
+            <img src="/static/svg/imdb.svg" class="movie-page__rating-svg">{{movie.ratingImdb}}
+          </div>
+          <div class="movie-info__rating-element flex-dir-row">
+          <img src="/static/svg/kinopoisk.svg" class="movie-page__rating-svg">{{movie.ratingKp}}
+          </div>
+          <div class="movie-info__rating-element flex-dir-row">
+            <img src="/static/svg/flk.svg" class="movie-page__rating-svg">{{movie.rating}}
+          </div>
+        </div>
+      </div>
     </div>
 
     <div class="detailed-info__about-title">О фильме:</div>

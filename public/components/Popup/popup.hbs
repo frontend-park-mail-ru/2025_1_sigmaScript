@@ -1,4 +1,15 @@
+{{#if isNotification}}
+<div class="popup popup--notification">
+  <div class="popup__notification-content">
+    <h3 class="popup__notification-title">{{title}}</h3>
+    <p class="popup__notification-movie">{{movieName}}</p>
+    <p class="popup__notification-date">{{releaseDate}}</p>
+  </div>
+  <button class="popup__notification-close" aria-label="Закрыть">&times;</button>
+</div>
+{{else}}
 <div class="popup {{#if isError}}popup--error{{else}}popup--success{{/if}}">
   <span class="popup__text">{{message}}</span>
   <button class="popup__close" aria-label="Закрыть">&times;</button>
 </div>
+{{/if}}

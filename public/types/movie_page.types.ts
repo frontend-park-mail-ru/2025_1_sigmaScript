@@ -1,3 +1,5 @@
+import { MovieCollection } from './main_page.types';
+
 export type User = {
   login: string;
   avatar?: string;
@@ -71,6 +73,7 @@ export type MovieData = {
   staff?: Person[];
   reviews?: Reviews;
   watchability?: WatchProvider[];
+  similarMovies?: MovieCollection;
 };
 
 export type DisplayField = {

@@ -23,6 +23,7 @@ type MainPageStateFromStore = {
 class MainPage {
   #parent: HTMLElement;
   #config: MainPageConfig;
+  #carousel: MovieCarousel | null = null;
   #state: MainPageStateFromStore = {
     auth: {
       user: null,
@@ -61,6 +62,8 @@ class MainPage {
 
   destroy(): void {
     MainPageStore.unsubscribe(this.bindedHandleStoreChange);
+    this.#carousel?.destroy();
+    this.#carousel = null;
     this.self()?.remove();
   }
 
@@ -141,7 +144,8 @@ class MainPage {
         const promoData = compilationsData[key];
 
         const carousel = new MovieCarousel(promoElem, { movies: promoData, interval: 12000 });
-        carousel.render();
+        this.#carousel = carousel;
+        this.#carousel.render();
         continue;
       }
 

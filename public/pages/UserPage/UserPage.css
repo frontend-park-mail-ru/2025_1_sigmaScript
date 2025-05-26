@@ -132,6 +132,10 @@
   font-size: 1.4rem;
 }
 
+.user-page .card-component {
+  max-width: 130px;
+}
+
 @media (max-width: 991.98px) {
   .user-page__upper {
     flex-direction: column;

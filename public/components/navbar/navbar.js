@@ -4,15 +4,18 @@ import template from './navbar.hbs';
 import { router } from 'public/modules/router.ts';
 import UniversalModal from 'components/modal/modal';
 import UserPageStore from 'store/UserPageStore';
+import NotificationStore from 'store/NotificationStore';
 import NavbarStore from 'store/NavbarStore';
-import { favoriteToggle, logoutUser, searchToggle, genresToggle } from 'flux/Actions';
+import { favoriteToggle, logoutUser, searchToggle, genresToggle, removeNotification } from 'flux/Actions';
 import { Tabs } from 'components/Tab/Tab';
 import Dropdown from 'components/Dropdown/dropdown';
+import NotificationDropdown from 'components/NotificationDropdown/NotiDropdown';
 
 const logoSvg = '/static/svg/logo_text_border_lining.svg';
 const userSvg = '/static/svg/Avatar large.svg';
 const searchSvg = '/static/svg/search.svg';
 const menuSvg = '/static/svg/menu.svg';
+const notificationSvg = '/static/svg/notification.svg';
 
 export const TABS_DATA = {
   tabsData: [
@@ -43,86 +46,6 @@ export const TABS_DATA = {
   ]
 };
 
-const dropdownConfig = {
-  id: 'userDropdown',
-  parent: document.getElementById('root'),
-  items: [
-    {
-      id: 'profile',
-      label: 'Профиль',
-      visible: true,
-      onClick: () => {
-        router.go('/profile', UserPageStore.getState().userData);
-      }
-    },
-    {
-      id: 'favorites',
-      label: 'Избранное',
-      visible: false,
-      onClick: () => {
-        router.go('/profile');
-        favoriteToggle();
-      }
-    },
-    {
-      id: 'genres',
-      label: 'Жанры',
-      visible: false,
-      onClick: () => {
-        router.go('/genres');
-        genresToggle();
-      }
-    },
-    {
-      id: 'search',
-      label: 'Поиск',
-      visible: false,
-      onClick: () => {
-        router.go('/search');
-        searchToggle();
-      }
-    },
-    {
-      id: 'logout',
-      label: 'Выход',
-      visible: true,
-      onClick: () => {
-        const modal = new UniversalModal(document.body, {
-          title: 'Подтверждение действия',
-          message: 'Вы уверены, что хотите выйти?',
-          confirmText: 'Да',
-          cancelText: 'Нет',
-          onConfirm: () => {
-            logoutUser();
-            router.go('/');
-          },
-          addClasses: ['login_modal']
-        });
-
-        modal.render();
-        modal.open();
-      }
-    }
-  ]
-};
-
-/**
- * Навигационная панель
- * @param {HTMLElement} parent - родительский элемент
- * @param {Object} config - конфигурация
- * @param {string} config.id - уникальный id элемента
- * @param {string} config.color - цвет содержимого кнопки
- * @param {boolean} config.disabled - флаг, что кнопка disabled
- * @param {string} config.form - форма, которая отправляется при нажатии кнопки.
- * Кнопка автоматически становится типа submit
- * @param {string} config.srcIcon - путь до иконки, которая будет внутри кнопки
- * @param {string} config.text - текст кнопки
- * @param {string} config.textColor - класс текста кнопки
- * @param {boolean} config.autofocus - автофокус на кнопку
- * @returns {Class}
- * @example
- * const nav = new Navbar(parent);
- */
 class Navbar {
   #parent;
 
@@ -130,34 +53,76 @@ class Navbar {
     this.#parent = parent;
 
     this.bindedHandleStoreChange = this.handleStoreChange.bind(this);
+    this.bindedHandleNotificationStoreChange = this.handleNotificationStoreChange.bind(this);
+
     NavbarStore.subscribe(this.bindedHandleStoreChange);
+    NotificationStore.subscribe(this.bindedHandleNotificationStoreChange);
   }
 
   handleStoreChange(state) {
     let userData = UserPageStore.getState().userData;
+
+    if (!this.user || !this.LoginButton) {
+      return;
+    }
+
     if (!userData?.username) {
-      this.user.parent().classList.remove('login__user');
+      if (this.user.parent) {
+        this.user.parent().classList.remove('login__user');
+      }
       this.user.destroy();
-      // this.LogoutButton.destroy();
+      this.notificationIcon?.destroy();
       this.LoginButton.render();
       this.LoginButton.self().classList.add('navbar__button');
-      this.LoginButton.parent().classList.add('logout__user');
+      if (this.LoginButton.parent) {
+        this.LoginButton.parent().classList.add('logout__user');
+      }
     } else {
-      this.LoginButton.parent().classList.remove('logout__user');
+      if (this.LoginButton.parent) {
+        this.LoginButton.parent().classList.remove('logout__user');
+      }
       this.LoginButton.destroy();
-      this.searchIcon.render();
+      this.searchIcon?.render();
+      this.notificationIcon?.render();
       this.user.changeConfig({
         text: userData.username,
         srcIcon: UserPageStore.getState().userData?.avatar || userSvg
       });
       this.user.render();
-      this.user.parent().classList.add('login__user');
-      this.tabs.render();
-      // this.LogoutButton.render();
-      // this.LogoutButton.self().classList.add('navbar__button');
+      if (this.user.parent) {
+        this.user.parent().classList.add('login__user');
+      }
+      this.tabs?.render();
+      this.updateNotificationBadge();
     }
-    if (state.needTabID) {
+    if (state.needTabID && this.tabs) {
       this.tabs.activateTabByIdDirect(state.needTabID);
+    }
+  }
+
+  handleNotificationStoreChange(notificationState) {
+    if (this.notificationDropdown) {
+      this.notificationDropdown.updateNotifications(notificationState.notifications);
+    }
+
+    this.updateNotificationBadge();
+  }
+
+  updateNotificationBadge() {
+    const wrapper = this.notificationIcon?.self()?.parentElement;
+    if (!wrapper) return;
+
+    const existingBadge = wrapper.querySelector('.notification-badge');
+    if (existingBadge) {
+      existingBadge.remove();
+    }
+
+    const count = NotificationStore.getState().notifications.length;
+
+    if (count > 0) {
+      const badge = document.createElement('span');
+      badge.className = 'notification-badge';
+      wrapper.appendChild(badge);
     }
   }
 
@@ -167,11 +132,16 @@ class Navbar {
 
   destroy() {
     NavbarStore.unsubscribe(this.bindedHandleStoreChange);
-    this.logo.destroy();
-    this.user.destroy();
+    NotificationStore.unsubscribe(this.bindedHandleNotificationStoreChange);
+
+    this.logo?.destroy();
+    this.user?.destroy();
     this.LoginButton?.destroy();
-    this.userDropdown.destroy();
-    // this.LogoutButton?.destroy();
+    this.userDropdown?.destroy();
+    this.notificationDropdown?.destroy();
+    this.searchIcon?.destroy();
+    this.notificationIcon?.destroy();
+    this.menu?.destroy();
 
     this.self()?.remove();
   }
@@ -184,9 +154,6 @@ class Navbar {
     if (!this.#parent) {
       return;
     }
-
-    this.userDropdown = new Dropdown(dropdownConfig);
-    this.userDropdown.render();
 
     const navbar = document.createElement('navbar');
     navbar.classList.add('navbar');
@@ -205,6 +172,125 @@ class Navbar {
     const navbarTabs = document.createElement('div');
     navbarTabs.classList.add('navbar__tabs');
     leftContainer.appendChild(navbarTabs);
+
+    const navbarUser = document.createElement('div');
+    navbarUser.classList.add('navbar__user', 'flex-box-row');
+    this.#elements().appendChild(navbarUser);
+
+    const navbarMenu = document.createElement('div');
+    navbarMenu.classList.add('navbar__menu');
+    this.#elements().appendChild(navbarMenu);
+
+    this.menu = new Icon(navbarMenu, {
+      id: 'menuIcon',
+      srcIcon: menuSvg,
+      size: 'medium'
+    });
+    this.menu.setActions({
+      click: async (e) => {
+        e.stopPropagation();
+        this.notificationDropdown.close();
+        this.userDropdown.toggle(e.currentTarget);
+      }
+    });
+    this.menu.render();
+
+    const dropdownConfig = {
+      id: 'userDropdown',
+      parent: document.getElementById('root'),
+      items: [
+        {
+          id: 'profile',
+          label: 'Профиль',
+          visible: true,
+          onClick: () => {
+            router.go('/profile', UserPageStore.getState().userData);
+          }
+        },
+        {
+          id: 'notifications',
+          label: 'Уведомления',
+          visible: false,
+          onClick: () => {
+            setTimeout(() => {
+              const notificationIcon = this.notificationIcon?.self();
+              if (notificationIcon && this.notificationDropdown) {
+                this.notificationDropdown.toggle(this.menu.self());
+              }
+            }, 1);
+          }
+        },
+        {
+          id: 'favorites',
+          label: 'Избранное',
+          visible: false,
+          onClick: () => {
+            router.go('/profile');
+            favoriteToggle();
+          }
+        },
+        {
+          id: 'genres',
+          label: 'Жанры',
+          visible: false,
+          onClick: () => {
+            router.go('/genres');
+            genresToggle();
+          }
+        },
+        {
+          id: 'search',
+          label: 'Поиск',
+          visible: false,
+          onClick: () => {
+            router.go('/search');
+            searchToggle();
+          }
+        },
+        {
+          id: 'logout',
+          label: 'Выход',
+          visible: true,
+          onClick: () => {
+            const modal = new UniversalModal(document.body, {
+              title: 'Подтверждение действия',
+              message: 'Вы уверены, что хотите выйти?',
+              confirmText: 'Да',
+              cancelText: 'Нет',
+              onConfirm: () => {
+                logoutUser();
+                router.go('/');
+              },
+              addClasses: ['login_modal']
+            });
+
+            modal.render();
+            modal.open();
+          }
+        }
+      ]
+    };
+
+    this.userDropdown = new Dropdown(dropdownConfig);
+    this.userDropdown.render();
+
+    const notificationState = NotificationStore.getState();
+    const notificationConfig = {
+      id: 'notificationDropdown',
+      parent: document.getElementById('root'),
+      title: 'Уведомления',
+      notifications: notificationState.notifications,
+      onNotificationClick: (id) => {
+        router.go('/movie/' + NotificationStore.getUrlIDbyID(id));
+      },
+      onNotificationRemove: (id) => {
+        removeNotification(id);
+      }
+    };
+
+    this.notificationDropdown = new NotificationDropdown(notificationConfig);
+    this.notificationDropdown.render();
+
     this.tabs = new Tabs(navbarTabs, TABS_DATA.tabsData);
 
     this.searchIcon = new Icon(leftContainer, {
@@ -225,34 +311,22 @@ class Navbar {
     });
 
     this.logo.setActions({ click: () => router.go('/') });
-
     this.logo.render();
 
-    const navbarUser = document.createElement('div');
-    navbarUser.classList.add('navbar__user', 'flex-box-row');
-    this.#elements().appendChild(navbarUser);
-
-    const navbarMenu = document.createElement('div');
-    navbarMenu.classList.add('navbar__menu');
-    this.#elements().appendChild(navbarMenu);
-
-    this.menu = new Icon(navbarMenu, {
-      id: 'menuIcon',
-      srcIcon: menuSvg,
-      size: 'medium'
+    const notificationWrapper = document.createElement('div');
+    notificationWrapper.classList.add('icon-wrapper');
+    navbarUser.appendChild(notificationWrapper);
+    this.notificationIcon = new Icon(notificationWrapper, {
+      id: 'notificationIcon',
+      srcIcon: notificationSvg,
+      size: 'small'
     });
-    this.menu.setActions({
-      click: async (e) => {
+    this.notificationIcon.setActions({
+      click: (e) => {
         e.stopPropagation();
-        this.userDropdown.toggle(e.currentTarget);
+        this.notificationDropdown.toggle(e.currentTarget);
       }
     });
-    this.menu.render();
-
-    // const logout = async () => {
-    //   logoutUser();
-    //   router.go('/');
-    // };
 
     this.LoginButtonAction = {
       click: () => {
@@ -266,33 +340,8 @@ class Navbar {
       actions: this.LoginButtonAction
     });
 
-    // this.LogoutButtonAction = {
-    //   click: async () => {
-    //     const modal = new UniversalModal(this.#parent, {
-    //       title: 'Подтверждение действия',
-    //       message: 'Вы уверены, что хотите выйти?',
-    //       confirmText: 'Да',
-    //       cancelText: 'Нет',
-    //       onConfirm: () => {
-    //         logout();
-    //       },
-    //       addClasses: ['login_modal']
-    //     });
-
-    //     modal.render();
-    //     modal.open();
-    //   }
-    // };
-
-    // this.LogoutButton = new Button(navbarUser, {
-    //   id: 'logoutbtn',
-    //   text: 'Выйти',
-    //   actions: this.LogoutButtonAction
-    // });
-
     this.user = new Icon(navbarUser, {
       id: 'user',
-      // srcIcon: userSvg,
       srcIcon: UserPageStore.getState().userData?.avatar || userSvg,
       size: 'large',
       text: UserPageStore.getState().userData?.username,
@@ -305,34 +354,30 @@ class Navbar {
       click: async (e) => {
         e.stopPropagation();
         this.userDropdown.toggle(e.currentTarget);
-        // this.userDropdown.toggle(this.user.self());
       }
     });
 
     if (!UserPageStore.getState().userData?.username) {
       this.LoginButton.render();
       this.LoginButton.self().classList.add('navbar__button');
-      this.LoginButton.parent().classList.add('logout__user');
+      if (this.LoginButton.parent) {
+        this.LoginButton.parent().classList.add('logout__user');
+      }
+      this.tabs.render();
+      this.tabs.hideAllTabs();
+      this.tabs.showTabById('genres');
+      this.tabs.showTabById('search');
+      this.searchIcon.render();
     } else {
       this.searchIcon.render();
+      this.notificationIcon.render();
       this.user.render();
-      this.user.parent().classList.add('login__user');
+      if (this.user.parent) {
+        this.user.parent().classList.add('login__user');
+      }
       this.tabs.render();
-      // this.LogoutButton.render();
-      // this.LogoutButton.self().classList.add('navbar__button');
+      this.updateNotificationBadge();
     }
-
-    // window.addEventListener('resize', () => {
-    //   if (window.innerWidth < 950) {
-    //     this.userDropdown.updateItemVisibility('favorites', true);
-    //     this.userDropdown.updateItemVisibility('genres', true);
-    //     this.userDropdown.updateItemVisibility('search', true);
-    //   } else {
-    //     this.userDropdown.updateItemVisibility('favorites', false);
-    //     this.userDropdown.updateItemVisibility('genres', false);
-    //     this.userDropdown.updateItemVisibility('search', false);
-    //   }
-    // });
   }
 }
 

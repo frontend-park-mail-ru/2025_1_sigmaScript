@@ -10,7 +10,8 @@ import {
   GenreActionTypes,
   SearchActionTypes,
   TabsActionTypes,
-  GenresActionTypes
+  GenresActionTypes,
+  NotificationActionTypes
 } from 'flux/ActionTypes';
 import { UpdateLoginData, UpdatePasswordData, UpdateUserData, UserData } from 'types/UserPage.types';
 import { MovieData, NewReviewDataJSON, Review, Reviews } from 'types/movie_page.types';
@@ -22,6 +23,7 @@ import { PopupType } from 'types/Popup.types';
 import { MovieDataJSON } from 'types/main_page.types';
 import { PersonCardInfo } from 'types/Person.types';
 import { SearchPageState } from 'types/SearchPage.types';
+import { NotificationItem } from 'types/NotiDropdown.types';
 
 export function loginSubmit(username: string, password: string) {
   dispatcher.dispatch({
@@ -369,5 +371,53 @@ export function searchToggle() {
   dispatcher.dispatch({
     type: TabsActionTypes.SEARCH_TOGGLE,
     payload: 'search'
+  });
+}
+
+// WebSocket Actions
+export function websocketConnect() {
+  dispatcher.dispatch({
+    type: NotificationActionTypes.WEBSOCKET_CONNECT
+  });
+}
+
+export function websocketDisconnect() {
+  dispatcher.dispatch({
+    type: NotificationActionTypes.WEBSOCKET_DISCONNECT
+  });
+}
+
+export function websocketError(error: any) {
+  dispatcher.dispatch({
+    type: NotificationActionTypes.WEBSOCKET_ERROR,
+    payload: error
+  });
+}
+
+// Notification Actions
+export function notificationReceived(notification: NotificationItem) {
+  dispatcher.dispatch({
+    type: NotificationActionTypes.NOTIFICATION_RECEIVED,
+    payload: notification
+  });
+}
+
+export function addNotification(notification: NotificationItem) {
+  dispatcher.dispatch({
+    type: NotificationActionTypes.NOTIFICATION_ADD,
+    payload: notification
+  });
+}
+
+export function removeNotification(notificationId: string) {
+  dispatcher.dispatch({
+    type: NotificationActionTypes.NOTIFICATION_REMOVE,
+    payload: notificationId
+  });
+}
+
+export function clearNotifications() {
+  dispatcher.dispatch({
+    type: NotificationActionTypes.NOTIFICATIONS_CLEAR
   });
 }

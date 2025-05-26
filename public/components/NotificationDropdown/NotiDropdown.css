@@ -1,0 +1,312 @@
+.notification-dropdown-container {
+  position: relative;
+  display: inline-block;
+}
+
+.notification-dropdown-menu {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: stretch;
+  padding: 1rem 0rem 0rem;
+  position: absolute;
+  width: 37.2rem;
+  min-height: 12.9rem;
+  max-height: 35rem;
+  background: #1e2023;
+  border: 1px solid rgba(148, 161, 178, 0.5);
+  border-radius: 1rem;
+  z-index: 100;
+  display: none;
+  overflow: hidden;
+}
+
+.notification-dropdown-menu.active {
+  display: flex;
+}
+
+.notification-dropdown-header {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 1rem 2rem;
+  width: 100%;
+  height: 4.8rem;
+  border-bottom: 1px solid rgba(148, 161, 178, 0.5);
+  flex: none;
+  order: 0;
+  align-self: stretch;
+  flex-grow: 0;
+}
+
+.notification-dropdown-title {
+  width: 100%;
+  height: 2.8rem;
+  font-family: 'Helvetica', sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 2.4rem;
+  line-height: 2.8rem;
+  display: flex;
+  align-items: center;
+  color: #fffffe;
+  flex: none;
+  order: 0;
+  align-self: stretch;
+  flex-grow: 0;
+}
+
+.notification-dropdown-list {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  padding: 1.5rem 2rem 1rem;
+  width: 100%;
+  flex: 1;
+  order: 1;
+  align-self: stretch;
+  max-height: 25rem;
+  overflow-y: auto;
+}
+
+.notification-dropdown-list:has(.notification-dropdown-empty) {
+  padding-bottom: 0rem;
+}
+
+.notification-item {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 0.5rem 0rem 1.5rem;
+  gap: 1rem;
+  width: 100%;
+  border-bottom: 0.5px solid rgba(148, 161, 178, 0.5);
+  flex: none;
+  align-self: stretch;
+  flex-grow: 0;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.notification-item:hover:not(:has(.notification-item-close:hover)) {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.notification-item:last-child {
+  border-bottom: none;
+  padding-bottom: 0.5rem;
+}
+
+.notification-item:not(:first-child) {
+  padding-top: 1.5rem;
+}
+
+.notification-item-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  flex: 1;
+  min-width: 0;
+}
+
+.notification-item-title {
+  width: 100%;
+  font-family: 'Helvetica', sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 1.8rem;
+  line-height: 2.1rem;
+  display: flex;
+  align-items: center;
+  color: #fffffe;
+  flex: none;
+  order: 0;
+  align-self: stretch;
+  flex-grow: 0;
+}
+
+.notification-item-text {
+  width: 100%;
+  font-family: 'Helvetica', sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 1.8rem;
+  line-height: 2.1rem;
+  display: flex;
+  align-items: center;
+  color: #fffffe;
+  flex: none;
+  order: 1;
+  align-self: stretch;
+  flex-grow: 0;
+}
+
+.notification-item-close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 3rem;
+  background: transparent;
+  border: none;
+  border-radius: 0.4rem;
+  color: #979aa3;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+  margin-top: 0.2rem;
+}
+
+.notification-item-close:hover {
+  background-color: transparent;
+  color: #ffffff;
+}
+
+.notification-item-close:active {
+  transform: scale(0.95);
+}
+
+.notification-item-close svg {
+  width: 2rem;
+  height: 2rem;
+}
+
+.notification-dropdown-empty {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  padding: 0.5rem 0rem;
+  width: 100%;
+  flex: none;
+  order: 0;
+  align-self: stretch;
+  flex-grow: 0;
+}
+
+.notification-empty-icon {
+  display: none;
+}
+
+.notification-empty-text {
+  font-family: 'Helvetica', sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 1.8rem;
+  line-height: 2.1rem;
+  color: #979aa3;
+}
+
+.notification-dropdown-list::-webkit-scrollbar {
+  width: 0.6rem;
+}
+
+.notification-dropdown-list::-webkit-scrollbar-track {
+  background: rgba(151, 154, 163, 0.1);
+  border-radius: 0.3rem;
+}
+
+.notification-dropdown-list::-webkit-scrollbar-thumb {
+  background: rgba(151, 154, 163, 0.3);
+  border-radius: 0.3rem;
+}
+
+.notification-dropdown-list::-webkit-scrollbar-thumb:hover {
+  background: rgba(151, 154, 163, 0.5);
+}
+
+@media (max-width: 94.9rem) {
+  .notification-dropdown-menu {
+    width: 32rem;
+    max-height: 30rem;
+  }
+
+  .notification-dropdown-list {
+    max-height: 20rem;
+  }
+}
+
+@media (max-width: 76.8rem) {
+  .notification-dropdown-menu {
+    width: 28rem;
+  }
+
+  .notification-dropdown-title {
+    font-size: 2.2rem;
+    line-height: 2.6rem;
+  }
+
+  .notification-item-title,
+  .notification-item-text,
+  .notification-empty-text {
+    font-size: 1.7rem;
+    line-height: 2rem;
+  }
+}
+
+@media (max-width: 57.6rem) {
+  .notification-dropdown-menu {
+    width: 26rem;
+    max-height: 28rem;
+  }
+
+  .notification-dropdown-list {
+    max-height: 18rem;
+  }
+}
+
+@media (max-width: 49.998rem) {
+  .notification-dropdown-menu {
+    width: calc(100vw - 4rem);
+    max-width: 32rem;
+    max-height: 25rem;
+  }
+
+  .notification-dropdown-list {
+    max-height: 15rem;
+  }
+
+  .notification-dropdown-title {
+    font-size: 2rem;
+    line-height: 2.4rem;
+  }
+
+  .notification-item-title,
+  .notification-item-text,
+  .notification-empty-text {
+    font-size: 1.6rem;
+    line-height: 1.9rem;
+  }
+}
+
+@media (max-width: 36rem) {
+  .notification-dropdown-menu {
+    width: calc(100vw - 3rem);
+    max-width: 28rem;
+  }
+
+  .notification-dropdown-header {
+    padding: 1rem 1.5rem;
+  }
+
+  .notification-dropdown-list {
+    padding: 1.5rem 1.5rem 1rem;
+  }
+
+  .notification-dropdown-title {
+    font-size: 1.8rem;
+    line-height: 2.2rem;
+  }
+
+  .notification-item-title,
+  .notification-item-text,
+  .notification-empty-text {
+    font-size: 1.5rem;
+    line-height: 1.8rem;
+  }
+}

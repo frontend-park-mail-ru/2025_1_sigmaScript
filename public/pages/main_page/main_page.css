@@ -120,6 +120,17 @@
   opacity: 1;
 }
 
+.card__title {
+  padding-top: 5px;
+  font-weight: bold;
+  font-size: 1.8rem;
+}
+
+.card {
+  border-radius: 0;
+}
+
+
 @media only screen and (max-width: 1024px) {
   .compilation__title {
     font-size: 2.8rem;

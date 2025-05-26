@@ -21,6 +21,7 @@ import { MovieCollection, MovieDataJSON } from 'types/main_page.types';
 import { PersonCardInfo, PersonCollection, PersonJSONCollection } from 'types/Person.types';
 import { Review } from 'types/movie_page.types';
 import { serializeTimeZToHumanTime } from 'modules/time_serialiser';
+import NotificationStore from './NotificationStore';
 
 class UserPageStore {
   private state: UserPageState;
@@ -56,6 +57,7 @@ class UserPageStore {
         break;
       case UserPageTypes.UPDATE_USER_PAGE:
         this.state.userData = action.payload as UserData;
+        NotificationStore.connect();
         this.emitChange();
         break;
       case UserPageTypes.NO_SESSION:

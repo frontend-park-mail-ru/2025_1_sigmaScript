@@ -103,6 +103,14 @@
   gap: 2rem;
 }
 
+.person-page .actor-card {
+  max-width: 300px;
+}
+
+.person-page .movie-card {
+  max-width: 130px;
+}
+
 @media (max-width: 767.98px) {
   .person-page__content {
     flex-direction: column;

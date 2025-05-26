@@ -46,77 +46,6 @@ export const TABS_DATA = {
   ]
 };
 
-const dropdownConfig = {
-  id: 'userDropdown',
-  parent: document.getElementById('root'),
-  items: [
-    {
-      id: 'profile',
-      label: 'Профиль',
-      visible: true,
-      onClick: () => {
-        router.go('/profile', UserPageStore.getState().userData);
-      }
-    },
-    {
-      id: 'favorites',
-      label: 'Избранное',
-      visible: false,
-      onClick: () => {
-        router.go('/profile');
-        favoriteToggle();
-      }
-    },
-    {
-      id: 'genres',
-      label: 'Жанры',
-      visible: false,
-      onClick: () => {
-        router.go('/genres');
-        genresToggle();
-      }
-    },
-    {
-      id: 'search',
-      label: 'Поиск',
-      visible: false,
-      onClick: () => {
-        router.go('/search');
-        searchToggle();
-      }
-    },
-    {
-      id: 'logout',
-      label: 'Выход',
-      visible: true,
-      onClick: () => {
-        const modal = new UniversalModal(document.body, {
-          title: 'Подтверждение действия',
-          message: 'Вы уверены, что хотите выйти?',
-          confirmText: 'Да',
-          cancelText: 'Нет',
-          onConfirm: () => {
-            logoutUser();
-            router.go('/');
-          },
-          addClasses: ['login_modal']
-        });
-
-        modal.render();
-        modal.open();
-      }
-    },
-    {
-      id: 'login',
-      label: 'Войти',
-      visible: false,
-      onClick: () => {
-        router.go('/auth');
-      }
-    }
-  ]
-};
-
 class Navbar {
   #parent;
 
@@ -164,6 +93,7 @@ class Navbar {
         this.user.parent().classList.add('login__user');
       }
       this.tabs?.render();
+      this.updateNotificationBadge();
     }
     if (state.needTabID && this.tabs) {
       this.tabs.activateTabByIdDirect(state.needTabID);
@@ -175,10 +105,10 @@ class Navbar {
       this.notificationDropdown.updateNotifications(notificationState.notifications);
     }
 
-    this.updateNotificationBadge(notificationState.notifications.length);
+    this.updateNotificationBadge();
   }
 
-  updateNotificationBadge(count) {
+  updateNotificationBadge() {
     const wrapper = this.notificationIcon?.self()?.parentElement;
     if (!wrapper) return;
 
@@ -187,10 +117,12 @@ class Navbar {
       existingBadge.remove();
     }
 
+    const count = NotificationStore.getState().notifications.length;
+
     if (count > 0) {
       const badge = document.createElement('span');
       badge.className = 'notification-badge';
-      wrapper.appendChild(badge); 
+      wrapper.appendChild(badge);
     }
   }
 
@@ -249,6 +181,96 @@ class Navbar {
     navbarMenu.classList.add('navbar__menu');
     this.#elements().appendChild(navbarMenu);
 
+    this.menu = new Icon(navbarMenu, {
+      id: 'menuIcon',
+      srcIcon: menuSvg,
+      size: 'medium'
+    });
+    this.menu.setActions({
+      click: async (e) => {
+        e.stopPropagation();
+        this.notificationDropdown.close();
+        this.userDropdown.toggle(e.currentTarget);
+      }
+    });
+    this.menu.render();
+
+    const dropdownConfig = {
+      id: 'userDropdown',
+      parent: document.getElementById('root'),
+      items: [
+        {
+          id: 'profile',
+          label: 'Профиль',
+          visible: true,
+          onClick: () => {
+            router.go('/profile', UserPageStore.getState().userData);
+          }
+        },
+        {
+          id: 'notifications',
+          label: 'Уведомления',
+          visible: false,
+          onClick: () => {
+            setTimeout(() => {
+              const notificationIcon = this.notificationIcon?.self();
+              if (notificationIcon && this.notificationDropdown) {
+                this.notificationDropdown.toggle(this.menu.self());
+              }
+            }, 1);
+          }
+        },
+        {
+          id: 'favorites',
+          label: 'Избранное',
+          visible: false,
+          onClick: () => {
+            router.go('/profile');
+            favoriteToggle();
+          }
+        },
+        {
+          id: 'genres',
+          label: 'Жанры',
+          visible: false,
+          onClick: () => {
+            router.go('/genres');
+            genresToggle();
+          }
+        },
+        {
+          id: 'search',
+          label: 'Поиск',
+          visible: false,
+          onClick: () => {
+            router.go('/search');
+            searchToggle();
+          }
+        },
+        {
+          id: 'logout',
+          label: 'Выход',
+          visible: true,
+          onClick: () => {
+            const modal = new UniversalModal(document.body, {
+              title: 'Подтверждение действия',
+              message: 'Вы уверены, что хотите выйти?',
+              confirmText: 'Да',
+              cancelText: 'Нет',
+              onConfirm: () => {
+                logoutUser();
+                router.go('/');
+              },
+              addClasses: ['login_modal']
+            });
+
+            modal.render();
+            modal.open();
+          }
+        }
+      ]
+    };
+
     this.userDropdown = new Dropdown(dropdownConfig);
     this.userDropdown.render();
 
@@ -259,10 +281,9 @@ class Navbar {
       title: 'Уведомления',
       notifications: notificationState.notifications,
       onNotificationClick: (id) => {
-        console.log('Клик по уведомлению:', id);
+        router.go('/movie/' + NotificationStore.getUrlIDbyID(id));
       },
       onNotificationRemove: (id) => {
-        console.log('Удаление уведомления:', id);
         removeNotification(id);
       }
     };
@@ -307,19 +328,6 @@ class Navbar {
       }
     });
 
-    this.menu = new Icon(navbarMenu, {
-      id: 'menuIcon',
-      srcIcon: menuSvg,
-      size: 'medium'
-    });
-    this.menu.setActions({
-      click: async (e) => {
-        e.stopPropagation();
-        this.userDropdown.toggle(e.currentTarget);
-      }
-    });
-    this.menu.render();
-
     this.LoginButtonAction = {
       click: () => {
         router.go('/auth');
@@ -349,8 +357,6 @@ class Navbar {
       }
     });
 
-    this.updateNotificationBadge(notificationState.notifications.length);
-
     if (!UserPageStore.getState().userData?.username) {
       this.LoginButton.render();
       this.LoginButton.self().classList.add('navbar__button');
@@ -370,6 +376,7 @@ class Navbar {
         this.user.parent().classList.add('login__user');
       }
       this.tabs.render();
+      this.updateNotificationBadge();
     }
   }
 }

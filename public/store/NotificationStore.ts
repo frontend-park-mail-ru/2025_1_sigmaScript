@@ -1,20 +1,14 @@
 import { dispatcher } from 'flux/Dispatcher';
 import { Action } from 'types/Dispatcher.types';
 import { NotificationActionTypes, UserPageTypes } from 'flux/ActionTypes';
-import { NotificationItem } from 'types/Notification.types';
+import { NotificationItem } from 'types/NotiDropdown.types';
 import { notificationReceived, websocketConnect, websocketDisconnect, websocketError } from 'flux/Actions';
 import { PopupActions } from 'flux/Actions';
+import WebSocketService from 'modules/WebSocketService';
+import { HOST } from 'public/consts';
+import { formatTimestamp } from 'modules/time_serialiser';
 
-const MOCK_NOTIFICATIONS = [
-  { title: 'Премьера фильма', text: 'Дэдпул и Росомаха - уже в кинотеатрах!' },
-  { title: 'Новый сезон', text: 'Ходячие мертвецы - 3 серия уже доступна' },
-  { title: 'Рекомендация', text: 'Посмотрите "Человек-паук: Через вселенные"' },
-  { title: 'Скоро в кино', text: 'Аватар 3 - премьера 20 декабря 2024' },
-  { title: 'Топ недели', text: 'Oppenheimer стал самым популярным фильмом' },
-  { title: 'Новинка', text: 'Добавлен новый фильм "Дюна: Часть вторая"' },
-  { title: 'Акция', text: 'Скидка 20% на премиум подписку' },
-  { title: 'Уведомление', text: 'Ваш любимый актер снялся в новом фильме' }
-];
+const WS_URL = `ws://${HOST}:8080/ws`;
 
 type NotificationState = {
   notifications: NotificationItem[];
@@ -27,9 +21,8 @@ type Listener = (state: NotificationState) => void;
 class NotificationStore {
   private state: NotificationState;
   private listeners: Array<Listener>;
-
-  private mockInterval: number | null = null;
-  private mockIndex = 0;
+  private webSocketService: WebSocketService;
+  private count: number;
 
   constructor() {
     this.state = {
@@ -38,44 +31,47 @@ class NotificationStore {
       error: null
     };
     this.listeners = [];
+    this.count = 0;
+    this.webSocketService = new WebSocketService(WS_URL);
+
+    this.setupWebSocketListeners();
 
     dispatcher.register(this.handleActions.bind(this));
   }
 
-  private startMockNotifications(): void {
-    if (this.mockInterval) return;
+  private setupWebSocketListeners(): void {
+    this.webSocketService.on('connect', () => {
+      websocketConnect();
+    });
 
-    console.log('🔔 Starting mock notifications...');
+    this.webSocketService.on('disconnect', () => {
+      websocketDisconnect();
+    });
 
-    this.mockInterval = window.setInterval(() => {
-      const mockData = MOCK_NOTIFICATIONS[this.mockIndex % MOCK_NOTIFICATIONS.length];
+    this.webSocketService.on('error', (error) => {
+      websocketError(error?.message || 'WebSocket error');
+    });
+
+    this.webSocketService.on('notification', (notificationData) => {
       const notification: NotificationItem = {
-        id: `mock_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`,
-        title: mockData.title,
-        text: mockData.text
+        id: this.count,
+        urlID: notificationData.id || Date.now().toString(),
+        title: notificationData.title || 'Новое уведомление',
+        text: notificationData.text || notificationData.message || '',
+        timestamp: notificationData.date
       };
-
-      console.log('📢 Mock notification:', notification);
+      ++this.count;
       notificationReceived(notification);
-      this.mockIndex++;
-    }, 60000);
-
-    setTimeout(() => {
-      const firstNotification: NotificationItem = {
-        id: `first_${Date.now()}`,
-        title: 'Добро пожаловать!',
-        text: 'Теперь вы будете получать уведомления'
-      };
-      notificationReceived(firstNotification);
-    }, 3000);
+    });
   }
 
-  private stopMockNotifications(): void {
-    if (this.mockInterval) {
-      clearInterval(this.mockInterval);
-      this.mockInterval = null;
-      console.log('❌ Mock notifications stopped');
+  getUrlIDbyID(id: string): number | null | undefined {
+    for (const elem of this.state.notifications) {
+      if (elem.id == id) {
+        return elem.urlID;
+      }
     }
+    return null;
   }
 
   private async handleActions(action: Action): Promise<void> {
@@ -102,10 +98,14 @@ class NotificationStore {
         const newNotification = action.payload as NotificationItem;
         this.state.notifications.unshift(newNotification);
 
+        if (this.state.notifications.length > 100) {
+          this.state.notifications = this.state.notifications.slice(0, 100);
+        }
+
         PopupActions.showPopup({
           title: newNotification.title,
           movieName: newNotification.text,
-          releaseDate: '12 июня 2025 года',
+          releaseDate: formatTimestamp(newNotification.timestamp),
           duration: 2500,
           isNotification: true
         });
@@ -115,7 +115,9 @@ class NotificationStore {
 
       case NotificationActionTypes.NOTIFICATION_REMOVE:
         const notificationId = action.payload as string;
-        this.state.notifications = this.state.notifications.filter((n) => n.id !== notificationId);
+        this.state.notifications = this.state.notifications.filter((n) => {
+          return n.id != notificationId;
+        });
         this.emitChange();
         break;
 
@@ -137,16 +139,25 @@ class NotificationStore {
     }
   }
 
+  /**
+   * Подключение к WebSocket
+   */
   connect(): void {
-    console.log('🔌 Connecting to notifications...');
-    this.startMockNotifications();
-    websocketConnect();
+    this.webSocketService.connect();
   }
 
+  /**
+   * Отключение от WebSocket
+   */
   disconnect(): void {
-    console.log('🔌 Disconnecting from notifications...');
-    this.stopMockNotifications();
-    websocketDisconnect();
+    this.webSocketService.disconnect();
+  }
+
+  /**
+   * Отправка сообщения через WebSocket (если нужно)
+   */
+  send(message: any): void {
+    this.webSocketService.send(message);
   }
 
   subscribe(listener: Listener): void {

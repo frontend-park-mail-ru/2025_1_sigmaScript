@@ -1,4 +1,4 @@
-import { NotificationDropdownConfig, NotificationItem } from 'types/Notification.types';
+import { NotificationDropdownConfig, NotificationItem } from 'types/NotiDropdown.types';
 import template from './NotiDropdown.hbs';
 
 class NotificationDropdown {
@@ -8,9 +8,9 @@ class NotificationDropdown {
   private parent: HTMLElement;
   public container: HTMLElement | null = null;
   private scrollHandler: (e: Event) => void;
+  private documentClickHandler: (e: MouseEvent) => void;
   private onNotificationClick?: (id: string) => void;
   private onNotificationRemove?: (id: string) => void;
-  private documentClickHandler?: (e: MouseEvent) => void;
 
   constructor(config: NotificationDropdownConfig) {
     this.id = config.id;
@@ -32,8 +32,10 @@ class NotificationDropdown {
       const tgt = e.target as HTMLElement;
       const menu = this.self();
       if (!menu) return;
-
-      if (menu.contains(tgt) || tgt.closest('.notification-item-close')) {
+      if (menu.contains(tgt) || tgt.closest('.notification-item-close')) return;
+      if (tgt.closest('.navbar__menu')) {
+        menu.classList.remove('active');
+        window.removeEventListener('scroll', this.scrollHandler);
         return;
       }
       menu.classList.remove('active');
@@ -41,7 +43,7 @@ class NotificationDropdown {
     };
   }
 
-  render(): void {
+  public render(): void {
     this.container = document.createElement('div');
     this.container.classList.add('notification-dropdown-container');
     this.container.innerHTML = template({
@@ -53,8 +55,8 @@ class NotificationDropdown {
     this.bindEvents();
   }
 
-  self(): HTMLElement | null {
-    return this.container?.querySelector(`#${this.id}_menu`) || null;
+  public self(): HTMLElement | null {
+    return this.container?.querySelector<HTMLElement>(`#${this.id}_menu`) || null;
   }
 
   private bindEvents(): void {
@@ -62,147 +64,77 @@ class NotificationDropdown {
     const menu = this.self();
     if (!menu) return;
 
-    const newMenu = menu.cloneNode(true);
-    if (menu.parentNode) {
-      menu.parentNode.replaceChild(newMenu, menu);
-    }
-
+    const newMenu = menu.cloneNode(true) as HTMLElement;
+    menu.parentNode!.replaceChild(newMenu, menu);
     newMenu.addEventListener('click', (e: Event) => {
-      const target = e.target as HTMLElement;
-
-      const closeButton = target.closest('.notification-item-close');
-      if (closeButton) {
-        e.stopPropagation(); 
-        console.log('Close button clicked');
-
-        const id = closeButton.getAttribute('data-id');
-        if (id) {
-          console.log('Removing notification with id:', id);
-          this.notifications = this.notifications.filter((n) => n.id !== id);
-
-          const currentMenu = this.self();
-          const isActive = currentMenu?.classList.contains('active');
-
-          this.container!.innerHTML = template({
-            id: this.id,
-            title: this.title,
-            notifications: this.notifications
-          });
-
-          if (isActive) {
-            const newMenuAfterUpdate = this.self();
-            if (newMenuAfterUpdate) {
-              newMenuAfterUpdate.classList.add('active');
-            }
-          }
-
-          this.bindEvents();
-
-          this.onNotificationRemove?.(id);
-        }
+      const tgt = e.target as HTMLElement;
+      const closeBtn = tgt.closest('.notification-item-close');
+      if (closeBtn) {
+        e.stopPropagation();
+        const id = closeBtn.getAttribute('data-id')!;
+        this.notifications = this.notifications.filter((n) => n.id !== id);
+        const wasActive = this.self()?.classList.contains('active');
+        this.container!.innerHTML = template({ id: this.id, title: this.title, notifications: this.notifications });
+        if (wasActive) this.self()!.classList.add('active');
+        this.bindEvents();
+        this.onNotificationRemove?.(id);
         return;
       }
-
-      const item = target.closest('.notification-item');
+      const item = tgt.closest('.notification-item');
       if (item) {
-        const id = item.getAttribute('data-id');
-        if (id) {
-          this.onNotificationClick?.(id);
-        }
+        this.onNotificationClick?.(item.getAttribute('data-id')!);
       }
     });
 
-    if (this.documentClickHandler) {
-      document.removeEventListener('click', this.documentClickHandler, false);
-    }
-
-    document.addEventListener('click', this.documentClickHandler!, false);
+    document.removeEventListener('click', this.documentClickHandler);
+    document.addEventListener('click', this.documentClickHandler);
   }
 
-  public removeNotification(id: string): void {
-    this.notifications = this.notifications.filter((n) => n.id !== id);
-    this.updateNotifications(this.notifications);
-  }
-
-  public addNotification(notification: NotificationItem): void {
-    this.notifications.push(notification);
-    this.updateNotifications(this.notifications);
-  }
-
-  public toggle(parent: HTMLElement): void {
+  public toggle(anchor: HTMLElement): void {
     if (!this.container) return;
-    const rect = parent.getBoundingClientRect();
     const menu = this.self();
     if (!menu) return;
 
-    if (menu.classList.contains('active')) {
-      menu.classList.remove('active');
+    if (menu.classList.toggle('active')) {
+      window.addEventListener('scroll', this.scrollHandler);
+    } else {
       window.removeEventListener('scroll', this.scrollHandler);
       return;
     }
 
-    menu.style.visibility = 'hidden';
-    menu.classList.add('active');
-
-    const menuRect = menu.getBoundingClientRect();
-    const viewportWidth = window.innerWidth;
-    const scrollX = window.scrollX;
-    const scrollY = window.scrollY;
-    const margin = 20;
-    const mobileBreakpoint = 768;
-    let leftPosition: number;
-
-    if (viewportWidth <= mobileBreakpoint) {
-      leftPosition = rect.right + scrollX;
-      if (leftPosition + menuRect.width > viewportWidth - margin + scrollX) {
-        leftPosition = viewportWidth - menuRect.width - margin + scrollX;
-      }
-    } else {
-      leftPosition = rect.left - menuRect.width + scrollX;
-      if (leftPosition < margin + scrollX) {
-        leftPosition = margin + scrollX;
-      }
-    }
+    const rect = anchor.getBoundingClientRect();
+    const mw = menu.offsetWidth;
+    const vw = window.innerWidth;
+    const sx = window.scrollX,
+      sy = window.scrollY;
+    let left = vw < 768 ? Math.min(rect.right + sx, vw - mw - 20 + sx) : Math.max(20 + sx, rect.left - mw + sx);
 
     this.container.style.position = 'absolute';
-    this.container.style.top = `${rect.bottom + scrollY}px`;
-    this.container.style.left = `${leftPosition}px`;
-
-    menu.style.visibility = 'visible';
-    window.addEventListener('scroll', this.scrollHandler);
+    this.container.style.top = `${rect.bottom + sy}px`;
+    this.container.style.left = `${left}px`;
   }
 
-  public updateNotifications(notifications: NotificationItem[]): void {
-    this.notifications = notifications;
-    if (this.container) {
-      const currentMenu = this.self();
-      const isActive = currentMenu?.classList.contains('active');
-
-      this.container.innerHTML = template({
-        id: this.id,
-        title: this.title,
-        notifications: this.notifications
-      });
-
-      if (isActive) {
-        const newMenuAfterUpdate = this.self();
-        if (newMenuAfterUpdate) {
-          newMenuAfterUpdate.classList.add('active');
-        }
-      }
-
-      this.bindEvents();
-    }
+  public updateNotifications(list: NotificationItem[]): void {
+    this.notifications = list;
+    if (!this.container) return;
+    const wasActive = this.self()?.classList.contains('active');
+    this.container.innerHTML = template({ id: this.id, title: this.title, notifications: this.notifications });
+    if (wasActive) this.self()!.classList.add('active');
+    this.bindEvents();
   }
 
-  destroy(): void {
-    if (this.container?.parentElement) {
-      this.container.parentElement.removeChild(this.container);
-    }
-    if (this.documentClickHandler) {
-      document.removeEventListener('click', this.documentClickHandler, false);
-    }
+  public destroy(): void {
+    if (this.container?.parentElement) this.container.parentElement.removeChild(this.container);
+    document.removeEventListener('click', this.documentClickHandler);
     window.removeEventListener('scroll', this.scrollHandler);
+  }
+
+  public close(): void {
+    const menu = this.self();
+    if (menu?.classList.contains('active')) {
+      menu.classList.remove('active');
+      window.removeEventListener('scroll', this.scrollHandler);
+    }
   }
 }
 

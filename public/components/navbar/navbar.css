@@ -161,7 +161,7 @@
   .dropdown-menu [data-id='search'] {
     display: block;
   }
-  
+
   .dropdown-menu [data-id='login'] {
     display: block;
   }
@@ -177,6 +177,10 @@
   .navbar .login__user,
   .navbar .logout__user + .navbar__menu {
     display: none;
+  }
+
+  .dropdown-menu [data-id='notifications'] {
+    display: block;
   }
 
   .navbar__menu {

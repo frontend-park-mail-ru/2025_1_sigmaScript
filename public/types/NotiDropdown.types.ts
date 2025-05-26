@@ -1,5 +1,6 @@
 export type NotificationItem = {
   id: string;
+  urlID?: number;
   title: string;
   text: string;
   timestamp?: Date;

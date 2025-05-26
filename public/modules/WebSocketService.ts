@@ -1,4 +1,4 @@
-import { NotificationItem } from 'types/Notification.types';
+import { NotificationItem } from 'types/NotiDropdown.types';
 
 type WebSocketEventType = 'notification' | 'connect' | 'disconnect' | 'error';
 
@@ -55,7 +55,6 @@ class WebSocketService {
     if (!this.ws) return;
 
     this.ws.onopen = () => {
-      console.log('WebSocket connected');
       this.isConnecting = false;
       this.reconnectAttempts = 0;
       this.emit('connect', null);
@@ -64,7 +63,6 @@ class WebSocketService {
     this.ws.onmessage = (event) => {
       try {
         const message: WebSocketMessage = JSON.parse(event.data);
-        console.log('WebSocket message received:', message);
 
         switch (message.type) {
           case 'notification':
@@ -79,7 +77,6 @@ class WebSocketService {
     };
 
     this.ws.onclose = () => {
-      console.log('WebSocket disconnected');
       this.isConnecting = false;
       this.emit('disconnect', null);
       this.attemptReconnect();
@@ -103,8 +100,6 @@ class WebSocketService {
 
     this.reconnectAttempts++;
     const delay = this.reconnectDelay * Math.pow(2, this.reconnectAttempts - 1);
-
-    console.log(`Attempting to reconnect in ${delay}ms (attempt ${this.reconnectAttempts})`);
 
     setTimeout(() => {
       this.connect();

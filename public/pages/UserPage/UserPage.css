@@ -136,6 +136,10 @@
   max-width: 130px;
 }
 
+.user-page .movie-page__reviews .empty-state {
+  align-self: flex-start;
+}
+
 @media (max-width: 991.98px) {
   .user-page__upper {
     flex-direction: column;

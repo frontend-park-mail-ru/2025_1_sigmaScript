@@ -13,6 +13,7 @@ import MovieCard from 'components/Card/Card';
 import { Urls } from 'modules/router';
 import { search } from 'flux/Actions';
 import { ActorsMap, MoviesMap } from 'types/UserPage.types';
+import { EmptyState } from 'components/EmptyState/EmptyState';
 
 export class SearchPage {
   #parent: HTMLElement;
@@ -151,19 +152,30 @@ export class SearchPage {
     moviesTitle.classList.add('favorites-section__title');
     moviesSection.appendChild(moviesTitle);
 
-    const moviesScroll = new Scroll(moviesSection);
-    moviesScroll.render();
-    const moviesContainer = moviesScroll.getContentContainer();
-    if (moviesContainer) {
-      for (const [id, movie] of movieCollection) {
-        new MovieCard(moviesContainer, {
-          id: `movieCard--${id}`,
-          title: movie.title,
-          url: `${Urls.movie}/${id}`,
-          previewUrl: movie.preview_url || '/static/img/default_preview.webp',
-          width: '130',
-          height: '180'
-        }).render();
+    if (!movieCollection || movieCollection.size === 0) {
+      const emptyState = new EmptyState(moviesSection, {
+        description: 'По вашему запросу фильмы не найдены. Попробуйте изменить поисковый запрос.'
+      });
+      emptyState.render();
+      const emptyStateElement = moviesSection.querySelector('.empty-state') as HTMLElement;
+      if (emptyStateElement) {
+        emptyStateElement.style.textAlign = 'left';
+      }
+    } else {
+      const moviesScroll = new Scroll(moviesSection);
+      moviesScroll.render();
+      const moviesContainer = moviesScroll.getContentContainer();
+      if (moviesContainer) {
+        for (const [id, movie] of movieCollection) {
+          new MovieCard(moviesContainer, {
+            id: `movieCard--${id}`,
+            title: movie.title,
+            url: `${Urls.movie}/${id}`,
+            previewUrl: movie.preview_url || '/static/img/default_preview.webp',
+            width: '130',
+            height: '180'
+          }).render();
+        }
       }
     }
   }
@@ -177,19 +189,30 @@ export class SearchPage {
     actorsTitle.classList.add('favorites-section__title');
     actorsSection.appendChild(actorsTitle);
 
-    const actorsScroll = new Scroll(actorsSection);
-    actorsScroll.render();
-    const actorsContainer = actorsScroll.getContentContainer();
-    if (actorsContainer) {
-      for (const [id, actor] of actorCollection) {
-        new MovieCard(actorsContainer, {
-          id: `actorCard--${id}`,
-          title: actor.nameRu as string,
-          url: `${Urls.person}/${id}`,
-          previewUrl: actor.photoUrl || '/static/img/default_person.webp',
-          width: '130',
-          height: '180'
-        }).render();
+    if (!actorCollection || actorCollection.size === 0) {
+      const emptyState = new EmptyState(actorsSection, {
+        description: 'По вашему запросу актёры не найдены. Попробуйте изменить поисковый запрос.'
+      });
+      emptyState.render();
+      const emptyStateElement = actorsSection.querySelector('.empty-state') as HTMLElement;
+      if (emptyStateElement) {
+        emptyStateElement.style.textAlign = 'left';
+      }
+    } else {
+      const actorsScroll = new Scroll(actorsSection);
+      actorsScroll.render();
+      const actorsContainer = actorsScroll.getContentContainer();
+      if (actorsContainer) {
+        for (const [id, actor] of actorCollection) {
+          new MovieCard(actorsContainer, {
+            id: `actorCard--${id}`,
+            title: actor.nameRu as string,
+            url: `${Urls.person}/${id}`,
+            previewUrl: actor.photoUrl || '/static/img/default_person.webp',
+            width: '130',
+            height: '180'
+          }).render();
+        }
       }
     }
   }

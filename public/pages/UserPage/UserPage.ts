@@ -396,16 +396,35 @@ export class UserPage {
                   selectedFile = modalAvatarImageInput.files[0];
                 }
 
-                if (!selectedFile || !ALLOWED_MIME_TYPES.includes(selectedFile.type)) {
-                  // TODO error handle
+                if (!selectedFile) {
                   PopupActions.showPopup({
-                    message: 'Разрешены только изображения с разрешением SVG, PNG, JPG, JPEG или WEBP',
+                    message: 'Пожалуйста, выберите файл',
                     duration: 2500,
                     isError: true
                   });
-                } else {
-                  updateUserAvatar(selectedFile);
+                  return;
                 }
+
+                const maxSize = 1 * 1024 * 1024;
+                if (selectedFile.size > maxSize) {
+                  PopupActions.showPopup({
+                    message: `Файл слишком большой! Максимум 1МБ, ваш файл: ${(selectedFile.size / (1024 * 1024)).toFixed(1)}МБ`,
+                    duration: 3000,
+                    isError: true
+                  });
+                  return;
+                }
+
+                if (!ALLOWED_MIME_TYPES.includes(selectedFile.type)) {
+                  PopupActions.showPopup({
+                    message: 'Разрешены только изображения: PNG, JPG, JPEG, WEBP (до 1МБ)',
+                    duration: 2500,
+                    isError: true
+                  });
+                  return;
+                }
+
+                updateUserAvatar(selectedFile);
               }
             } as UniversalModalConfig);
 

@@ -378,14 +378,15 @@ export class UserPage {
         actions: {
           click: async () => {
             const modal = new UniversalModal(document.body, {
-              title: 'Измените аватар',
+              title: 'Измените аватар (до 1МБ)',
               confirmText: 'Сохранить',
               cancelText: 'Отмена',
               inputs: [
                 {
                   id: 'modalAvatarImageInput',
                   name: 'modalAvatarImage',
-                  type: 'file'
+                  type: 'file',
+                  accept: 'image/svg+xml,image/png,image/jpg,image/jpeg,image/webp'
                 }
               ],
               onConfirm: () => {

@@ -34,6 +34,7 @@ class Input {
     this.#config.text = config.text || '';
     this.#config.placeholder = config.placeholder || '';
     this.#config.type = config.type || '';
+    this.#config.accept = config.accept || '';
 
     this.#actions = config.actions || {};
     this.#addClasses = config.addClasses || [];

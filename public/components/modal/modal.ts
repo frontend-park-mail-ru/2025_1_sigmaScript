@@ -112,6 +112,7 @@ class UniversalModal {
       const inputsContainer = this.self()?.querySelector('.modal_content__inputs');
       if (inputsContainer) {
         this.#config.inputs.forEach((inputConfig: InputConfig) => {
+          console.log('Input config:', inputConfig);
           const input = new Input(inputsContainer, inputConfig);
           this.#inputs[inputConfig.name] = input;
           input.render();

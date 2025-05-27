@@ -7,6 +7,7 @@ export type InputConfig = {
   text?: string;
   placeholder?: string;
   type?: string;
+  accept?: string;
   actions?: { [key: string]: (...args: unknown[]) => unknown };
 };
 

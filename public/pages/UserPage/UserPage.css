@@ -219,3 +219,69 @@
     font-size: 1.6rem;
   }
 }
+
+input[type='file'][name='modalAvatarImage'] {
+  width: 100%;
+  padding: 1.5rem;
+  border: 2px solid transparent;
+  border-radius: 1rem;
+  background: linear-gradient(135deg, #5130b3 0%, var(--primary-color) 100%);
+  color: var(--primary-text-color);
+  font-size: 1.6rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  outline: none;
+}
+
+input[type='file'][name='modalAvatarImage']:hover {
+  background: linear-gradient(135deg, #6240c4 0%, #7c5ce6 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(81, 48, 179, 0.3);
+}
+
+input[type='file'][name='modalAvatarImage']:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(81, 48, 179, 0.2);
+}
+
+input[type='file'][name='modalAvatarImage']:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 6px rgba(81, 48, 179, 0.2);
+}
+
+input[type='file'][name='modalAvatarImage']::file-selector-button {
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  border-radius: 0.8rem;
+  color: var(--primary-text-color);
+  padding: 0.8rem 1.5rem;
+  margin-right: 1rem;
+  font-size: 1.4rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+input[type='file'][name='modalAvatarImage']::file-selector-button:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: scale(1.05);
+}
+
+input[type='file'][name='modalAvatarImage']::-webkit-file-upload-button {
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  border-radius: 0.8rem;
+  color: var(--primary-text-color);
+  padding: 0.8rem 1.5rem;
+  margin-right: 1rem;
+  font-size: 1.4rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+input[type='file'][name='modalAvatarImage']::-webkit-file-upload-button:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: scale(1.05);
+}

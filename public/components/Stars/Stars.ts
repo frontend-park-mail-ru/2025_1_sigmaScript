@@ -56,7 +56,7 @@ export class Stars {
           { sign: 9, svg: defaultStarSVG },
           { sign: 10, svg: defaultStarSVG }
         ]),
-      initialRating: config.initialRating || config.initialRating === 0 ? config.initialRating : 5,
+      initialRating: config.initialRating || config.initialRating === 0 ? config.initialRating : 0,
       withInfo: config.withInfo === false ? false : true
     };
     this.#currentRating = this.#config.initialRating!;
@@ -189,7 +189,11 @@ export class Stars {
         }
       });
 
-      this.#rating.textContent = rating > 0 ? rating.toString() : '0';
+      if (rating > 0) {
+        this.#rating.textContent = `${rating.toString()} / ${this.#config.starsRange?.length}`;
+      } else {
+        this.#rating.textContent = '';
+      }
     } else {
       this.#stars.forEach((star: SVGElement) => {
         const starValue = parseInt(star.dataset.value || '0', 10);

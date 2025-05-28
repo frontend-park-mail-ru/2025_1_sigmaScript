@@ -152,6 +152,7 @@
 .detailed-info__movie-titles {
   width: 35%;
   padding: 0 0 0 3%;
+  gap: 0.5rem;
 }
 
 .detailed-info__about-title {
@@ -181,6 +182,7 @@
 .detailed-info__detailed-description {
   font-size: 2rem;
   color: var(--primary-text-color);
+  line-height: 3rem;
 }
 
 .detailed-info__right-column {
@@ -199,22 +201,27 @@
   display: flex;
   flex-direction: column;
   align-items: start;
+  gap: 0.7rem;
 }
 
 .detailed-info__field-title {
-  font-size: 1.7rem;
-  color: var(--secondary-text-color);
+  font-size: 2rem;
+  color: var(--primary-text-color);
   font-weight: bold;
 }
 
 .detailed-info__field-value {
   font-size: 2rem;
-  color: var(--primary-text-color);
+  color: var(--secondary-text-color);
+}
+
+.detailed-info__watchability {
+  gap: 1rem
 }
 
 
 .watchability__title {
-  font-size: 2.5rem;
+  font-size: 3rem;
   color: var(--secondary-text-color);
 }
 
@@ -377,6 +384,72 @@
   overflow: visible; 
   font-size: 2rem;
   padding: 0 2.5rem;
+}
+
+.movie-page__review-card--current-user {
+  background-color: rgba(80, 50, 150, 0.3);
+  border: 1px solid rgba(var(--primary-color-rgb), 0.5);
+}
+
+.movie-page__review-card--current-user .movie-page__review-user-avatar {
+  display: none;
+}
+
+.movie-page__review-placeholder {
+  color: rgba(var(--primary-text-color-rgb), 0.7);
+  font-size: 2rem;
+}
+
+.movie-page__review-form-buttons {
+  gap: 1rem;
+}
+
+.movie-page__review-auth {
+  text-align: center;
+  font-size: 2rem;
+  color: rgba(var(--primary-text-color-rgb), 0.8);
+}
+
+.movie-page__review-auth a {
+  color: var(--primary-color);
+}
+
+.movie-page__review-auth a:hover {
+  text-decoration: underline;
+}
+
+.movie-page-button--secondary {
+  background: rgba(50, 50, 50, 0.7);
+}
+
+.movie-info-column__rating-button {
+  width: 6rem; 
+  height: 6rem;
+  border-radius: 50%;
+  position: relative;
+}
+
+.movie-info-column__rating-button > .u_button__text {
+  font-weight: bold;
+  font-size: 2rem;
+}
+
+.movie-info-column__rating-button > .u_button__icon {
+  width: 2.8rem;
+}
+
+.movie-info-column__rating-button--icon-only > .u_button__text {
+  display: none;
+}
+
+.movie-page__no-reviews {
+  font-weight: bold;
+  margin-bottom: 3rem;
+}
+
+.movie-page__empty-state {
+  font-size: 2rem;
+  color: var(--secondary-text-color);
 }
 
 .movie__button {

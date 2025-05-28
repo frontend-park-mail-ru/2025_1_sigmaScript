@@ -1,22 +1,27 @@
 import { createID } from 'utils/createID';
 import template from './movie_page.hbs';
+import userReviewTemplate from './user_review.hbs';
 import MovieCard from 'components/Card/Card';
 import Button from 'components/universal_button/button';
 import Scroll from 'components/Scroll/Scroll';
 import Stars from 'components/Stars/Stars';
 import Textarea from 'components/Textarea/Textarea';
-import { Person, MovieData, DisplayField, fieldTranslations, keysToShow } from 'types/movie_page.types';
+import { Person, MovieData, DisplayField, fieldTranslations, keysToShow, Review } from 'types/movie_page.types';
 import MoviePageStore from 'store/MoviePageStore';
 import Loading from 'components/Loading/loading';
 import Navbar from 'components/navbar/navbar';
+import DOMPurify from 'dompurify';
+import { router } from 'modules/router';
 
 import { Footer } from 'components/Footer/Footer';
 import { FOOTER_CONFIG } from '../../consts.js';
-import { router, Urls } from '../../modules/router';
+import { Urls } from '../../modules/router';
 import { FooterData } from 'types/Footer.types.js';
-import { addMovieToFavorite, postMovieReview, removeMovieFromFavorite } from 'flux/Actions.ts';
+import { addMovieToFavorite, postMovieReview, removeMovieFromFavorite, PopupActions } from 'flux/Actions.ts';
 import UserPageStore from 'store/UserPageStore.ts';
 import { serializeTimeZToHumanDate } from 'modules/time_serialiser';
+import { getRatingColor } from 'utils/ratingColor';
+import { scrollToElement } from 'utils/scrollToElement';
 import { MovieCollection } from 'types/main_page.types.js';
 
 type MoviePageStateFromStore = {
@@ -158,12 +163,23 @@ class MoviePage {
     if (this.#state.movieData) {
       const movie = this.#state.movieData;
       const infoForDisplay = this.#prepareMovieInfo(movie);
+      const currentUser = UserPageStore.getState().userData;
 
-      container.innerHTML = template({ movie, info: infoForDisplay });
+      const filteredMovie = {
+        ...movie,
+        reviews: movie.reviews?.filter((review) => review.reviewText && review.reviewText.trim() !== '') || []
+      };
+
+      container.innerHTML = template({
+        movie: filteredMovie,
+        info: infoForDisplay,
+        showAuth: !currentUser?.username
+      });
+
       this.#renderActors(movie.staff || []);
       this.#renderSimilar(movie.similarMovies || []);
       this.#renderReviewForm();
-      this.#renderButtons(this.#state.movieId!);
+      this.#renderButtons();
     } else {
       container.innerHTML = '<div class="info">Нет данных для отображения.</div>';
     }
@@ -222,8 +238,33 @@ class MoviePage {
   }
 
   #renderReviewForm(): void {
-    let formElement = this.self()?.querySelector<HTMLElement>('.js-review-form');
+    const currentUser = UserPageStore.getState().userData;
+    const currentMovie = this.#state.movieData;
+    if (!currentUser?.username) {
+      const authLink = this.self()?.querySelector('.auth-link');
+      if (authLink) {
+        authLink.addEventListener('click', (event) => {
+          event.preventDefault();
+          router.go(Urls.auth);
+        });
+      }
+      return;
+    }
+
+    const formElement = this.self()?.querySelector<HTMLElement>('.js-review-form');
     if (!formElement) return;
+
+    const existingReview = currentMovie?.reviews?.find((review: Review) => review.user.login === currentUser.username);
+
+    if (existingReview) {
+      this.#renderExistingReview(formElement, existingReview);
+    } else {
+      this.#renderNewReviewForm(formElement);
+    }
+  }
+
+  #renderNewReviewForm(formElement: HTMLElement): void {
+    formElement.innerHTML = '';
 
     this.#stars = new Stars(formElement, {});
     this.#stars.render();
@@ -246,22 +287,114 @@ class MoviePage {
     formElement.addEventListener('submit', (event) => {
       event.preventDefault();
 
-      const rating = this.#stars?.currentRating === 0 ? 5 : this.#stars?.currentRating;
-      const text = textarea.getValue();
+      const rating = this.#stars?.currentRating;
+      const text = textarea.getValue()?.trim() || '';
 
-      if (!rating || !UserPageStore.getState().userData?.username || text === undefined) {
-        router.go('/auth');
+      if (!rating || rating === 0) {
+        PopupActions.showPopup({
+          message: 'Пожалуйста, поставьте оценку',
+          duration: 2500,
+          isError: true
+        });
         return;
       }
 
       postMovieReview({
-        reviewText: text,
+        reviewText: DOMPurify.sanitize(text),
         score: rating
       });
     });
   }
 
-  #renderButtons(id: string | number): void {
+  #renderExistingReview(formElement: HTMLElement, review: Review): void {
+    formElement.innerHTML = '';
+
+    const sanitizedReviewText =
+      review.reviewText && review.reviewText.trim() !== ''
+        ? DOMPurify.sanitize(review.reviewText)
+        : '<i class="movie-page__review-placeholder">Вы оценили этот фильм, но не оставили текстовый отзыв</i>';
+
+    const reviewHTML = userReviewTemplate({
+      score: review.score,
+      createdAt: review.createdAt,
+      reviewText: sanitizedReviewText
+    });
+
+    formElement.innerHTML = reviewHTML;
+
+    const editButton = new Button(formElement, {
+      id: 'button--edit-review-' + createID(),
+      type: 'button',
+      text: 'Редактировать',
+      addClasses: ['movie-page-button', 'movie-page__review-form-button']
+    });
+    editButton.render();
+
+    editButton.self()?.addEventListener('click', () => {
+      this.#renderEditReviewForm(formElement, review);
+    });
+  }
+
+  #renderEditReviewForm(formElement: HTMLElement, existingReview: Review): void {
+    formElement.innerHTML = '';
+
+    this.#stars = new Stars(formElement, { initialRating: existingReview.score });
+    this.#stars.render();
+
+    const textarea = new Textarea(formElement, {
+      id: 'textarea--edit-review-' + createID(),
+      name: 'review',
+      text: existingReview.reviewText || '',
+      placeholder: 'Введите текст отзыва...',
+      addClasses: ['movie-page__review-form-textarea']
+    });
+    textarea.render();
+
+    const buttonContainer = document.createElement('div');
+    buttonContainer.className = 'movie-page__review-form-buttons flex-dir-row';
+    formElement.appendChild(buttonContainer);
+
+    new Button(buttonContainer, {
+      id: 'button--save-review-' + createID(),
+      type: 'submit',
+      text: 'Сохранить',
+      addClasses: ['movie-page-button', 'movie-page__review-form-button']
+    }).render();
+
+    new Button(buttonContainer, {
+      id: 'button--cancel-review-' + createID(),
+      type: 'button',
+      text: 'Отмена',
+      addClasses: ['movie-page-button', 'movie-page__review-form-button', 'movie-page-button--secondary']
+    }).render();
+
+    formElement.addEventListener('submit', (event) => {
+      event.preventDefault();
+
+      const rating = this.#stars?.currentRating;
+      const text = textarea.getValue()?.trim() || '';
+
+      if (!rating || rating === 0) {
+        PopupActions.showPopup({
+          message: 'Пожалуйста, поставьте оценку',
+          duration: 2500,
+          isError: true
+        });
+        return;
+      }
+
+      postMovieReview({
+        reviewText: DOMPurify.sanitize(text),
+        score: rating
+      });
+    });
+
+    buttonContainer.querySelector('#button--cancel-review-' + createID().slice(-8))?.addEventListener('click', () => {
+      this.#renderExistingReview(formElement, existingReview);
+    });
+  }
+
+  #renderButtons(): void {
     this.#favoriteButtons = [];
     const container = this.self();
     if (!container) return;
@@ -284,6 +417,64 @@ class MoviePage {
         }
       }).render();
 
+      new Button(buttonContainer, {
+        id: 'button--reviews-' + createID(),
+        type: 'button',
+        text: 'Отзывы',
+        addClasses: ['movie-info-column__reviws-button', 'movie-page-button', 'movie-page-button--secondary'],
+        actions: {
+          click: () => {
+            scrollToElement('.js-reviews');
+          }
+        }
+      }).render();
+      const currentUser = UserPageStore.getState().userData;
+      const currentMovie = this.#state.movieData;
+      let userRating = 0;
+      let ratingText = '';
+      let ratingIcon = '/static/svg/star--white.svg';
+
+      if (currentUser?.username && currentMovie?.reviews) {
+        const userReview = currentMovie.reviews.find((review: Review) => review.user.login === currentUser.username);
+        if (userReview) {
+          userRating = userReview.score;
+          ratingText = userRating.toString();
+        }
+      }
+
+      const ratingButton = new Button(buttonContainer, {
+        id: 'button--rating-' + createID(),
+        type: 'button',
+        text: ratingText,
+        addClasses: ['movie-info-column__rating-button', 'movie-page-button', 'movie-page-button--secondary'],
+        srcIcon: ratingText ? undefined : ratingIcon,
+        actions: {
+          click: () => {
+            scrollToElement('.js-reviews');
+          }
+        }
+      });
+
+      ratingButton.render();
+
+      if (!ratingText) {
+        const buttonElement = ratingButton.self();
+        if (buttonElement) {
+          buttonElement.classList.add('movie-info-column__rating-button--icon-only');
+        }
+      }
+
+      if (userRating > 0) {
+        const buttonElement = ratingButton.self();
+        if (buttonElement) {
+          const ratingColor = getRatingColor(userRating);
+          const textElement = buttonElement.querySelector('.u_button__text');
+          if (textElement) {
+            (textElement as HTMLElement).style.color = ratingColor;
+          }
+        }
+      }
+
       const button = new Button(buttonContainer, {
         id: 'button--favourite-' + createID(),
         type: 'button',
@@ -301,6 +492,7 @@ class MoviePage {
               addMovieToFavorite({
                 id: id!,
                 title: this.#state.movieData?.name as string,
+                rating: this.#state.movieData?.rating || 0,
                 preview_url: this.#state.movieData?.poster as string
               });
               this.#favoriteButtons?.forEach((element: Button) => {
@@ -325,19 +517,6 @@ class MoviePage {
           });
         }
       }
-
-      new Button(buttonContainer, {
-        id: 'button--review-' + createID(),
-        type: 'button',
-        addClasses: ['movie-info-column__review-button', 'movie-page-button'],
-        srcIcon: '/static/svg/review.svg',
-        actions: {
-          click: () => {
-            // TODO error handle
-            console.log(`Toggle favourite for movie ${id}`);
-          }
-        }
-      }).render();
     }
   }
 }

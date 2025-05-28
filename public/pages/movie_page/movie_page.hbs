@@ -77,7 +77,7 @@
             {{/each}}
           </div>
         {{else}}
-          <div class="watchability__empty">Нет информации о доступности для просмотра.</div>
+          <div class="watchability__empty movie-page__empty-state">Нет информации о доступности для просмотра</div>
         {{/if}}
       </div>
     
@@ -91,7 +91,7 @@
             <div class="detailed-info__field-value">{{ value }}</div>
           </div>
         {{else}}
-          <p>Подробная информация о фильме недоступна.</p>
+          <p class="movie-page__empty-state">Подробная информация о фильме недоступна.</p>
         {{/each}}
       </div>
     </div>
@@ -114,7 +114,13 @@
 
   <div class="movie-page__reviews-title">Отзывы:</div>
 
-  <form class="movie-page__review-form flex-dir-col flex-start js-review-form" type="submit"></form>
+  {{#if showAuth}}
+    <div class="movie-page__review-auth">
+      <p>Чтобы оставить отзыв, необходимо <a class="auth-link">войти в аккаунт</a></p>
+    </div>
+  {{else}}
+    <form class="movie-page__review-form flex-dir-col flex-start js-review-form" type="submit"></form>
+  {{/if}}
   
   <div class="movie-page__reviews flex-dir-col flex-start">
     {{#each movie.reviews}}
@@ -135,7 +141,7 @@
         <div class="movie-page__review-text">{{ reviewText }}</div>
       </div>
     {{else}}
-      <p>Отзывов пока нет. Будьте первым!</p>
+      <p class="movie-page__no-reviews movie-page__empty-state">Отзывов пока нет. Будьте первым!</p>
     {{/each}}
   </div>
 </div>

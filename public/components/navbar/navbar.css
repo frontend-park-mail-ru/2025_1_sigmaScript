@@ -30,9 +30,7 @@
 }
 
 .navbar_elements {
-  transition:
-    background-color 0.3s ease-in,
-    background-color 0.2s ease-out;
+  transition: background 0.3s ease-in-out;
   position: fixed;
   left: 0;
   top: 0;
@@ -51,7 +49,7 @@
 
 .navbar_gradient {
   transition:
-    opacity 0.1s ease-in,
+    opacity 0.3s ease-in,
     opacity 0.3s ease-out;
   position: fixed;
   left: 0;
@@ -142,6 +140,17 @@
   display: none;
 }
 
+.navbar .icon-size_small {
+    & .icon__img {
+        width: 2rem;
+        height: 2rem;
+    }
+}
+
+.navbar .icon__text-color_secondary {
+    color: var(--primary-text-color);
+}
+
 @media (max-width: 949.98px) {
   .navbar .navbar__tabs,
   /* .navbar .navbar__user, */
@@ -204,12 +213,17 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  align-items: center;
+  justify-content: center;
+  margin-top: 0.35rem;
+  margin-right: 0.5rem;
+  height: 100%;
 }
 
 .notification-badge {
   position: absolute;
-  top: -0.3rem;
-  left: -0.3rem;
+  top: 0.6rem;
+  left: 0.1rem;
   background: #ffd700;
   width: 0.8rem;
   height: 0.8rem;

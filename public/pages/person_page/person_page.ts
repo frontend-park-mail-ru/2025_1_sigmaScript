@@ -152,7 +152,7 @@ export class PersonPage {
       color: this.isFavorite ? 'favorite' : 'primary',
       type: 'button',
       text: this.isFavorite ? 'Удалить' : 'Добавить',
-      addClasses: ['movie__button'],
+      addClasses: ['actor__button'],
       srcIcon: '/static/svg/favourite.svg',
       actions: {
         click: () => {

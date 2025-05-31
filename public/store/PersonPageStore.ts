@@ -10,7 +10,7 @@ import { initialStore } from './InitialStore';
 import { PersonPage } from 'pages/person_page/person_page';
 import { router } from '../modules/router';
 import { PERSON_URL } from 'public/consts';
-import { serializeTimeZToHumanTimeAndYearsOld } from '../modules/time_serialiser';
+import { serializeTimeZToHumanDate, serializeTimeZToHumanTimeAndYearsOld, serializeTimeZToHumanYear } from '../modules/time_serialiser';
 import { cmToMeters } from '../modules/smToMetersSerialiser';
 import { ErrorPayload } from 'types/Auth.types';
 
@@ -68,9 +68,14 @@ class PersonPageStore {
         const personJSON = jsonData as PersonPayload;
 
         let personBirthDate = null;
+        let personDeath = null;
         if (personJSON.birthday) {
-          personBirthDate = serializeTimeZToHumanTimeAndYearsOld(personJSON.birthday as string);
+          personBirthDate = serializeTimeZToHumanDate(personJSON.birthday as string);
         }
+        if (personJSON.death) {
+          personDeath = serializeTimeZToHumanDate(personJSON.death as string);
+        }
+        console.log(personDeath);
 
         let person: PersonInfo = {
           personID: personJSON.id,
@@ -81,7 +86,7 @@ class PersonPageStore {
           gender: personJSON.sex,
           height: cmToMeters(personJSON.growth),
           dateOfBirth: personBirthDate,
-          dateOfDeath: personJSON.death,
+          dateOfDeath: personDeath,
           career: personJSON.career,
           genres: personJSON.genres,
           totalFilms: personJSON.total_films,

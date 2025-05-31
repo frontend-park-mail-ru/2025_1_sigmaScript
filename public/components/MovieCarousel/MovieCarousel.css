@@ -17,7 +17,7 @@
   height: 100%;
   object-fit: cover;
   object-position: center;
-  transition: opacity 0.8s ease-in-out;
+  transition: opacity 0.5s ease-in-out;
   opacity: 1;
 }
 
@@ -50,7 +50,8 @@
 }
 
 .movie-carousel__arrow:hover {
-  background-color: rgba(148, 161, 178, 0.5);
+  background-color: rgba(50, 50, 50, 0.7); 
+  /* background-color: rgba(148, 161, 178, 0.5); */
 }
 
 .movie-carousel__arrow--prev {
@@ -89,7 +90,7 @@
 
 .movie-carousel__about:hover {
   background: var(--primary-color);
-  filter: drop-shadow(0 6px 10px rgba(255,255,255,0.5));
+  filter: drop-shadow(0 0 10px rgba(255,255,255,0.5));
 }
 .movie-carousel__duration {
   font-size: 1.2rem;
@@ -105,8 +106,8 @@
   justify-content: center;
   align-items: center;
   position: absolute;
-  bottom: 70px;
-  left: 70px;
+  bottom: 4rem;
+  left: 5rem;
 }
 
 @media only screen and (max-width: 1024px) {

@@ -4,6 +4,7 @@ export type InputConfig = {
   inputClasses?: string;
   text?: string;
   placeholder?: string;
+  accept?: string;
   type?: string;
   actions?: { [key: string]: (...args: unknown[]) => unknown };
 };

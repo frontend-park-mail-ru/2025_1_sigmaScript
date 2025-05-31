@@ -24,6 +24,7 @@ import { UniversalModalConfig } from 'types/Modal.types';
 import Scroll from 'components/Scroll/Scroll';
 import MovieCard from 'components/Card/Card';
 import { Urls } from 'modules/router';
+import { EmptyState } from 'components/EmptyState/EmptyState';
 
 export const TABS_DATA = {
   tabsData: [
@@ -44,19 +45,32 @@ export const TABS_DATA = {
         moviesTitle.classList.add('favorites-section__title');
         moviesSection.appendChild(moviesTitle);
 
-        const moviesScroll = new Scroll(moviesSection);
-        moviesScroll.render();
-        const moviesContainer = moviesScroll.getContentContainer();
-        if (moviesContainer) {
-          for (const [id, movie] of UserPageStore.getState().movieCollection as MoviesMap) {
-            new MovieCard(moviesContainer, {
-              id: `movieCard--${id}`,
-              title: movie.title,
-              url: `${Urls.movie}/${id}`,
-              previewUrl: movie.preview_url || '/static/img/default_preview.webp',
-              width: '130',
-              height: '180'
-            }).render();
+        const movieCollection = UserPageStore.getState().movieCollection as MoviesMap;
+
+        if (!movieCollection || movieCollection.size === 0) {
+          const emptyState = new EmptyState(moviesSection, {
+            description: 'Вы пока не добавили ни одного фильма в избранное. Найдите интересные фильмы и добавьте их!'
+          });
+          emptyState.render();
+          const emptyStateElement = moviesSection.querySelector('.empty-state') as HTMLElement;
+          if (emptyStateElement) {
+            emptyStateElement.style.textAlign = 'left';
+          }
+        } else {
+          const moviesScroll = new Scroll(moviesSection);
+          moviesScroll.render();
+          const moviesContainer = moviesScroll.getContentContainer();
+          if (moviesContainer) {
+            for (const [id, movie] of movieCollection) {
+              new MovieCard(moviesContainer, {
+                id: `movieCard--${id}`,
+                title: movie.title,
+                url: `${Urls.movie}/${id}`,
+                previewUrl: movie.preview_url || '/static/img/default_preview.webp',
+                width: '130',
+                height: '180'
+              }).render();
+            }
           }
         }
 
@@ -69,19 +83,33 @@ export const TABS_DATA = {
         actorsTitle.classList.add('favorites-section__title');
         actorsSection.appendChild(actorsTitle);
 
-        const actorsScroll = new Scroll(actorsSection);
-        actorsScroll.render();
-        const actorsContainer = actorsScroll.getContentContainer();
-        if (actorsContainer) {
-          for (const [id, actor] of UserPageStore.getState().actorCollection as ActorsMap) {
-            new MovieCard(actorsContainer, {
-              id: `actorCard--${id}`,
-              title: actor.nameRu as string,
-              url: `${Urls.person}/${id}`,
-              previewUrl: actor.photoUrl || '/static/img/default_person.webp',
-              width: '130',
-              height: '180'
-            }).render();
+        const actorCollection = UserPageStore.getState().actorCollection as ActorsMap;
+
+        if (!actorCollection || actorCollection.size === 0) {
+          const emptyState = new EmptyState(actorsSection, {
+            description:
+              'Вы пока не добавили ни одного актёра в избранное. Изучайте фильмографии и находите любимых актёров!'
+          });
+          emptyState.render();
+          const emptyStateElement = actorsSection.querySelector('.empty-state') as HTMLElement;
+          if (emptyStateElement) {
+            emptyStateElement.style.textAlign = 'left';
+          }
+        } else {
+          const actorsScroll = new Scroll(actorsSection);
+          actorsScroll.render();
+          const actorsContainer = actorsScroll.getContentContainer();
+          if (actorsContainer) {
+            for (const [id, actor] of actorCollection) {
+              new MovieCard(actorsContainer, {
+                id: `actorCard--${id}`,
+                title: actor.nameRu as string,
+                url: `${Urls.person}/${id}`,
+                previewUrl: actor.photoUrl || '/static/img/default_person.webp',
+                width: '130',
+                height: '180'
+              }).render();
+            }
           }
         }
       }
@@ -95,10 +123,22 @@ export const TABS_DATA = {
 
         const reviewsDiv: HTMLDivElement = document.createElement('div');
         contentDiv.appendChild(reviewsDiv);
-
         reviewsDiv.className = 'movie-page__reviews flex-dir-col flex-start';
-        if (contentDiv) {
-          for (const review of (UserPageStore.getState().reviews as ReviewsMap).values()) {
+
+        const reviews = UserPageStore.getState().reviews as ReviewsMap;
+
+        if (!reviews || reviews.size === 0) {
+          const emptyState = new EmptyState(reviewsDiv, {
+            description:
+              'Вы пока не оставили ни одного отзыва. Поделитесь своими впечатлениями о просмотренных фильмах!'
+          });
+          emptyState.render();
+          const emptyStateElement = reviewsDiv.querySelector('.empty-state') as HTMLElement;
+          if (emptyStateElement) {
+            emptyStateElement.style.textAlign = 'left';
+          }
+        } else {
+          for (const review of reviews.values()) {
             reviewsDiv.innerHTML += reviewTemplate(review);
           }
         }
@@ -345,7 +385,8 @@ export class UserPage {
                 {
                   id: 'modalAvatarImageInput',
                   name: 'modalAvatarImage',
-                  type: 'file'
+                  type: 'file',
+                  accept: 'image/svg+xml,image/png,image/jpg,image/jpeg,image/webp'
                 }
               ],
               onConfirm: () => {
@@ -355,16 +396,35 @@ export class UserPage {
                   selectedFile = modalAvatarImageInput.files[0];
                 }
 
-                if (!selectedFile || !ALLOWED_MIME_TYPES.includes(selectedFile.type)) {
-                  // TODO error handle
+                if (!selectedFile) {
                   PopupActions.showPopup({
-                    message: 'Разрешены только изображения с разрешением SVG, PNG, JPG, JPEG или WEBP',
+                    message: 'Пожалуйста, выберите файл',
                     duration: 2500,
                     isError: true
                   });
-                } else {
-                  updateUserAvatar(selectedFile);
+                  return;
                 }
+
+                const maxSize = 1 * 1024 * 1024;
+                if (selectedFile.size > maxSize) {
+                  PopupActions.showPopup({
+                    message: `Файл слишком большой! Максимум 1МБ, ваш файл: ${(selectedFile.size / (1024 * 1024)).toFixed(1)}МБ`,
+                    duration: 3000,
+                    isError: true
+                  });
+                  return;
+                }
+
+                if (!ALLOWED_MIME_TYPES.includes(selectedFile.type)) {
+                  PopupActions.showPopup({
+                    message: 'Разрешены только изображения: PNG, JPG, JPEG, WEBP (до 1МБ)',
+                    duration: 2500,
+                    isError: true
+                  });
+                  return;
+                }
+
+                updateUserAvatar(selectedFile);
               }
             } as UniversalModalConfig);
 

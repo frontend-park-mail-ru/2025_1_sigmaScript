@@ -7,8 +7,10 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint public --ext .js,.jsx,.ts,.tsx",
     "lint-fix": "eslint public --ext .js,.jsx,.ts,.tsx --fix",
-    "build": "webpack --mode production",
-    "start": "webpack serve --config webpack.config.ts --mode development"
+    "build": "NODE_ENV=production webpack --mode production",
+    "start": "NODE_ENV=development webpack serve --config webpack.config.ts --mode development",
+    "dev": "NODE_ENV=development webpack serve --config webpack.config.ts --mode development",
+    "analyze": "NODE_ENV=production webpack --mode production --env analyze"
   },
   "repository": {
     "type": "git",
@@ -38,7 +40,9 @@
     "@eslint/js": "^9.21.0",
     "@typescript-eslint/eslint-plugin": "^8.27.0",
     "@typescript-eslint/parser": "^8.27.0",
+    "autoprefixer": "^10.4.21",
     "babel-loader": "^10.0.0",
+    "compression-webpack-plugin": "^11.1.0",
     "copy-webpack-plugin": "^13.0.0",
     "css-loader": "^7.1.2",
     "css-minimizer-webpack-plugin": "^7.0.2",
@@ -50,13 +54,17 @@
     "html-loader": "^5.1.0",
     "html-webpack-plugin": "^5.6.3",
     "mini-css-extract-plugin": "^2.9.2",
+    "postcss": "^8.5.3",
+    "postcss-loader": "^8.1.1",
     "sass": "^1.86.3",
     "sass-loader": "^16.0.5",
     "style-loader": "^4.0.0",
+    "terser-webpack-plugin": "^5.3.14",
     "ts-node": "^10.9.2",
     "typescript": "^5.7.3",
     "typescript-eslint": "^8.24.1",
     "webpack": "^5.98.0",
+    "webpack-bundle-analyzer": "^4.10.2",
     "webpack-cli": "^6.0.1",
     "webpack-dev-server": "^5.2.0"
   }

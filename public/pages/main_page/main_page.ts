@@ -87,8 +87,9 @@ class MainPage {
         url: movieUrl,
         width: config?.width,
         height: config?.height,
-        topText: movie.rating?.toFixed(1),
-        bottomText: config?.bottomText || ''
+        topText: movie.rating && movie.rating > 0 ? movie.rating?.toFixed(1) : undefined,
+        bottomText: config?.bottomText || '',
+        rating: movie.rating // Передаем рейтинг для окраски
       };
       new MovieCard(contentContainer, cardConfig).render();
     });
@@ -110,7 +111,11 @@ class MainPage {
     const contentContainer = scroll.getContentContainer();
     if (!contentContainer) return;
 
-    Object.values(movies).forEach((movie) => {
+    Object.values(movies).sort((a, b) => {
+      const dateA = new Date(a.releaseDate || '');
+      const dateB = new Date(b.releaseDate || '');
+      return dateA.getTime() - dateB.getTime();
+    }).forEach((movie) => {
       const movieUrl = `${Urls.movie}/${movie.id}`;
       const cardConfig: CardConfig = {
         id: createID(),
@@ -143,7 +148,7 @@ class MainPage {
       if (key === 'promo') {
         const promoData = compilationsData[key];
 
-        const carousel = new MovieCarousel(promoElem, { movies: promoData, interval: 12000 });
+        const carousel = new MovieCarousel(promoElem, { movies: promoData, interval: 7000 });
         this.#carousel = carousel;
         this.#carousel.render();
         continue;

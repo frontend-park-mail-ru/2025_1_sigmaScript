@@ -1,4 +1,6 @@
 <div class="u_input {{#if inputClasses}} {{inputClasses}} {{/if}}" id="{{id}}">
-    <input class="u_input__field" name="{{ name }}" placeholder="{{placeholder}}" type="{{type}}" value="{{text}}">
+    <input class="u_input__field" name="{{ name }}" placeholder="{{placeholder}}" type="{{type}}" value="{{text}}"
+        {{#if accept}}accept="{{accept}}"{{/if}}
+    >
     <div class="u_input__error-container"></div>
 </div>

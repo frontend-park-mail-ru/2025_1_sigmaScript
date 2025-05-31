@@ -84,8 +84,8 @@ class UniversalModal {
           const cancelBtn = new Button(cancelContainer, {
             id: `cancelBtn`,
             text: this.#config.cancelText,
-            color: 'primary',
-            textColor: 'primary',
+            color: 'gray',
+            textColor: 'white',
             actions: {
               click: () => {
                 this.#actions.onCancel();

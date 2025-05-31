@@ -78,3 +78,15 @@
     justify-content: center;
     height: calc(var(--navbar-elements-height) * 0.6);
 }
+
+.u_button-color_gray {
+    background-color: rgba(50, 50, 50, 0.7);
+}
+
+.u_button-color_gray:hover {
+    background-color: rgba(50, 50, 50, 0.7);
+}
+
+.u_button-color_gray:active {
+    background-color: var(--gray-color-hover, #5a6268);
+}

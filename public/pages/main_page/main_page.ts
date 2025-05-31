@@ -87,7 +87,7 @@ class MainPage {
         url: movieUrl,
         width: config?.width,
         height: config?.height,
-        topText: movie.rating?.toFixed(1),
+        topText: movie.rating && movie.rating > 0 ? movie.rating?.toFixed(1) : undefined,
         bottomText: config?.bottomText || '',
         rating: movie.rating // Передаем рейтинг для окраски
       };
@@ -111,7 +111,11 @@ class MainPage {
     const contentContainer = scroll.getContentContainer();
     if (!contentContainer) return;
 
-    Object.values(movies).forEach((movie) => {
+    Object.values(movies).sort((a, b) => {
+      const dateA = new Date(a.releaseDate || '');
+      const dateB = new Date(b.releaseDate || '');
+      return dateA.getTime() - dateB.getTime();
+    }).forEach((movie) => {
       const movieUrl = `${Urls.movie}/${movie.id}`;
       const cardConfig: CardConfig = {
         id: createID(),

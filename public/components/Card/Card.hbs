@@ -1,7 +1,7 @@
   {{#if url}}<a class="card-a" href="{{this.url}}" id="{{this.id}}">{{else}}<span id="{{this.id}}"></span>{{/if}}
     <div class="card {{#if hover}}card--hover{{/if}}" style="width: {{ this.width }}px; height: {{ this.height }}px;">
       <div class="card__top-elems-container">
-        <div class="card__top-text">{{this.topText}}</div>
+        {{#if this.topText}}<div class="card__top-text">{{this.topText}}</div>{{/if}}
       </div>
       
       <img src="{{this.previewUrl}}" alt="{{this.title}} card__preview" class="card__preview">

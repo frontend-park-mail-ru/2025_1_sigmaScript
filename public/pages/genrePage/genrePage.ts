@@ -99,7 +99,7 @@ class GenrePage {
           previewUrl: movie.previewUrl,
           title: movie.title,
           url: `${Urls.movie}/${movie.id}`,
-          topText: movie.rating?.toFixed(1),
+          topText: movie.rating && movie.rating > 0 ? movie.rating?.toFixed(1) : undefined,
           bottomText: '',
           rating: movie.rating // Передаем рейтинг для окраски
         };

@@ -115,7 +115,7 @@ export class MovieCard {
     }
     
     // Применяем цвет к фону topText на основе рейтинга, но только если это не календарная карточка
-    if (this.#config.rating !== undefined && this.#config.topText !== 'Скоро') {
+    if (this.#config.rating !== undefined && this.#config.topText !== 'Скоро' && this.#config.topText) {
       const topTextElement = this.self()?.querySelector('.card__top-text');
       if (topTextElement) {
         const color = getRatingColor(this.#config.rating);

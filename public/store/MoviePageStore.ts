@@ -179,7 +179,7 @@ class MoviePageStore {
           });
         }
 
-        renderCsat();
+        // renderCsat();
         break;
       case UserPageTypes.UPDATE_USER_PAGE: {
         this.state.needUpdateFavorite = true;

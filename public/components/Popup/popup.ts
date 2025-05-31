@@ -79,7 +79,9 @@ export class Popup {
     this.#parent.appendChild(popup);
 
     requestAnimationFrame(() => {
-      popup.classList.add('popup--visible');
+      requestAnimationFrame(() => {
+        popup.classList.add('popup--visible');
+      });
     });
   }
 

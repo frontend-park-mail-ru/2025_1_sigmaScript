@@ -84,8 +84,8 @@ class UniversalModal {
           const cancelBtn = new Button(cancelContainer, {
             id: `cancelBtn`,
             text: this.#config.cancelText,
-            color: 'primary',
-            textColor: 'primary',
+            color: 'gray',
+            textColor: 'white',
             actions: {
               click: () => {
                 this.#actions.onCancel();
@@ -112,7 +112,6 @@ class UniversalModal {
       const inputsContainer = this.self()?.querySelector('.modal_content__inputs');
       if (inputsContainer) {
         this.#config.inputs.forEach((inputConfig: InputConfig) => {
-          console.log('Input config:', inputConfig);
           const input = new Input(inputsContainer, inputConfig);
           this.#inputs[inputConfig.name] = input;
           input.render();

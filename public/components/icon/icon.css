@@ -87,6 +87,7 @@
   font-weight: 500;
   line-height: 1.8rem;
   color: var(--primary-text-color);
+  margin-right: 0.7rem;
 }
 
 .icon__text-color_primary {

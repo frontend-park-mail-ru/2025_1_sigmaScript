@@ -19,6 +19,8 @@ export class MovieCarousel {
   #currentIndex: number;
   #timerId: ReturnType<typeof setInterval> | null = null;
 
+  #preloadedImages: Map<string, HTMLImageElement> = new Map();
+
   #linkElement: HTMLAnchorElement | null = null;
   #imageElement: HTMLImageElement | null = null;
   #prevButton: HTMLButtonElement | null = null;
@@ -54,6 +56,7 @@ export class MovieCarousel {
   destroy(): void {
     this.#stopAutoPlay();
     this.#removeActions();
+    this.#clearPreloadedImages();
     this.self()?.remove();
     this.#linkElement = null;
     this.#imageElement = null;
@@ -90,6 +93,7 @@ export class MovieCarousel {
 
     if (hasMovies) {
       this.#cacheElements();
+      this.#preloadImages();
       this.#addActions();
       this.#startAutoPlay();
     }
@@ -179,15 +183,44 @@ export class MovieCarousel {
     setTimeout(() => {
       if (!this.#imageElement || !this.#linkElement) return;
 
-      this.#imageElement.src = imageUrl;
-      this.#imageElement.alt = imageAlt;
-      this.#linkElement.href = linkUrl;
-
-      this.#imageElement?.classList.remove('movie-carousel__image--fading');
-
-      this.#prevButton?.classList.remove('disabled');
-      this.#nextButton?.classList.remove('disabled');
-    }, 700);
+      const preloadedImage = this.#preloadedImages.get(imageUrl);
+      if (preloadedImage && preloadedImage.complete) {
+        this.#imageElement.src = preloadedImage.src;
+        this.#imageElement.alt = imageAlt;
+        this.#linkElement.href = linkUrl;
+        
+        this.#imageElement.classList.remove('movie-carousel__image--fading');
+        this.#prevButton?.classList.remove('disabled');
+        this.#nextButton?.classList.remove('disabled');
+      } else {
+        const tempImg = new Image();
+        
+        tempImg.onload = () => {
+          if (this.#imageElement && this.#linkElement) {
+            this.#imageElement.src = imageUrl;
+            this.#imageElement.alt = imageAlt;
+            this.#linkElement.href = linkUrl;
+            
+            this.#imageElement.classList.remove('movie-carousel__image--fading');
+            this.#prevButton?.classList.remove('disabled');
+            this.#nextButton?.classList.remove('disabled');
+          }
+        };
+        
+        tempImg.onerror = () => {
+          if (this.#imageElement && this.#linkElement) {
+            this.#imageElement.alt = imageAlt;
+            this.#linkElement.href = linkUrl;
+            
+            this.#imageElement.classList.remove('movie-carousel__image--fading');
+            this.#prevButton?.classList.remove('disabled');
+            this.#nextButton?.classList.remove('disabled');
+          }
+        };
+        
+        tempImg.src = imageUrl;
+      }
+    }, 500);
   }
 
   #startAutoPlay = (): void => {
@@ -210,6 +243,24 @@ export class MovieCarousel {
     this.#stopAutoPlay();
     this.#startAutoPlay();
   };
+
+  #preloadImages(): void {
+    this.#preloadedImages.clear();
+
+    this.#config.movies.forEach((movie) => {
+      if (movie.previewUrl) {
+        const img = new Image();
+        img.onload = () => {
+          this.#preloadedImages.set(movie.previewUrl, img);
+        };
+        img.src = movie.previewUrl;
+      }
+    });
+  }
+
+  #clearPreloadedImages(): void {
+    this.#preloadedImages.clear();
+  }
 }
 
 export default MovieCarousel;

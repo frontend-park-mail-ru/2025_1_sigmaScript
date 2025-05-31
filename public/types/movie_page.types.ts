@@ -74,6 +74,7 @@ export type MovieData = {
   reviews?: Reviews;
   watchability?: WatchProvider[];
   similarMovies?: MovieCollection;
+  trailerUrl?: string;
 };
 
 export type DisplayField = {

@@ -97,15 +97,7 @@
 }
 
 .navbar--overlay .navbar_elements {
-  background-color: transparent;
-}
-
-.navbar--scrolled .navbar_elements {
-  background-color: var(--background-color);
-}
-
-.navbar--overlay:hover .navbar_elements {
-  background-color: var(--background-color);
+  background: transparent;
 }
 
 .navbar--overlay .navbar_gradient {

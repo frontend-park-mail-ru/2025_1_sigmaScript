@@ -6,15 +6,21 @@
       <img class="movie-info-column__logo-image" src="{{movie.logo}}">
 
       <div class="movie-info-column__additional-info flex-dir-row">
-        <div class="movie-info__rating-element flex-dir-row">
-          <img src="/static/svg/imdb.svg">{{movie.ratingImdb}}
-        </div>
-        <div class="movie-info__rating-element flex-dir-row">
-        <img src="/static/svg/kinopoisk.svg">{{movie.ratingKp}}
-        </div>
+        {{#if movie.rating}}
         <div class="movie-info__rating-element flex-dir-row">
           <img src="/static/svg/flk.svg">{{movie.rating}}
         </div>
+        {{/if}}
+        {{#if movie.ratingKp}}
+        <div class="movie-info__rating-element flex-dir-row">
+          <img src="/static/svg/kinopoisk.svg">{{movie.ratingKp}}
+        </div>
+        {{/if}}
+        {{#if movie.ratingImdb}}
+        <div class="movie-info__rating-element flex-dir-row">
+          <img src="/static/svg/imdb.svg">{{movie.ratingImdb}}
+        </div>
+        {{/if}}
       </div>
 
     </div>
@@ -43,15 +49,21 @@
       <div class="movie-info-column__logo flex-dir-col flex-center">
         <div class="movie-info-column__buttons flex-dir-row js-movie-buttons-mobile"></div>
         <div class="movie-info-column__additional-info flex-dir-row">
-          <div class="movie-info__rating-element flex-dir-row">
-            <img src="/static/svg/imdb.svg" class="movie-page__rating-svg">{{movie.ratingImdb}}
-          </div>
-          <div class="movie-info__rating-element flex-dir-row">
-          <img src="/static/svg/kinopoisk.svg" class="movie-page__rating-svg">{{movie.ratingKp}}
-          </div>
+          {{#if movie.rating}}
           <div class="movie-info__rating-element flex-dir-row">
             <img src="/static/svg/flk.svg" class="movie-page__rating-svg">{{movie.rating}}
           </div>
+          {{/if}}
+          {{#if movie.ratingKp}}
+          <div class="movie-info__rating-element flex-dir-row">
+            <img src="/static/svg/kinopoisk.svg" class="movie-page__rating-svg">{{movie.ratingKp}}
+          </div>
+          {{/if}}
+          {{#if movie.ratingImdb}}
+          <div class="movie-info__rating-element flex-dir-row">
+            <img src="/static/svg/imdb.svg" class="movie-page__rating-svg">{{movie.ratingImdb}}
+          </div>
+          {{/if}}
         </div>
       </div>
     </div>
@@ -66,6 +78,7 @@
 
       <div class="detailed-info__detailed-description">{{#if movie.about }}{{movie.about}}{{else}}Описание фильма недоступно.{{/if}}</div>
       
+      {{#if movie.watchability}}
       <div class="detailed-info__watchability flex-dir-col">
         <div class="watchability__title">Где посмотреть:</div>
         {{#if movie.watchability}}
@@ -80,6 +93,7 @@
           <div class="watchability__empty movie-page__empty-state">Нет информации о доступности для просмотра</div>
         {{/if}}
       </div>
+      {{/if}}
     
     </div> 
 

@@ -55,10 +55,6 @@
   width: 90%;
 }
 
-.genres-page .card-component {
-    max-width: 200px;
-  }
-
 @media screen and (max-width: 899.98px) {
   .genres-page .card {
     width: 150px !important;

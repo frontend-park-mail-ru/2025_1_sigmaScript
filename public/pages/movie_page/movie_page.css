@@ -38,7 +38,14 @@
   gap: 0.5rem;
 }
 
-.movie-info-column__logo-image,
+.movie-info-column__logo-image {
+  width: 100%;
+  height: auto;
+  max-height: 20rem;
+  object-fit: contain;
+  object-position: center;
+}
+
 .general-info-block__backdrop-image {
   width: 100%;
   height: auto;
@@ -222,7 +229,8 @@
 
 .watchability__title {
   font-size: 3rem;
-  color: var(--secondary-text-color);
+  color: var(--primary-text-color);
+  font-weight: bold;
 }
 
 .watchability__list {
@@ -473,10 +481,6 @@
   max-height: 2.4rem;
 }
 
-.movie-page .card-component {
-  max-width: 15rem;
-}
-
 @media only screen and (max-width: 1260px) {
   html.movie-page-html {
     font-size: 9px;
@@ -575,5 +579,10 @@
   html.movie-page-html {
     font-size: 5px;
   }
+}
+
+.movie-page .loading {
+  height: 50vh;
+  min-height: 300px;
 }
 

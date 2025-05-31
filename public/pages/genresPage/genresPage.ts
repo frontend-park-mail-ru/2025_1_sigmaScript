@@ -108,7 +108,8 @@ class GenresPage {
         width: config?.width,
         height: config?.height,
         topText: movie.rating?.toFixed(1),
-        bottomText: config?.bottomText || ''
+        bottomText: config?.bottomText || '',
+        rating: movie.rating // Передаем рейтинг для цветового кодирования
       };
       new MovieCard(contentContainer, cardConfig).render();
     });

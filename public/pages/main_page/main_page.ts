@@ -88,7 +88,8 @@ class MainPage {
         width: config?.width,
         height: config?.height,
         topText: movie.rating?.toFixed(1),
-        bottomText: config?.bottomText || ''
+        bottomText: config?.bottomText || '',
+        rating: movie.rating // Передаем рейтинг для окраски
       };
       new MovieCard(contentContainer, cardConfig).render();
     });
@@ -143,7 +144,7 @@ class MainPage {
       if (key === 'promo') {
         const promoData = compilationsData[key];
 
-        const carousel = new MovieCarousel(promoElem, { movies: promoData, interval: 12000 });
+        const carousel = new MovieCarousel(promoElem, { movies: promoData, interval: 7000 });
         this.#carousel = carousel;
         this.#carousel.render();
         continue;

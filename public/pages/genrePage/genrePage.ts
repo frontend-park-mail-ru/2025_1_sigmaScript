@@ -100,7 +100,8 @@ class GenrePage {
           title: movie.title,
           url: `${Urls.movie}/${movie.id}`,
           topText: movie.rating?.toFixed(1),
-          bottomText: ''
+          bottomText: '',
+          rating: movie.rating // Передаем рейтинг для окраски
         };
         const cardWrapper = document.createElement('div');
         cardWrapper.className = 'genre-movie-grid__item';

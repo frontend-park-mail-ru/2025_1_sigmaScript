@@ -8,7 +8,7 @@ export type MainPageConfig = {
 export type MovieDataJSON = {
   id: number;
   title: string;
-  rating: number;
+  rating?: number;
   previewUrl: string;
   duration?: string;
   releaseDate?: string;

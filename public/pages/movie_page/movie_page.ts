@@ -6,7 +6,8 @@ import Button from 'components/universal_button/button';
 import Scroll from 'components/Scroll/Scroll';
 import Stars from 'components/Stars/Stars';
 import Textarea from 'components/Textarea/Textarea';
-import { Person, MovieData, DisplayField, fieldTranslations, keysToShow, Review } from 'types/movie_page.types';
+// import TrailerModal from 'components/TrailerModal/TrailerModal';
+import { Person, Genre, MovieData, DisplayField, fieldTranslations, keysToShow, Review } from 'types/movie_page.types';
 import MoviePageStore from 'store/MoviePageStore';
 import Loading from 'components/Loading/loading';
 import Navbar from 'components/navbar/navbar';
@@ -27,7 +28,6 @@ import { MovieCollection } from 'types/main_page.types.js';
 type MoviePageStateFromStore = {
   movieId: number | string | null;
   movieData: MovieData | null;
-  similar: MovieCollection | null;
   isLoading: boolean;
   error: string | null;
 };
@@ -232,6 +232,8 @@ class MoviePage {
         id: createID(),
         title: movie.title,
         url: `${Urls.movie}/${movie.id}`,
+        width: '150',
+        height: '225',
         previewUrl: movie.previewUrl || '/static/img/default_preview.webp'
       }).render();
     }
@@ -273,6 +275,7 @@ class MoviePage {
       id: 'textarea--review-' + createID(),
       name: 'review',
       placeholder: 'Введите текст отзыва...',
+      maxlength: 2000,
       addClasses: ['movie-page__review-form-textarea']
     });
     textarea.render();
@@ -293,6 +296,15 @@ class MoviePage {
       if (!rating || rating === 0) {
         PopupActions.showPopup({
           message: 'Пожалуйста, поставьте оценку',
+          duration: 2500,
+          isError: true
+        });
+        return;
+      }
+
+      if (text.length > 2000) {
+        PopupActions.showPopup({
+          message: 'Отзыв не может быть длиннее 2000 символов',
           duration: 2500,
           isError: true
         });
@@ -346,6 +358,7 @@ class MoviePage {
       name: 'review',
       text: existingReview.reviewText || '',
       placeholder: 'Введите текст отзыва...',
+      maxlength: 2000,
       addClasses: ['movie-page__review-form-textarea']
     });
     textarea.render();
@@ -383,6 +396,15 @@ class MoviePage {
         return;
       }
 
+      if (text.length > 2000) {
+        PopupActions.showPopup({
+          message: 'Отзыв не может быть длиннее 2000 символов',
+          duration: 2500,
+          isError: true
+        });
+        return;
+      }
+
       postMovieReview({
         reviewText: DOMPurify.sanitize(text),
         score: rating
@@ -404,18 +426,48 @@ class MoviePage {
     for (const buttonContainer of buttonContainers) {
       if (!buttonContainer) continue;
       buttonContainer.innerHTML = '';
-      new Button(buttonContainer, {
-        id: 'button--trailer-' + createID(),
-        type: 'button',
-        text: 'Смотреть трейлер',
-        addClasses: ['movie-info-column__trailer-button', 'movie-page-button'],
-        srcIcon: '/static/svg/play.svg',
-        actions: {
-          click: () => {
-            // TODO
+      
+      if (this.#state.movieData?.trailerUrl) {
+        new Button(buttonContainer, {
+          id: 'button--trailer-' + createID(),
+          type: 'button',
+          text: 'Смотреть трейлер',
+          addClasses: ['movie-info-column__trailer-button', 'movie-page-button'],
+          srcIcon: '/static/svg/play.svg',
+          actions: {
+            click: () => {
+              // TODO
+            }
           }
-        }
-      }).render();
+        }).render();
+      }
+
+      // new Button(buttonContainer, {
+      //   id: 'button--trailer-' + createID(),
+      //   type: 'button',
+      //   text: 'Смотреть трейлер',
+      //   addClasses: ['movie-info-column__trailer-button', 'movie-page-button'],
+      //   srcIcon: '/static/svg/play.svg',
+      //   actions: {
+      //     click: () => {
+      //       const movieId = this.#state.movieData?.id;
+      //       const trailerUrl = this.#state.movieData?.trailerUrl;
+            
+      //       if (trailerUrl) {
+      //         const trailerModal = new TrailerModal(document.body, {
+      //           trailerUrl: trailerUrl
+      //         });
+      //         trailerModal.render();
+      //       } else {
+      //         PopupActions.showPopup({
+      //           message: 'Трейлер для данного фильма недоступен',
+      //           duration: 2500,
+      //           isError: true
+      //         });
+      //       }
+      //     }
+      //   }
+      // }).render();
 
       new Button(buttonContainer, {
         id: 'button--reviews-' + createID(),

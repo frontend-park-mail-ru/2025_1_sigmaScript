@@ -10,7 +10,11 @@
 }
 
 .card--hover {
-  transition: transform 0.1s ease-in-out, box-shadow 0.1s ease-in-out;
+  transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
+}
+
+.card--hover:hover {
+  transition: transform 0.1s ease-in, box-shadow 0.1s ease-in;
 }
 
 .card-component {
@@ -27,6 +31,7 @@
 
 .card__preview {
   width: 100%;
+  height: 100%;
   aspect-ratio: 2 / 3;
   object-fit: cover;
   border-radius: 10px;

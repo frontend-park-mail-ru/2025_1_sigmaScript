@@ -1,0 +1,18 @@
+<div class="trailer-modal__overlay">
+  <div class="trailer-modal__window">
+    <button class="trailer-modal__close">×</button>
+    {{#if isYoutube}}
+      <iframe 
+        class="trailer-modal__iframe" 
+        src="{{trailerUrl}}" 
+        frameborder="0" 
+        allowfullscreen>
+      </iframe>
+    {{else}}
+      <video class="trailer-modal__video" controls autoplay>
+        <source src="{{trailerUrl}}" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+    {{/if}}
+  </div>
+</div>

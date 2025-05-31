@@ -1,6 +1,7 @@
 import { createID } from 'utils/createID';
 import template from './Card.hbs';
 import { router } from 'modules/router';
+import { getRatingColor } from 'utils/ratingColor';
 
 export type CardConfig = {
   id?: string;
@@ -14,6 +15,7 @@ export type CardConfig = {
   topText?: string;
   bottomText?: string;
   addClass?: string[];
+  rating?: number; // Добавляем поле для рейтинга
 };
 
 export class MovieCard {
@@ -47,6 +49,7 @@ export class MovieCard {
     this.#config.topText = config.topText || '';
     this.#config.bottomText = config.bottomText || '';
     this.#config.addClass = config.addClass;
+    this.#config.rating = config.rating;
   }
 
   /**
@@ -108,6 +111,17 @@ export class MovieCard {
     if (this.#config.addClass) {
       for (const cls of this.#config.addClass) {
         this.self()?.classList.add(cls);
+      }
+    }
+    
+    // Применяем цвет к фону topText на основе рейтинга, но только если это не календарная карточка
+    if (this.#config.rating !== undefined && this.#config.topText !== 'Скоро') {
+      const topTextElement = this.self()?.querySelector('.card__top-text');
+      if (topTextElement) {
+        const color = getRatingColor(this.#config.rating);
+        (topTextElement as HTMLElement).style.backgroundColor = color;
+        (topTextElement as HTMLElement).style.color = 'white'; // Белый текст для контраста
+        (topTextElement as HTMLElement).style.fontWeight = 'bold';
       }
     }
   }

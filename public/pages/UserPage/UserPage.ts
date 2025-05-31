@@ -378,7 +378,7 @@ export class UserPage {
         actions: {
           click: async () => {
             const modal = new UniversalModal(document.body, {
-              title: 'Измените аватар (до 1МБ)',
+              title: 'Измените аватар',
               confirmText: 'Сохранить',
               cancelText: 'Отмена',
               inputs: [

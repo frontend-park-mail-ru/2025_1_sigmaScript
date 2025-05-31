@@ -92,12 +92,12 @@ class MainPageStore {
     if (!rootElement) {
       return;
     }
-    setTimeout(
-      () => {
-        renderCsat();
-      },
-      1000 * 60 * 10
-    );
+    // setTimeout(
+    //   () => {
+    //     renderCsat();
+    //   },
+    //   1000 * 60 * 10
+    // );
     initialStore.destroyStored();
     const main = new MainPage(rootElement, { id: createID() } as MainPageConfig);
     initialStore.store(main);

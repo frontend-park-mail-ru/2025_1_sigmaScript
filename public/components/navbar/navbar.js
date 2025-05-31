@@ -188,6 +188,7 @@ class Navbar {
     });
     this.menu.setActions({
       click: async (e) => {
+        e.preventDefault();
         e.stopPropagation();
         this.notificationDropdown.close();
         this.userDropdown.toggle(e.currentTarget);
@@ -211,10 +212,12 @@ class Navbar {
           id: 'notifications',
           label: 'Уведомления',
           visible: false,
-          onClick: () => {
+          onClick: (e) => {
             setTimeout(() => {
               const notificationIcon = this.notificationIcon?.self();
               if (notificationIcon && this.notificationDropdown) {
+                e.preventDefault();
+                e.stopPropagation();
                 this.notificationDropdown.toggle(this.menu.self());
               }
             }, 1);
@@ -323,6 +326,7 @@ class Navbar {
     });
     this.notificationIcon.setActions({
       click: (e) => {
+        e.preventDefault();
         e.stopPropagation();
         this.notificationDropdown.toggle(e.currentTarget);
       }
@@ -352,6 +356,7 @@ class Navbar {
 
     this.user.setActions({
       click: async (e) => {
+        e.preventDefault();
         e.stopPropagation();
         this.userDropdown.toggle(e.currentTarget);
       }

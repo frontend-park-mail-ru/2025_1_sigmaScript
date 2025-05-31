@@ -213,12 +213,17 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  align-items: center;
+  justify-content: center;
+  margin-top: 0.35rem;
+  margin-right: 0.5rem;
+  height: 100%;
 }
 
 .notification-badge {
   position: absolute;
-  top: -0.3rem;
-  left: -0.3rem;
+  top: 0.6rem;
+  left: 0.1rem;
   background: #ffd700;
   width: 0.8rem;
   height: 0.8rem;

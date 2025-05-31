@@ -64,50 +64,59 @@ class NotificationDropdown {
     const menu = this.self();
     if (!menu) return;
 
-    const newMenu = menu.cloneNode(true) as HTMLElement;
-    menu.parentNode!.replaceChild(newMenu, menu);
-    newMenu.addEventListener('click', (e: Event) => {
-      const tgt = e.target as HTMLElement;
-      const closeBtn = tgt.closest('.notification-item-close');
-      if (closeBtn) {
-        e.stopPropagation();
-        const id = closeBtn.getAttribute('data-id')!;
-        this.notifications = this.notifications.filter((n) => n.id !== id);
-        const wasActive = this.self()?.classList.contains('active');
-        this.container!.innerHTML = template({ id: this.id, title: this.title, notifications: this.notifications });
-        if (wasActive) this.self()!.classList.add('active');
-        this.bindEvents();
-        this.onNotificationRemove?.(id);
-        return;
-      }
-      const item = tgt.closest('.notification-item');
-      if (item) {
-        this.onNotificationClick?.(item.getAttribute('data-id')!);
-      }
-    });
+    menu.removeEventListener('click', this.handleMenuClick);
+    menu.addEventListener('click', this.handleMenuClick);
 
     document.removeEventListener('click', this.documentClickHandler);
     document.addEventListener('click', this.documentClickHandler);
   }
+
+  private handleMenuClick = (e: Event): void => {
+    const tgt = e.target as HTMLElement;
+    const closeBtn = tgt.closest('.notification-item-close');
+    if (closeBtn) {
+      e.stopPropagation();
+      const id = closeBtn.getAttribute('data-id')!;
+      this.notifications = this.notifications.filter((n) => n.id !== id);
+      const wasActive = this.self()?.classList.contains('active');
+      this.container!.innerHTML = template({
+        id: this.id,
+        title: this.title,
+        notifications: this.notifications
+      });
+      if (wasActive) this.self()!.classList.add('active');
+      this.bindEvents();
+      this.onNotificationRemove?.(id);
+      return;
+    }
+    const item = tgt.closest('.notification-item');
+    if (item) {
+      this.onNotificationClick?.(item.getAttribute('data-id')!);
+    }
+  };
 
   public toggle(anchor: HTMLElement): void {
     if (!this.container) return;
     const menu = this.self();
     if (!menu) return;
 
-    if (menu.classList.toggle('active')) {
-      window.addEventListener('scroll', this.scrollHandler);
+    const isNowActive = menu.classList.toggle('active');
+
+    if (isNowActive) {
+      setTimeout(() => {
+        window.addEventListener('scroll', this.scrollHandler);
+      }, 100);
     } else {
       window.removeEventListener('scroll', this.scrollHandler);
       return;
     }
 
     const rect = anchor.getBoundingClientRect();
-    const mw = menu.offsetWidth;
-    const vw = window.innerWidth;
     const sx = window.scrollX,
       sy = window.scrollY;
-    let left = vw < 768 ? Math.min(rect.right + sx, vw - mw - 20 + sx) : Math.max(20 + sx, rect.left - mw + sx);
+    const mw = menu.offsetWidth;
+    const vw = window.innerWidth;
+    const left = vw < 768 ? Math.min(rect.right + sx, vw - mw - 20 + sx) : Math.max(20 + sx, rect.left - mw + sx);
 
     this.container.style.position = 'absolute';
     this.container.style.top = `${rect.bottom + sy}px`;

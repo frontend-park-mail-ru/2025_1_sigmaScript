@@ -37,7 +37,7 @@
 .person-page__header {
   display: flex;
   flex-direction: column;
-  margin-bottom: 1.5rem;
+  /* margin-bottom: 1.5rem; */
   padding-bottom: 1rem;
 }
 
@@ -157,12 +157,70 @@
   }
 }
 
-.person-page .movie__button {
+/* .person-page .actor__button {
   width: 140px;
   height: 45px;
+  background-color: rgba(50, 50, 50, 0.9);
   min-height: 30px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
   transition:
     transform 0.2s ease,
     box-shadow 0.2s ease;
+  padding: 1.5rem 8rem;
+  gap: 1.5rem;
+}
+
+.person-page .u_button__text {
+  font-size: 1.8rem;
+}
+
+.person-page .u_button__icon {
+  height: calc(var(--navbar-elements-height) * 0.7);
+} */
+
+.person-page .actor__button {
+  color: var(--primary-text-color);
+  background: linear-gradient(135deg, #5130b3 65%, var(--primary-color) 100%);
+  width: 17rem;
+  height: 6rem;
+  padding: 0 2.5rem;
+  cursor: pointer;
+  border: none;
+  border-radius: 3.5rem;
+  white-space: nowrap;
+  justify-content: center;
+  transition: ease-in-out 0.2s;
+  margin-top: 1rem;
+}
+
+.person-page .actor__button:hover {
+  border: none;
+  transform: scale(1.05);
+  filter: drop-shadow(0 0px 4px rgba(80, 80, 80, 0.9));
+}
+
+.person-page .actor__button > .u_button__text-color_primary {
+  font-weight: bold;
+  font-size: 2rem;
+}
+
+.person-page .actor__button > .u_button__icon {
+  width: 1.5rem;
+  margin-right: 0.5rem;
+}
+
+.person-page .u_button.u_button-color_favorite {
+  background: #eb9534;
+}
+
+.person-page .u_button.u_button-color_primary {
+  background: linear-gradient(135deg, #5130b3 65%, var(--primary-color) 100%);
+}
+
+.person-page .movie-page-button.u_button.u_button-color_favorite {
+  background: #eb9534;
+}
+
+.person-page .movie-page-button.u_button.u_button-color_primary {
+  background: linear-gradient(135deg, #5130b3 65%, var(--primary-color) 100%);
 }
